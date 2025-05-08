@@ -26,7 +26,7 @@ export const HudPanel = ({
 /**
  * 타이핑 애니메이션 텍스트 컴포넌트
  */
-export const TypewriterText = ({ text, delay = 50, className = "" }) => {
+export const TypewriterText = ({ text, delay = 30, className = "" }) => {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const textRef = useRef(text);
@@ -61,7 +61,7 @@ export const TypewriterText = ({ text, delay = 50, className = "" }) => {
 /**
  * 타이핑 애니메이션이 적용된 텍스트 블록 컴포넌트
  */
-export const TypewriterBlock = ({ content, delay = 40, className = "" }) => {
+export const TypewriterBlock = ({ content, delay = 1, className = "" }) => {
   if (typeof content === "string") {
     return (
       <TypewriterText text={content} delay={delay} className={className} />

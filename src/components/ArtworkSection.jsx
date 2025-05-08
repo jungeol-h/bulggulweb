@@ -83,7 +83,7 @@ const ArtworkSection = () => {
               <div className="mr-4 text-xs text-gray-400"></div>
               <h1 className="text-white text-3xl font-bold tracking-wider text-left">
                 <span className="lcd-text">
-                  <TypewriterText text="나≠나" delay={150} />
+                  <TypewriterText text="나≠나" delay={30} />
                 </span>
               </h1>
             </div>
