@@ -28,13 +28,10 @@ const ArtworkSection = () => {
       className="bg-black w-full text-white font-mono relative"
       id="artwork"
     >
-      {/* Grid background */}
-      <div className="absolute inset-0 grid-background opacity-30"></div>
-
       <div className="relative z-10">
         <div className="container mx-auto min-h-screen py-20 px-4">
           {/* Title Header */}
-          <div className="border-b border-gray-800 mb-10 pb-3 flex items-center">
+          <div className="mb-10 pb-3 flex items-center">
             <div className="mr-4 text-xs text-gray-400">
               <span>[</span>
               작품명
@@ -46,7 +43,7 @@ const ArtworkSection = () => {
           </div>
 
           {/* Unified Grid Layout - All sections in one connected grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0.5 bg-gray-800">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0.5 outline outline-2">
             {/* Top row: Specs + Visual */}
             <div className="col-span-1">
               <ArtworkSpecsPanel artworkData={artworkData} />
@@ -70,7 +67,6 @@ const ArtworkSection = () => {
           </div>
         </div>
       </div>
-
       {/* CSS for LCD and pixel effects */}
       <style jsx>{lcdStyles}</style>
     </section>

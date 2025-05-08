@@ -10,11 +10,11 @@ export const HudPanel = ({
   titleColor = "text-white",
 }) => (
   <section
-    className={`border border-gray-800 bg-black relative lcd-screen h-full flex flex-col ${className}`}
+    className={` bg-black relative lcd-screen h-full flex flex-col ${className} outline outline-1`}
   >
     {title && (
       <div
-        className={`border-b border-gray-800 px-4 py-2 text-sm uppercase tracking-widest ${titleColor} font-mono text-left w-full`}
+        className={`px-4 py-2 text-sm uppercase tracking-widest ${titleColor} font-mono text-left w-full`}
       >
         {title}
       </div>
@@ -47,7 +47,7 @@ export const HudLabelValue = ({
  * 구분선 컴포넌트
  */
 export const HudDivider = ({ className = "" }) => (
-  <div className={`border-t border-gray-800 my-3 ${className}`}></div>
+  <div className={`border-t border-gray-100 my-3 ${className}`}></div>
 );
 
 /**
@@ -77,7 +77,7 @@ export const HudImageFrame = ({ src, alt, className = "", refCode }) => (
   <div
     className={`relative w-full h-full overflow-hidden lcd-frame ${className}`}
   >
-    <div className="absolute inset-0 border border-gray-800 z-10 pointer-events-none"></div>
+    <div className="absolute inset-0 z-10 pointer-events-none"></div>
     <img
       src={src}
       alt={alt}
@@ -138,7 +138,6 @@ export const lcdStyles = `
 /* LCD Frame */
 .lcd-frame {
   position: relative;
-  border: 1px solid rgba(255,255,255,0.1);
 }
 
 /* Monochrome Filter */
