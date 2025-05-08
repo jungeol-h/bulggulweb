@@ -11,7 +11,7 @@ function App() {
       <ArtworkSection />
 
       {/* Curator Section - Gradient theme */}
-      <CuratorSection />
+      {/* <CuratorSection /> */}
 
       {/* Team Section - Light theme */}
       <TeamSection />
