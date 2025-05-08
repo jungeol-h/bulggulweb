@@ -61,7 +61,7 @@ const ArtworkSection = () => {
       <StarryBackground count={150} className="z-0" />
 
       {/* Floating heads animation */}
-      <FloatingHeads count={5} />
+      {/* <FloatingHeads count={5} /> */}
 
       {/* <div className="relative z-10 pt-12 px-8">
         <div className="container mx-auto text-left">
@@ -74,7 +74,7 @@ const ArtworkSection = () => {
         </div>
       </div> */}
 
-      <div className="relative z-10 pt-12">
+      <div className="relative z-1 pt-12">
         <div className="container mx-auto min-h-screen pb-20 px-4 max-w-6xl">
           <div
             ref={containerRef}

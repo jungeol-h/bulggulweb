@@ -156,7 +156,7 @@ export const HudImageFrame = ({ src, alt, className = "" }) => (
   <div
     className={` relative w-full h-full overflow-hidden lcd-frame ${className}`}
   >
-    <div className="absolute inset-0 z-10 pointer-events-none"></div>
+    <div className="absolute inset-0 z-1 pointer-events-none"></div>
     <img src={src} alt={alt} className="w-full h-full object-cover " />
   </div>
 );
@@ -315,7 +315,7 @@ export const FloatingHeads = ({ count = 8 }) => {
   }, [count, windowWidth]); // windowWidth가 변경될 때마다 재계산
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-30">
       {heads.map((head) => (
         <div
           key={head.id}
