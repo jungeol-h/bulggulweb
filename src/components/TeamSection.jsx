@@ -51,9 +51,6 @@ const TeamSection = () => {
               />
             </div>
             <div className="w-full md:w-1/2 md:pl-6">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-800 text-left pb-2">
-                팀 소개
-              </h3>
               <p className="leading-relaxed text-gray-700 mb-6 text-left">
                 왜 벌꿀오소리냐구요? <br></br>벌꿀오소리는 강하니까.
               </p>
@@ -72,12 +69,9 @@ const TeamSection = () => {
             <h3 className="text-2xl font-semibold mb-8 text-gray-800 text-left">
               팀 멤버
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-0">
               {members.map((member, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-6 hover:shadow-md transition-shadow"
-                >
+                <div key={index} className="bg-white w-full">
                   <MemberProfile member={{ ...member, isCompact: true }} />
                 </div>
               ))}

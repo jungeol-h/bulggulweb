@@ -60,11 +60,11 @@ const MemberProfile = ({ member }) => {
   return (
     <div className="member-profile w-full">
       <div className="flex flex-col items-center">
-        <div className="w-36 h-36 overflow-hidden rounded-full mb-4">
+        <div className="w-full h-auto overflow-hidden mb-4">
           <img
             src={image}
             alt={`${name} 프로필 사진`}
-            className="w-full h-full object-cover"
+            className="w-full h-auto object-contain"
           />
         </div>
         <h3 className="text-xl font-medium mb-2 text-gray-800">{name}</h3>
