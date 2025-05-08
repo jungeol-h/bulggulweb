@@ -6,6 +6,7 @@ import {
   TextPanel,
   lcdStyles,
   GridBackground,
+  StarryBackground,
   TypewriterText,
 } from "./HudComponents";
 
@@ -29,6 +30,9 @@ const ArtworkSection = () => {
       id="artwork"
       style={{ fontFamily: "NeoDunggeunmoPro" }}
     >
+      {/* 흰색 글리터 배경 추가 */}
+      <StarryBackground count={150} className="z-0" />
+
       <div className="relative z-10">
         <div className="container mx-auto min-h-screen py-20 px-4">
           <div className="flex flex-col gap-0.5 outline outline-2">

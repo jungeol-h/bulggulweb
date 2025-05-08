@@ -173,6 +173,40 @@ export const GridBackground = ({ className = "" }) => (
 );
 
 /**
+ * 별이 반짝이는 배경 컴포넌트
+ */
+export const StarryBackground = ({ className = "", count = 100 }) => {
+  const stars = Array.from({ length: count }, (_, i) => ({
+    id: i,
+    top: `${Math.random() * 100}%`,
+    left: `${Math.random() * 100}%`,
+    size: Math.random() * 2 + 1,
+    duration: 3 + Math.random() * 7,
+    delay: Math.random() * 5,
+  }));
+
+  return (
+    <div className={`absolute inset-0 overflow-hidden ${className}`}>
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className="absolute rounded-full bg-white animate-twinkle"
+          style={{
+            top: star.top,
+            left: star.left,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            opacity: Math.random() * 0.7 + 0.3,
+            animationDuration: `${star.duration}s`,
+            animationDelay: `${star.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+/**
  * 개요 패널 - 작품 기본 정보를 포함하는 패널
  */
 export const InfoPanel = ({ artworkData }) => (

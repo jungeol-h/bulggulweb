@@ -13,6 +13,15 @@ export default {
         "ibm-plex": ["IBM Plex Sans", "sans-serif"],
         noto: ["Noto Sans", "sans-serif"],
       },
+      keyframes: {
+        twinkle: {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0.2 },
+        },
+      },
+      animation: {
+        twinkle: "twinkle var(--tw-animation-duration) ease-in-out infinite",
+      },
     },
   },
   plugins: [],
