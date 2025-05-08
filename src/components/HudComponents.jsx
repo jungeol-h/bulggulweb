@@ -14,12 +14,12 @@ export const HudPanel = ({
   >
     {title && (
       <div
-        className={`px-1 py-3 text-ldg uppercase tracking-widest ${titleColor} font-mono text-left w-full`}
+        className={`py-3 text-ldg uppercase tracking-widest ${titleColor} font-mono text-left w-full`}
       >
         {title}
       </div>
     )}
-    <div className="pixel-text flex-grow text-left px-1">{children}</div>
+    <div className="pixel-text flex-grow text-left ">{children}</div>
   </section>
 );
 
@@ -157,11 +157,7 @@ export const HudImageFrame = ({ src, alt, className = "" }) => (
     className={` relative w-full h-full overflow-hidden lcd-frame ${className}`}
   >
     <div className="absolute inset-0 z-10 pointer-events-none"></div>
-    <img
-      src={src}
-      alt={alt}
-      className="w-full h-full object-cover monochrome-filter"
-    />
+    <img src={src} alt={alt} className="w-full h-full object-cover " />
   </div>
 );
 
@@ -209,8 +205,8 @@ export const StarryBackground = ({ className = "", count = 100 }) => {
 /**
  * 개요 패널 - 작품 기본 정보를 포함하는 패널
  */
-export const InfoPanel = ({ artworkData }) => (
-  <HudPanel title=" " className="h-full space-y-2">
+export const InfoPanel = ({ artworkData, className = "" }) => (
+  <HudPanel title=" " className={`h-full space-y-2 ${className}`}>
     <div>
       <p className="text-white font-mono text-sm">
         <TypewriterText text={artworkData.shortDescription} />
@@ -265,8 +261,8 @@ export const ImagePanel = ({ imageSrc, imageAlt }) => (
 /**
  * 텍스트 패널 - 텍스트 콘텐츠를 표시하는 패널
  */
-export const TextPanel = ({ title, content }) => (
-  <HudPanel title={title} className="h-full">
+export const TextPanel = ({ title, content, className }) => (
+  <HudPanel title={title} className={`h-full ${className}`}>
     <div className="text-white font-mono text-sm h-full">
       <TypewriterBlock content={content} />
     </div>

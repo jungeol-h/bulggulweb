@@ -71,7 +71,7 @@ const ArtworkSection = () => {
       </div> */}
 
       <div className="relative z-10 pt-12">
-        <div className="container mx-auto min-h-screen pb-20 px-4">
+        <div className="container mx-auto min-h-screen pb-20 px-4 max-w-6xl">
           <div
             ref={containerRef}
             className={`flex flex-col gap-0.5 outline outline-2 ${
@@ -91,7 +91,7 @@ const ArtworkSection = () => {
             {/* Second row: Specs + Visual */}
             <div className="flex flex-col lg:flex-row gap-0.5">
               <div className="w-full lg:w-1/3">
-                <InfoPanel artworkData={artworkData} />
+                <InfoPanel artworkData={artworkData} className="px-2" />
               </div>
 
               <div className="w-full lg:w-2/3 p-4 outline outline-1">
@@ -105,35 +105,47 @@ const ArtworkSection = () => {
 
             {/* Third row: Overview + Concept */}
             <div className="flex flex-col lg:flex-row gap-0.5">
-              <div className="w-full lg:w-2/3">
+              <div className="w-full lg:w-2/4">
                 <TextPanel
                   title="프로젝트 요약"
                   content={artworkContent.overview}
+                  className="px-2"
                 />
               </div>
 
-              <div className="w-full lg:w-1/3">
+              <div className="w-full lg:w-2/4">
                 <TextPanel
                   title="문제의식/의도"
                   content={artworkContent.intention}
+                  className="px-2"
                 />
               </div>
             </div>
 
-            {/* Fourth row: Image */}
             <div className="w-full p-4 outline outline-1">
               <ImagePanel
-                imageSrc="/images/artwork-main.webp"
+                imageSrc="/images/artwork-1.webp"
                 imageAlt="나≠나 작품 대표 이미지"
                 refCode="VIS.REF.01"
               />
             </div>
 
-            <div className="w-full lg:w-1/2">
-              <TextPanel
-                title="문제의식/의도"
-                content={artworkContent.intention}
-              />
+            <div className="flex flex-col lg:flex-row gap-0.5">
+              <div className="w-full lg:w-2/3">
+                <TextPanel
+                  title="작품설명"
+                  content={artworkContent.description}
+                  className="px-2"
+                />
+              </div>
+
+              <div className="w-full p-4 outline outline-1 lg:w-1/3">
+                <ImagePanel
+                  imageSrc="/images/artwork-2.webp"
+                  imageAlt="나≠나 작품 대표 이미지"
+                  refCode="VIS.REF.01"
+                />
+              </div>
             </div>
           </div>
         </div>
