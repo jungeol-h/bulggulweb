@@ -8,6 +8,7 @@ import {
   GridBackground,
   StarryBackground,
   TypewriterText,
+  FloatingHeads,
 } from "./HudComponents";
 import StyledHeading from "./StyledHeading";
 
@@ -58,6 +59,9 @@ const ArtworkSection = () => {
     >
       {/* 흰색 글리터 배경 추가 */}
       <StarryBackground count={150} className="z-0" />
+
+      {/* Floating heads animation */}
+      <FloatingHeads count={5} />
 
       {/* <div className="relative z-10 pt-12 px-8">
         <div className="container mx-auto text-left">
