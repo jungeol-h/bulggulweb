@@ -46,7 +46,7 @@ const ArtworkSection = () => {
       </div> */}
 
       <div className="relative z-10 pt-12">
-        <div className="container mx-auto min-h-screen pb-52 px-2">
+        <div className="container mx-auto min-h-screen pb-20 px-4">
           <div className="flex flex-col gap-0.5 outline outline-2">
             {/* Title row */}
             <div className="w-full py-3 flex items-center">

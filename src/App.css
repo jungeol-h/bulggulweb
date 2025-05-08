@@ -29,13 +29,6 @@ button {
   text-align: center;
 }
 
-/* Section container for full width with centered content */
-.section-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
 /* Section content for content width constraint */
 .section-content {
   width: 100%;
