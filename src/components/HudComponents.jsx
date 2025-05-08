@@ -330,7 +330,7 @@ export const FloatingHeads = ({ count = 8 }) => {
           }}
         >
           <img
-            src="/head.webp"
+            src="/images/head.webp"
             alt="Floating head"
             className="w-full h-full object-contain"
             style={{
