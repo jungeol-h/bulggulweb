@@ -1,12 +1,108 @@
-# React + Vite
+# 졸업전시 웹사이트 기획서
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+본 기획서는 **'벌꿀오소리' 팀 홈페이지**에 대한 기획서이다.
+기획자는 팀장 **황준걸**이며, 해당 웹사이트는 **React + Tailwind CSS** 기반의 \*\*단일 페이지 웹사이트(SPA)\*\*로 제작된다.
 
-Currently, two official plugins are available:
+## 🎯 목적
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **숭실대학교 글로벌미디어학부 2024학년도 졸업전시회**에 참가하는 ‘벌꿀오소리’ 팀의 작품 \*\*「나≠나」\*\*와 팀을 웹사이트 상에서 효과적으로 소개한다.
 
-## Expanding the ESLint configuration
+## ✨ 표현하고자 하는 것
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **작품**
+
+   - 작품의 컨셉, 배경, 구성 등을 충분히 설명하고, 텍스트적 완결성을 갖춘다.
+
+2. **팀**
+
+   - 3인 팀의 협업 과정과 분위기, 팀의 정체성을 보여준다.
+
+3. **개인**
+
+   - 팀 구성원 각각의 개성과 독립적인 작업 정체성을 보여준다.
+
+## 🧱 전체 구조 및 기술 스펙
+
+- **단일 페이지(SPA)** 구성. `react-router`는 사용하지 않음.
+- **섹션 기반 구성**: HTML5 `section` 태그 기반 레이아웃
+- **반응형 디자인**: 모바일 퍼스트, Tailwind CSS 적극 활용
+- **데이터 구조**: 모든 텍스트 및 미디어 정보는 **하드코딩**
+
+## 📐 섹션 구조 및 디자인 가이드
+
+### SECTION 1: 작품 섹션 (`<ArtworkSection />`)
+
+- **톤**: 다크 모드, 그로테스크한 분위기
+- **컬러**:
+
+  - 배경: `#0d0d0d`
+  - 텍스트: `#f4f4f4`, 하이라이트 `#c084fc`
+
+- **폰트**: `IBM Plex Sans`, 대체로 단정하고 기계적인 느낌
+- **느낌**: 디지털과 아날로그, 인간과 기계의 경계에 있는 디자인
+- **애니메이션**: 스크롤 등장 시 슬라이드업 or 페이드인
+- **포함 요소**:
+
+  - 대표 이미지
+  - 작품 한줄 설명
+  - 문제의식 및 의도
+  - 작업 배경
+  - 작업 구성 설명 등
+
+### SECTION 2: 팀 섹션 (`<TeamSection />`)
+
+- **톤**: 밝고 순수한 분위기
+- **컬러**:
+
+  - 배경: `#fef6f0`
+  - 파스텔톤 (예: 연보라, 연분홍 등)
+
+- **폰트**: `Noto Sans`, 부드러운 곡선의 한글+영문 혼용 가독성 고려
+- **디자인 요소**: 폴라로이드 스타일 팀 사진, 손글씨 느낌 코멘트
+- **포함 요소**:
+
+  - 팀 단체 사진
+  - 팀 소개 및 팀 코멘트
+  - 팀 블로그 리스트 (외부 링크)
+
+### SECTION 3\~5: 개인 섹션 (`<MemberProfile />` 컴포넌트로 재사용)
+
+- **연속된 섹션으로 처리**: 팀 섹션의 자연스러운 연장선
+- **공통 디자인 요소 유지** (배경, 폰트, 마진, 간격 등)
+- **포함 요소**:
+
+  - 인물 사진
+  - 한줄 코멘트
+  - 개인 블로그 글 리스트 (외부 링크: Notion 등)
+
+#### 📌 개인 정보 하드코딩 예시
+
+```js
+const members = [
+  {
+    name: "이혜연",
+    image: "/images/hyeyeon.jpg",
+    comment: "기록하는 디자이너",
+    notionUrl: "https://...",
+  },
+  {
+    name: "임나영",
+    image: "/images/nayoung.jpg",
+    comment: "감각을 나누는 사람",
+    notionUrl: "https://...",
+  },
+  {
+    name: "황준걸",
+    image: "/images/jungeol.jpg",
+    comment: "사유하는 예술가",
+    notionUrl: "https://...",
+  },
+];
+```
+
+## 📏 개발 시 유의사항
+
+- 페이지 뎁스는 최소화 (단일 페이지 구조 유지)
+- 각 섹션은 Tailwind를 기반으로 명확하게 구분되되 자연스러운 흐름 유지
+- 개인 섹션은 `<MemberProfile />` 컴포넌트로 통일
+- 모바일 뷰 기준으로 설계 → 이후 데스크탑 대응
