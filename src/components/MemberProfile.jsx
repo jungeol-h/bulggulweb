@@ -16,14 +16,14 @@ const MemberProfile = ({ member }) => {
             />
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-full md:w-1/3">
-                <div className="bg-white p-3 rounded-lg shadow-md transform -rotate-2">
+                <div className="bg-white p-3">
                   <img
                     src={image}
                     alt={`${name} 프로필 사진`}
-                    className="w-full h-auto rounded"
+                    className="w-full h-auto"
                   />
                 </div>
               </div>

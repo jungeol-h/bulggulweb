@@ -66,7 +66,7 @@ const ArtworkSection = () => {
 
               <div className="w-full lg:w-2/3 p-4 outline outline-1">
                 <ImagePanel
-                  imageSrc="/images/artwork-main.png"
+                  imageSrc="/images/artwork-main.webp"
                   imageAlt="나≠나 작품 대표 이미지"
                   refCode="VIS.REF.01"
                 />
@@ -93,7 +93,7 @@ const ArtworkSection = () => {
             {/* Fourth row: Image */}
             <div className="w-full p-4 outline outline-1">
               <ImagePanel
-                imageSrc="/images/artwork-main.png"
+                imageSrc="/images/artwork-main.webp"
                 imageAlt="나≠나 작품 대표 이미지"
                 refCode="VIS.REF.01"
               />

@@ -2,19 +2,19 @@
 export const members = [
   {
     name: "이혜연",
-    image: "/images/hyeyeon.jpg",
+    image: "/images/hyeyeon.png",
     comment: "어쩌구",
     notionUrl: "https://example.com/hyeyeon",
   },
   {
     name: "임나영",
-    image: "/images/nayoung.jpg",
+    image: "/images/nayoung.png",
     comment: "어쩌구",
     notionUrl: "https://example.com/nayoung",
   },
   {
     name: "황준걸",
-    image: "/images/jungeol.jpg",
+    image: "/images/jungeol.png",
     comment: "어쩌구",
     notionUrl: "https://example.com/jungeol",
   },
