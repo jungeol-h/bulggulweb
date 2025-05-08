@@ -3,7 +3,7 @@ export const members = [
   {
     name: "이혜연",
     image: "/images/hyeyeon.png",
-    comment: "어쩌구",
+    comment: "아이 이게 뭐야",
     notionUrl: "https://example.com/hyeyeon",
   },
   {
