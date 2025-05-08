@@ -28,10 +28,10 @@ const ArtworkSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen bg-[#0d0d0d] text-[#f4f4f4] font-['IBM_Plex_Sans'] py-20 px-6 md:px-12"
+      className="bg-[#0d0d0d] w-full text-[#f4f4f4] font-['IBM_Plex_Sans']"
       id="artwork"
     >
-      <div className="max-w-5xl mx-auto">
+      <div className="min-h-screen py-20 px-6 md:px-12 max-w-5xl mx-auto">
         {/* Title and tagline with animation */}
         <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-[#c084fc]">
