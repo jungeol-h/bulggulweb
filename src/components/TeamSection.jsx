@@ -43,16 +43,20 @@ const TeamSection = () => {
             {/* Team Image + Description row */}
             <div className="flex flex-col lg:flex-row gap-0.5">
               {/* Team Image Column */}
-              <div className="w-full lg:w-1/2 outline outline-1">
-                <div className="flex items-center justify-center h-full mb-4">
+              <div className="w-full lg:w-1/2 outline outline-1 h-full">
+                <div className="h-full flex items-center justify-center">
                   <img
                     src="/images/team photo.webp"
                     alt="벌꿀오소리 팀 단체 사진"
-                    className="w-full h-auto"
+                    className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="p-2">
-                  <p className="leading-relaxed text-gray-700 mb-4 text-left">
+              </div>
+
+              {/* Team Description Column - Added for PC display */}
+              <div className="w-full lg:w-1/2 outline outline-1 p-4">
+                <div className="h-full flex flex-col justify-center">
+                  <p className="leading-relaxed text-gray-700 mb-4 text-left text-lg">
                     왜 벌꿀오소리냐구요? <br></br>벌꿀오소리는 강하니까.
                   </p>
                   <div className="mb-4 text-left">
