@@ -72,7 +72,7 @@ const MemberProfile = ({ member }) => {
           "{comment}"
         </p>
 
-        <a
+        {/* <a
           href={notionUrl}
           target="_blank"
           rel="noopener noreferrer"
@@ -93,7 +93,7 @@ const MemberProfile = ({ member }) => {
               d="M9 5l7 7-7 7"
             />
           </svg>
-        </a>
+        </a> */}
       </div>
     </div>
   );
