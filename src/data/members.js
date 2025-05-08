@@ -15,7 +15,7 @@ export const members = [
   {
     name: "황준걸",
     image: "/images/jungeol.png",
-    comment: "어쩌구",
+    comment: "스읍,,,",
     notionUrl: "https://example.com/jungeol",
   },
 ];
