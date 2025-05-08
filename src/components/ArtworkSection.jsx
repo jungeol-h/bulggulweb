@@ -9,6 +9,7 @@ import {
   StarryBackground,
   TypewriterText,
 } from "./HudComponents";
+import StyledHeading from "./StyledHeading";
 
 const ArtworkSection = () => {
   const sectionRef = useRef(null);
@@ -33,13 +34,24 @@ const ArtworkSection = () => {
       {/* 흰색 글리터 배경 추가 */}
       <StarryBackground count={150} className="z-0" />
 
-      <div className="relative z-10">
-        <div className="container mx-auto min-h-screen py-20 px-4">
+      {/* <div className="relative z-10 pt-12 px-8">
+        <div className="container mx-auto text-left">
+          <StyledHeading
+            text="작품 정보"
+            className="text-left text-gray-200 "
+            color="#fff"
+            fontSize="text-xl"
+          />
+        </div>
+      </div> */}
+
+      <div className="relative z-10 pt-12">
+        <div className="container mx-auto min-h-screen pb-52 px-4">
           <div className="flex flex-col gap-0.5 outline outline-2">
             {/* Title row */}
             <div className="w-full py-3 flex items-center">
               <div className="mr-4 text-xs text-gray-400"></div>
-              <h1 className="text-white text-3xl font-bold tracking-wider">
+              <h1 className="text-white text-3xl font-bold tracking-wider text-left">
                 <span className="lcd-text">
                   <TypewriterText text="나≠나" delay={150} />
                 </span>

@@ -6,11 +6,14 @@ const TeamSection = () => {
     <section className="min-h-screen bg-team-bg font-noto py-16">
       <div className="section-container">
         <div className="section-content fade-in">
-          <StyledHeading
-            text="벌꿀오소리"
-            color="#4f46e5"
-            className="text-gray-800"
-          />
+          <div className="text-left">
+            <StyledHeading
+              text="TEAM 벌꿀오소리"
+              color="#123"
+              className="text-gray-800"
+              fontSize="text-3xl"
+            />
+          </div>
 
           {/* 2-column layout for desktop, 1-column for mobile */}
           <div className="flex flex-col md:flex-row gap-6 mb-12">
@@ -24,19 +27,19 @@ const TeamSection = () => {
             </div>
 
             {/* Team Introduction Column */}
-            <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+            <div className="w-full md:w-1/2 ">
+              <h3 className="text-2xl font-semibold mb-4 text-gray-800 text-left">
                 팀 소개
               </h3>
-              <p className="leading-relaxed text-gray-700 mb-6">
-                '벌꿀오소리' 소개글이 여기에 들어갑니다
+              <p className="leading-relaxed text-gray-700 mb-6 text-left">
+                왜 벌꿀오소리냐구요? <br></br>벌꿀오소리는 강하니까.
               </p>
             </div>
           </div>
 
           {/* Blog Section (Single Column) */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h4 className="text-xl font-medium mb-3 text-gray-800">
+            <h4 className="text-xl font-medium mb-3 text-gray-800 text-left">
               팀 블로그
             </h4>
             <ul className="space-y-2 ml-4">

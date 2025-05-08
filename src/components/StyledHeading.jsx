@@ -1,18 +1,22 @@
 import React from "react";
 
 /**
- * StyledHeading - A grotesque heading component with repetition effects
+ * StyledHeading - A heading component with customizable styling
  *
  * @param {Object} props
  * @param {string} props.text - The heading text
  * @param {string} [props.number] - Optional number badge to display
- * @param {string} [props.color] - Optional color override for the heading text
+ * @param {string} [props.color] - Color for the heading text (default: currentColor)
+ * @param {string} [props.fontSize] - Custom font size (default: text-5xl md:text-7xl lg:text-7xl)
  * @param {string} [props.className] - Optional additional classes
  */
-const StyledHeading = ({ text, number, color, className = "" }) => {
-  // Determine text color based on context or use provided color
-  const textColor = color || "currentColor";
-
+const StyledHeading = ({
+  text,
+  number,
+  color = "currentColor",
+  fontSize,
+  className = "",
+}) => {
   // Generate 6 copies with decreasing opacity for the repetition effect
   const repetitions = [
     // { transform: "translateX(420px)", opacity: 0.4 },
@@ -21,18 +25,26 @@ const StyledHeading = ({ text, number, color, className = "" }) => {
     // { transform: "translateX(50px)", opacity: 0.1 },
   ];
 
+  // Default fontSize if not provided
+  const fontSizeClasses = fontSize || "text-5xl md:text-7xl lg:text-7xl";
+
   return (
     <h2
       className={`
-        text-5xl md:text-7xl lg:text-7xl
-        font-bold mb-12
+        ${fontSizeClasses}
+        font-bold mb-6
         inline-block
-        transform -rotate-2
         relative
         ${className}
       `}
-      style={{ color: textColor }}
+      style={{ color }}
     >
+      {/* Small square at the top-left */}
+      {/* <span
+        className="absolute -top-4 -left-4 w-3 h-3"
+        style={{ backgroundColor: color }}
+      /> */}
+
       {/* Main text */}
       <span className="relative z-10">{text}</span>
 
@@ -42,7 +54,7 @@ const StyledHeading = ({ text, number, color, className = "" }) => {
           key={index}
           className="absolute top-0 left-0 z-0"
           style={{
-            color: textColor,
+            color,
             opacity: style.opacity,
             transform: style.transform,
           }}
@@ -59,11 +71,10 @@ const StyledHeading = ({ text, number, color, className = "" }) => {
             w-10 h-10 md:w-12 md:h-12
             rounded-full 
             flex items-center justify-center
-            transform rotate-12
             text-xl md:text-2xl
           "
           style={{
-            backgroundColor: textColor,
+            backgroundColor: color,
             color: color === "white" ? "black" : "white",
           }}
         >

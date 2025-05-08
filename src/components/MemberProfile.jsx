@@ -8,11 +8,13 @@ const MemberProfile = ({ member }) => {
     <section className="bg-team-bg font-noto py-10">
       <div className="section-container">
         <div className="section-content fade-in">
-          <StyledHeading
-            text={name}
-            color="#4f46e5"
-            className="text-gray-800 mb-8"
-          />
+          <div className="text-left">
+            <StyledHeading
+              text={name}
+              color="#123"
+              className="text-gray-800 mb-8"
+            />
+          </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex flex-col md:flex-row gap-6 items-center">
@@ -30,7 +32,7 @@ const MemberProfile = ({ member }) => {
                 <p className="text-lg italic text-gray-600 mb-6">{comment}</p>
 
                 <div>
-                  <h4 className="text-xl font-medium mb-3 text-gray-800">
+                  <h4 className="text-xl font-medium mb-3 text-gray-800 text-left">
                     개인 블로그
                   </h4>
                   <a
