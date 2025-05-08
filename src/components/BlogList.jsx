@@ -10,7 +10,7 @@ const BlogList = ({ posts }) => {
         {posts.map((post, index) => (
           <div
             key={index}
-            className="blog-item p-4 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200 min-h-[200px]"
+            className="blog-item hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200"
           >
             <div className="flex flex-col md:flex-row gap-4">
               {/* 썸네일 이미지 */}

@@ -28,58 +28,60 @@ const TeamSection = () => {
   ];
 
   return (
-    <section className="min-h-screen font-noto py-16 border-t border-gray-300 w-full">
+    <section className="min-h-screen font-noto py-12 border-t border-gray-300 w-full">
       <div className="container mx-auto min-h-screen pb-52 px-4">
         <div className="fade-in">
-          <div className="text-left mb-4">
-            <StyledHeading
-              text="TEAM 벌꿀오소리"
-              color="#000"
-              className="text-gray-900"
-              fontSize="text-3xl"
-            />
-          </div>
-
-          {/* 2-column layout for desktop, 1-column for mobile */}
-          <div className="flex flex-col md:flex-row gap-6 pb-8">
-            {/* Team Image Column */}
-            <div className="w-full md:w-1/2">
-              <img
-                src="/images/team photo.png"
-                alt="벌꿀오소리 팀 단체 사진"
-                className="w-full h-auto"
-              />
+          <div className="flex flex-col gap-0.5 outline outline-2">
+            {/* Title row */}
+            <div className="w-full py-3 flex items-center">
+              <div className="mr-4 text-xs text-gray-400"></div>
+              <h1 className="text-3xl font-bold tracking-wider text-left">
+                TEAM 벌꿀오소리
+              </h1>
             </div>
-            <div className="w-full md:w-1/2 md:pl-6">
-              <p className="leading-relaxed text-gray-700 mb-6 text-left">
-                왜 벌꿀오소리냐구요? <br></br>벌꿀오소리는 강하니까.
-              </p>
-              <div className="mb-4 text-left">
-                <img
-                  src="/images/honeybadger.png"
-                  alt="벌꿀오소리 마스코트"
-                  className="w-48 h-auto"
-                />
+
+            {/* Team Image + Description row */}
+            <div className="flex flex-col lg:flex-row gap-0.5">
+              {/* Team Image Column */}
+              <div className="w-full lg:w-1/2 outline outline-1">
+                <div className="flex items-center justify-center h-full mb-4">
+                  <img
+                    src="/images/team photo.webp"
+                    alt="벌꿀오소리 팀 단체 사진"
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="p-2">
+                  <p className="leading-relaxed text-gray-700 mb-4 text-left">
+                    왜 벌꿀오소리냐구요? <br></br>벌꿀오소리는 강하니까.
+                  </p>
+                  <div className="mb-4 text-left">
+                    <img
+                      src="/images/honeybadger.png"
+                      alt="벌꿀오소리 마스코트"
+                      className="w-24 h-auto"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Member Profiles Section */}
-          <div className="mt-12 mb-16">
-            <h3 className="text-2xl font-semibold mb-8 text-gray-800 text-left">
-              팀 멤버
-            </h3>
-            <div className="grid grid-cols-3 gap-0">
-              {members.map((member, index) => (
-                <div key={index} className="bg-white w-full">
-                  <MemberProfile member={{ ...member, isCompact: true }} />
-                </div>
-              ))}
+            {/* Member Profiles Section */}
+            <div className="w-full outline outline-1 ">
+              <div className="grid grid-cols-3 gap-0.5">
+                {members.map((member, index) => (
+                  <div key={index} className="outline outline-1">
+                    <MemberProfile member={{ ...member, isCompact: true }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Blog Section */}
+            <div className="w-full p-4 outline outline-1">
+              <BlogList posts={blogPosts} />
             </div>
           </div>
-
-          {/* Blog Section (Using BlogList Component) */}
-          <BlogList posts={blogPosts} />
         </div>
       </div>
     </section>

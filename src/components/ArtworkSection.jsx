@@ -112,7 +112,7 @@ const ArtworkSection = () => {
         {/* <StyledHeading text="큐레이터" className="mb-12 text-center" /> */}
 
         <div className="text-center max-w-3xl mx-auto">
-          <p className="text-xl mb-8">
+          <p className="text-l mb-4">
             본 작품은 숭실대학교 글로벌미디어학부<br></br> 2024년 졸업전시에
             출품되었습니다.
           </p>
