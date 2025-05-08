@@ -28,7 +28,7 @@ const TeamSection = () => {
   ];
 
   return (
-    <section className="min-h-screen font-noto py-12 border-t border-gray-300 w-full">
+    <section className="min-h-screen font-noto py-12  w-full">
       <div className="container mx-auto min-h-screen pb-52 px-4">
         <div className="fade-in">
           <div className="flex flex-col gap-0.5 outline outline-2">
