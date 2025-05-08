@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 /**
  * 기본 HUD 패널 컴포넌트
@@ -19,9 +19,85 @@ export const HudPanel = ({
         {title}
       </div>
     )}
-    <div className="pixel-text flex-grow">{children}</div>
+    <div className="pixel-text flex-grow text-left px-1">{children}</div>
   </section>
 );
+
+/**
+ * 타이핑 애니메이션 텍스트 컴포넌트
+ */
+export const TypewriterText = ({ text, delay = 50, className = "" }) => {
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const textRef = useRef(text);
+
+  useEffect(() => {
+    textRef.current = text;
+    setDisplayText("");
+    setCurrentIndex(0);
+  }, [text]);
+
+  useEffect(() => {
+    if (currentIndex < textRef.current.length) {
+      const timer = setTimeout(() => {
+        setDisplayText((prev) => prev + textRef.current[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, delay);
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, delay]);
+
+  return (
+    <span className={className}>
+      {displayText}
+      {currentIndex < textRef.current.length && (
+        <span className="blink">_</span>
+      )}
+    </span>
+  );
+};
+
+/**
+ * 타이핑 애니메이션이 적용된 텍스트 블록 컴포넌트
+ */
+export const TypewriterBlock = ({ content, delay = 40, className = "" }) => {
+  if (typeof content === "string") {
+    return (
+      <TypewriterText text={content} delay={delay} className={className} />
+    );
+  }
+
+  // 객체 형태의 콘텐츠 처리
+  return (
+    <div className={`prose text-white max-w-none ${className}`}>
+      {content.part1 && (
+        <p>
+          <TypewriterText text={content.part1} delay={delay} />
+        </p>
+      )}
+      {content.quote && (
+        <blockquote>
+          <TypewriterText text={content.quote} delay={delay} />
+        </blockquote>
+      )}
+      {content.part2 && (
+        <p>
+          <TypewriterText text={content.part2} delay={delay} />
+        </p>
+      )}
+      {content.inspirations && (
+        <ul>
+          {content.inspirations.map((item, idx) => (
+            <li key={idx}>
+              <TypewriterText text={item} delay={delay} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 
 /**
  * 레이블-값 쌍 컴포넌트
@@ -32,14 +108,17 @@ export const HudLabelValue = ({
   className = "",
   labelColor = "text-gray-400",
   valueColor = "text-white",
+  useTypewriter = false,
 }) => (
   <div className={`mb-2 ${className}`}>
     <span
       className={`text-xs uppercase tracking-widest ${labelColor} font-mono block`}
     >
-      {label}
+      <TypewriterText text={label} delay={30} />
     </span>
-    <span className={`text-lg ${valueColor} font-mono lcd-text`}>{value}</span>
+    <span className={`text-lg ${valueColor} font-mono lcd-text`}>
+      {useTypewriter ? <TypewriterText text={value} delay={40} /> : value}
+    </span>
   </div>
 );
 
@@ -97,39 +176,42 @@ export const GridBackground = ({ className = "" }) => (
  * 개요 패널 - 작품 기본 정보를 포함하는 패널
  */
 export const InfoPanel = ({ artworkData }) => (
-  <HudPanel title="개요" className="h-full space-y-2">
-    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-4">
-      <HudLabelValue label="UNIT ID" value="VX-NANANA-25" />
+  <HudPanel title=" " className="h-full space-y-2">
+    <div>
+      <p className="text-white font-mono text-sm">
+        <TypewriterText text={artworkData.shortDescription} />
+      </p>
+    </div>
+    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-4 mt-8">
+      {/* <HudLabelValue label="UNIT ID" value="VX-NANANA-25" /> */}
+      <HudLabelValue
+        label="CLASSIFICATION"
+        value={artworkData.category || "미디어아트"}
+        useTypewriter={true}
+      />
       <HudLabelValue
         label="MANUFACTURE DATE"
         value={artworkData.year || "2025"}
+        useTypewriter={true}
       />
       <HudLabelValue
         label="OPERATOR"
         value={artworkData.creator || "팀 '벌꿀오소리'"}
+        useTypewriter={true}
       />
-      <HudLabelValue
-        label="CLASSIFICATION"
-        value={artworkData.category || "미디어아트"}
-      />
+
       <HudLabelValue
         label="COMPONENTS"
         value={artworkData.materials || "AI, 카메라, 디스플레이"}
         className="col-span-2"
+        useTypewriter={true}
       />
       <HudLabelValue
         label="SPATIAL PARAMETERS"
         value={artworkData.dimensions || "가변적"}
         className="col-span-2"
+        useTypewriter={true}
       />
-    </div>
-
-    <HudDivider />
-
-    <div>
-      <p className="text-white font-mono text-sm">
-        {artworkData.shortDescription}
-      </p>
     </div>
   </HudPanel>
 );
@@ -152,22 +234,7 @@ export const ImagePanel = ({ imageSrc, imageAlt }) => (
 export const TextPanel = ({ title, content }) => (
   <HudPanel title={title} className="h-full">
     <div className="text-white font-mono text-sm h-full">
-      {typeof content === "string" ? (
-        <p>{content}</p>
-      ) : (
-        <div className="prose text-white max-w-none font-mono text-sm h-full">
-          {content.part1 && <p>{content.part1}</p>}
-          {content.quote && <blockquote>{content.quote}</blockquote>}
-          {content.part2 && <p>{content.part2}</p>}
-          {content.inspirations && (
-            <ul>
-              {content.inspirations.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
+      <TypewriterBlock content={content} />
     </div>
   </HudPanel>
 );

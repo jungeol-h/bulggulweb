@@ -6,6 +6,7 @@ import {
   TextPanel,
   lcdStyles,
   GridBackground,
+  TypewriterText,
 } from "./HudComponents";
 
 const ArtworkSection = () => {
@@ -35,7 +36,9 @@ const ArtworkSection = () => {
             <div className="w-full py-3 flex items-center">
               <div className="mr-4 text-xs text-gray-400"></div>
               <h1 className="text-white text-3xl font-bold tracking-wider">
-                <span className="lcd-text">나≠나</span>
+                <span className="lcd-text">
+                  <TypewriterText text="나≠나" delay={150} />
+                </span>
               </h1>
             </div>
 
