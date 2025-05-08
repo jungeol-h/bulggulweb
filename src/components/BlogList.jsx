@@ -4,7 +4,7 @@ const BlogList = ({ posts }) => {
   return (
     <div className="blog-list">
       <h4 className="text-xl font-medium mb-6 text-gray-800 text-left">
-        팀의 이야기들
+        이야기들
       </h4>
       <div className="space-y-4">
         {posts.map((post, index) => (
