@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import ArtworkSection from "./components/ArtworkSection";
 import TeamSection from "./components/TeamSection";
 import CuratorSection from "./components/CuratorSection";
 import "./App.css";
 
-// 픽셀화된 전환 컴포넌트 - 퍼즐 조각처럼 분해되는 효과
+// 픽셀화된 전환 컴포넌트 - 퍼즐 조각처럼 분해되는 효과 (애니메이션 추가)
 const PixelTransition = () => {
   // 화면 크기에 따라 픽셀 수 계산
   const [dimensions, setDimensions] = useState({
@@ -13,12 +13,16 @@ const PixelTransition = () => {
     cols: 60,
   });
 
+  // 애니메이션 프레임 추적
+  const [frame, setFrame] = useState(0);
+  const animationRef = useRef(null);
+
   // 화면 크기 변경 감지 및 픽셀 크기/개수 계산
   useEffect(() => {
     const calculateDimensions = () => {
-      const pixelSize = window.innerWidth > 768 ? 10 : 8; // 모바일은 더 작은 픽셀
+      const pixelSize = window.innerWidth > 768 ? 10 : 8;
       const cols = Math.ceil(window.innerWidth / pixelSize);
-      const rows = Math.ceil(400 / pixelSize); // 섹션 높이 400px 기준
+      const rows = Math.ceil(300 / pixelSize); // 높이를 400에서 300으로 줄임
 
       setDimensions({ pixelSize, rows, cols });
     };
@@ -34,43 +38,69 @@ const PixelTransition = () => {
     };
   }, []);
 
-  // 픽셀 도트 배열 생성 - dimensions가 변경될 때만 재생성
+  // 애니메이션 루프 설정
+  useEffect(() => {
+    const animate = () => {
+      setFrame((prev) => (prev + 0.5) % 1000); // 프레임 증가량 조정 (1에서 0.5로 줄임)
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
+  // 픽셀 도트 배열 생성 - dimensions와 frame이 변경될 때 재생성
   const pixels = useMemo(() => {
     const result = [];
     const { rows, cols } = dimensions;
 
-    // 노이즈 시드 (픽셀에 약간의 랜덤성 추가)
-    const noiseSeed = [];
-    for (let i = 0; i < rows; i++) {
-      noiseSeed[i] = [];
-      for (let j = 0; j < cols; j++) {
-        noiseSeed[i][j] = Math.random() * 0.3; // 0~0.3 사이의 랜덤 노이즈
-      }
-    }
+    // 시간에 따라 변화하는 노이즈 시드
+    const time = frame / 200; // 애니메이션 속도 조정 (100에서 200으로 늘림)
 
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < cols; j++) {
-        // 더 자연스러운 페이드아웃을 위한 계산 개선
-        // 1. 기본 높이 기반 확률 (S자 커브 적용)
+        // 기본 패턴 생성
         const normalizedHeight = i / rows;
-        const sigmoid = 1 / (1 + Math.exp(-10 * (normalizedHeight - 0.5))); // S자 커브
 
-        // 2. 노이즈 추가 (약간의 랜덤성)
-        const noiseValue = noiseSeed[i][j];
+        // 시간에 따라 변화하는 웨이브 패턴 (사인파)
+        const waveFactor = Math.sin(j / 5 + time) * 0.08; // 웨이브 크기 감소 (0.1에서 0.08로)
+        const wave2Factor = Math.cos(i / 5 + time * 0.5) * 0.08; // 웨이브 속도 및 크기 감소
 
-        // 3. 픽셀 가장자리로 갈수록 먼저 사라지는 효과 (중앙은 더 오래 유지)
+        // 노이즈 생성 (단순한 유사 난수)
+        const noise = Math.sin(i * 0.1 + j * 0.1 + time * 0.15) * 0.08; // 노이즈 속도 감소
+
+        // 사라짐 확률 계산 - 시간에 따라 변화하는 패턴
+        const sigmoid =
+          1 /
+          (1 +
+            Math.exp(
+              -10 * (normalizedHeight - 0.5 + waveFactor + wave2Factor)
+            ));
+
+        // 가장자리 효과
         const centerX = cols / 2;
         const distFromCenterX = Math.abs(j - centerX) / centerX;
         const edgeFactor = 0.2 * Math.pow(distFromCenterX, 2);
 
-        // 최종 사라짐 확률 계산
-        const disappearProb = sigmoid + noiseValue + edgeFactor - 0.2; // 0.2 오프셋으로 초기 밀도 증가
+        // 최종 사라짐 확률
+        const disappearProb = sigmoid + noise + edgeFactor - 0.2;
 
-        const shouldShow = Math.random() > disappearProb;
+        // 특별한 침범 효과 - 가끔 하단에서 위로 올라오는 픽셀
+        const invasionFactor =
+          Math.sin(j * 0.3 + time * 1.2) > 0.92
+            ? Math.max(0, 0.6 - normalizedHeight) * 0.4
+            : 0;
+
+        const shouldShow = Math.random() > disappearProb - invasionFactor;
 
         if (shouldShow) {
           result.push({
-            id: `pixel-${i}-${j}`,
+            id: `pixel-${i}-${j}-${frame}`, // 프레임 추가로 키 충돌 방지
             row: i,
             col: j,
           });
@@ -79,7 +109,7 @@ const PixelTransition = () => {
     }
 
     return result;
-  }, [dimensions]);
+  }, [dimensions, frame]);
 
   return (
     <div className="pixel-transition-container">
@@ -128,7 +158,7 @@ function App() {
       <style jsx>{`
         .pixel-transition-section {
           position: relative;
-          height: 400px;
+          height: 300px; /* 400px에서 300px로 높이 줄임 */
           width: 100%;
           background: white;
           overflow: hidden;
@@ -159,7 +189,7 @@ function App() {
 
         @media (max-width: 768px) {
           .pixel-transition-section {
-            height: 300px;
+            height: 200px; /* 300px에서 200px로 줄임 */
           }
         }
       `}</style>
