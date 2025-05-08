@@ -10,7 +10,7 @@ export const HudPanel = ({
   titleColor = "text-white",
 }) => (
   <section
-    className={`border border-gray-800 bg-black relative lcd-screen ${className}`}
+    className={`border border-gray-800 bg-black relative lcd-screen h-full flex flex-col ${className}`}
   >
     {title && (
       <div
@@ -19,7 +19,7 @@ export const HudPanel = ({
         {title}
       </div>
     )}
-    <div className="p-4 pixel-text">{children}</div>
+    <div className="p-4 pixel-text flex-grow">{children}</div>
   </section>
 );
 
@@ -40,25 +40,6 @@ export const HudLabelValue = ({
       {label}
     </span>
     <span className={`text-lg ${valueColor} font-mono lcd-text`}>{value}</span>
-  </div>
-);
-
-/**
- * 데이터 상태 표시 인디케이터
- */
-export const HudStatusIndicator = ({
-  text,
-  dotColor = "bg-white",
-  pulse = true,
-  className = "",
-}) => (
-  <div className={`text-xs text-gray-400 flex items-center ${className}`}>
-    <span
-      className={`inline-block w-2 h-2 ${dotColor} mr-2 ${
-        pulse ? "blink" : ""
-      }`}
-    ></span>
-    {text}
   </div>
 );
 
@@ -93,7 +74,9 @@ export const HudProgressBar = ({
  * 이미지 프레임 컴포넌트
  */
 export const HudImageFrame = ({ src, alt, className = "", refCode }) => (
-  <div className={`relative overflow-hidden lcd-frame ${className}`}>
+  <div
+    className={`relative w-full h-full overflow-hidden lcd-frame ${className}`}
+  >
     <div className="absolute inset-0 border border-gray-800 z-10 pointer-events-none"></div>
     <img
       src={src}
