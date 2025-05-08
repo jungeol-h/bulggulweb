@@ -34,43 +34,44 @@ const ArtworkSection = () => {
     >
       <div className="section-container">
         <div className="section-content min-h-screen py-20">
-          {/* Title and tagline with animation */}
-          <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10 mb-8">
-            <h1 className="text-[#FF5C00] text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight text-white">
-              『나≠나』
-            </h1>
-            <div className="prose prose-invert prose-lg max-w-none space-y-2">
-              <p>
-                <strong>형태:</strong> 인터랙티브 미디어 설치
-              </p>
-              <p>
-                <strong>재료:</strong> AI 모델, 프로젝션, 카메라, 디스플레이,
-                Javascript 기반 웹 인터페이스
-              </p>
-              <p>
-                <strong>크기:</strong> 가변적 (설치 공간에 따라 조정)
-              </p>
-              <p>
-                <strong>제작년도:</strong> 2025
-              </p>
-              <p>
-                <strong>참여인원:</strong> 황준걸 외 2인 (벌꿀오소리 팀)
-              </p>
-            </div>
-          </div>
-
-          {/* Main artwork image */}
-          <div className="mb-20 animate-on-scroll opacity-0 transition-all duration-1000 delay-300 transform translate-y-10">
-            <div className="relative aspect-video max-h-[80vh] overflow-hidden rounded-lg">
-              <img
-                src="/images/artwork-main.jpg"
-                alt="나≠나 작품 대표 이미지"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+          {/* Title and two column section containing artwork info and image */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            {/* Column 1: Artwork title and details */}
+            <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10 text-left">
+              <h1 className="text-[#FF5C00] text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight text-white text-left">
+                나≠나
+              </h1>
+              <div className="prose prose-invert prose-lg max-w-none space-y-2 text-left">
                 <p className="text-lg md:text-xl">
                   {artworkContent.shortDescription}
                 </p>
+                <p className="text-left">
+                  <strong>작가</strong> 팀 '벌꿀오소리'
+                </p>
+                <p className="text-left">
+                  <strong>제작년도</strong> 2025
+                </p>
+                <p className="text-left">
+                  <strong>유형</strong> 미디어아트
+                </p>
+                <p className="text-left">
+                  <strong>재료</strong> AI 모델, 카메라, 디스플레이, 나무판
+                </p>
+                <p className="text-left">
+                  <strong>크기</strong> 가변적 (설치 공간에 따라 조정)
+                </p>
+              </div>
+            </div>
+
+            {/* Column 2: Main artwork image */}
+            <div className="animate-on-scroll opacity-0 transition-all duration-1000 delay-300 transform translate-y-10">
+              <div className="relative aspect-video max-h-[80vh] overflow-hidden rounded-lg">
+                <img
+                  src="/images/artwork-main.png"
+                  alt="나≠나 작품 대표 이미지"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6"></div>
               </div>
             </div>
           </div>
