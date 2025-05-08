@@ -34,7 +34,7 @@ const CuratorSection = () => {
 
           <div className="mt-10">
             <a
-              href="https://example.com/exhibition"
+              href="https://afterglow2025.github.io/afterglow2025/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-8 py-3 bg-black/40 hover:bg-black/60 rounded-full text-white transition-colors text-lg border border-white/50 hover:border-white shadow-lg backdrop-blur-sm"

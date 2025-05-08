@@ -13,13 +13,14 @@ const MemberProfile = ({ member }) => {
               text={name}
               color="#123"
               className="text-gray-800 mb-8"
+              fontSize="text-2xl"
             />
           </div>
 
           <div className="bg-white">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-full md:w-1/3">
-                <div className="bg-white p-3">
+                <div className="bg-white">
                   <img
                     src={image}
                     alt={`${name} 프로필 사진`}
@@ -33,7 +34,7 @@ const MemberProfile = ({ member }) => {
 
                 <div>
                   <h4 className="text-xl font-medium mb-3 text-gray-800 text-left">
-                    개인 블로그
+                    개인적인 이야기들
                   </h4>
                   <a
                     href={notionUrl}
