@@ -6,7 +6,7 @@ import {
   TextPanel,
   lcdStyles,
   GridBackground,
-} from "./hud/HudComponents";
+} from "./HudComponents";
 
 const ArtworkSection = () => {
   const sectionRef = useRef(null);
