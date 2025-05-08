@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { artworkContent } from "../data/artworkContent";
+import StyledHeading from "./StyledHeading";
 
 const ArtworkSection = () => {
   const sectionRef = useRef(null);
@@ -34,9 +35,11 @@ const ArtworkSection = () => {
       <div className="min-h-screen py-20 px-6 md:px-12 max-w-5xl mx-auto">
         {/* Title and tagline with animation */}
         <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-[#c084fc]">
-            「나≠나」
-          </h1>
+          <StyledHeading
+            text="「나≠나」"
+            color="#c084fc"
+            className="text-7xl md:text-8xl lg:text-9xl"
+          />
         </div>
 
         {/* Main artwork image */}
@@ -59,12 +62,7 @@ const ArtworkSection = () => {
         <div className="space-y-16">
           {/* 작품 개요 */}
           <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
-            <h2 className="text-3xl font-semibold mb-6 text-[#c084fc] flex items-center">
-              <span className="w-8 h-8 inline-flex items-center justify-center rounded-full bg-[#c084fc] text-[#0d0d0d] mr-3">
-                1
-              </span>
-              작품 개요
-            </h2>
+            <StyledHeading text="작품 개요" number="1" color="#c084fc" />
             <div className="prose prose-invert prose-lg max-w-none">
               <p className="leading-relaxed">{artworkContent.overview}</p>
             </div>
@@ -72,12 +70,7 @@ const ArtworkSection = () => {
 
           {/* 문제의식 및 의도 */}
           <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
-            <h2 className="text-3xl font-semibold mb-6 text-[#c084fc] flex items-center">
-              <span className="w-8 h-8 inline-flex items-center justify-center rounded-full bg-[#c084fc] text-[#0d0d0d] mr-3">
-                2
-              </span>
-              문제의식 및 의도
-            </h2>
+            <StyledHeading text="문제의식 및 의도" number="2" color="#c084fc" />
             <div className="prose prose-invert prose-lg max-w-none">
               <p>{artworkContent.intention.part1}</p>
               <blockquote className="border-l-4 border-[#c084fc] pl-4 my-6 italic">
@@ -89,12 +82,7 @@ const ArtworkSection = () => {
 
           {/* 작품 설명 */}
           <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
-            <h2 className="text-3xl font-semibold mb-6 text-[#c084fc] flex items-center">
-              <span className="w-8 h-8 inline-flex items-center justify-center rounded-full bg-[#c084fc] text-[#0d0d0d] mr-3">
-                3
-              </span>
-              작품 설명
-            </h2>
+            <StyledHeading text="작품 설명" number="3" color="#c084fc" />
             <div className="prose prose-invert prose-lg max-w-none">
               <p className="leading-relaxed">
                 {artworkContent.description.part1}
@@ -107,12 +95,7 @@ const ArtworkSection = () => {
 
           {/* 작업 배경 */}
           <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
-            <h2 className="text-3xl font-semibold mb-6 text-[#c084fc] flex items-center">
-              <span className="w-8 h-8 inline-flex items-center justify-center rounded-full bg-[#c084fc] text-[#0d0d0d] mr-3">
-                4
-              </span>
-              작업 배경
-            </h2>
+            <StyledHeading text="작업 배경" number="4" color="#c084fc" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <p className="leading-relaxed">
@@ -139,12 +122,7 @@ const ArtworkSection = () => {
 
           {/* 작업 구성 */}
           <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
-            <h2 className="text-3xl font-semibold mb-6 text-[#c084fc] flex items-center">
-              <span className="w-8 h-8 inline-flex items-center justify-center rounded-full bg-[#c084fc] text-[#0d0d0d] mr-3">
-                5
-              </span>
-              작업 구성
-            </h2>
+            <StyledHeading text="작업 구성" number="5" color="#c084fc" />
             <div className="space-y-6">
               <p className="leading-relaxed">{artworkContent.structure}</p>
 
@@ -163,12 +141,11 @@ const ArtworkSection = () => {
 
           {/* 기타 시각자료 */}
           <div className="animate-on-scroll opacity-0 transition-all duration-1000 transform translate-y-10">
-            <h2 className="text-3xl font-semibold mb-6 text-[#c084fc] flex items-center">
-              <span className="w-8 h-8 inline-flex items-center justify-center rounded-full bg-[#c084fc] text-[#0d0d0d] mr-3">
-                6
-              </span>
-              작업 과정 및 시각자료
-            </h2>
+            <StyledHeading
+              text="작업 과정 및 시각자료"
+              number="6"
+              color="#c084fc"
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {artworkContent.processImages.map((image, idx) => (

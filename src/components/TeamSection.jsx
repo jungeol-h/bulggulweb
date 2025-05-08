@@ -1,10 +1,15 @@
 import React from "react";
+import StyledHeading from "./StyledHeading";
 
 const TeamSection = () => {
   return (
     <section className="min-h-screen bg-team-bg font-noto py-16 px-4">
       <div className="max-w-4xl mx-auto fade-in">
-        <h2 className="text-4xl font-bold mb-8 text-gray-800">벌꿀오소리</h2>
+        <StyledHeading
+          text="벌꿀오소리"
+          color="#4f46e5"
+          className="text-gray-800"
+        />
 
         <div className="mb-12">
           <div className="bg-white p-4 rounded-lg shadow-lg mb-6 transform rotate-1 max-w-lg mx-auto">
