@@ -1,13 +1,12 @@
 import React, { useRef } from "react";
 import { artworkContent } from "../data/artworkContent";
 import {
-  ArtworkSpecsPanel,
-  ArtworkVisualPanel,
-  ProjectOverviewPanel,
-  ConceptFrameworkPanel,
-  BackgroundAnalysisPanel,
-} from "./hud/ArtworkHudPanels";
-import { lcdStyles, GridBackground } from "./hud/HudComponents";
+  InfoPanel,
+  ImagePanel,
+  TextPanel,
+  lcdStyles,
+  GridBackground,
+} from "./hud/HudComponents";
 
 const ArtworkSection = () => {
   const sectionRef = useRef(null);
@@ -46,23 +45,31 @@ const ArtworkSection = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-0.5 outline outline-2">
             {/* Top row: Specs + Visual */}
             <div className="col-span-1">
-              <ArtworkSpecsPanel artworkData={artworkData} />
+              <InfoPanel artworkData={artworkData} />
             </div>
 
             <div className="col-span-1 lg:col-span-2">
-              <ArtworkVisualPanel
+              <ImagePanel
                 imageSrc="/images/artwork-main.png"
                 imageAlt="나≠나 작품 대표 이미지"
+                title="이미지 #1"
+                refCode="VIS.REF.01"
               />
             </div>
 
             {/* Bottom row: Overview + Concept */}
             <div className="col-span-1 lg:col-span-2">
-              <ProjectOverviewPanel overview={artworkContent.overview} />
+              <TextPanel
+                title="프로젝트 요약"
+                content={artworkContent.overview}
+              />
             </div>
 
             <div className="col-span-1">
-              <ConceptFrameworkPanel data={artworkContent.intention} />
+              <TextPanel
+                title="문제의식/의도"
+                content={artworkContent.intention}
+              />
             </div>
           </div>
         </div>

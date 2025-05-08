@@ -99,6 +99,94 @@ export const GridBackground = ({ className = "" }) => (
 );
 
 /**
+ * 개요 패널 - 작품 기본 정보를 포함하는 패널
+ */
+export const InfoPanel = ({ artworkData }) => (
+  <HudPanel title="개요" className="h-full space-y-2">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-4">
+      <HudLabelValue label="UNIT ID" value="VX-NANANA-25" />
+      <HudLabelValue
+        label="MANUFACTURE DATE"
+        value={artworkData.year || "2025"}
+      />
+      <HudLabelValue
+        label="OPERATOR"
+        value={artworkData.creator || "팀 '벌꿀오소리'"}
+      />
+      <HudLabelValue
+        label="CLASSIFICATION"
+        value={artworkData.category || "미디어아트"}
+      />
+      <HudLabelValue
+        label="COMPONENTS"
+        value={artworkData.materials || "AI, 카메라, 디스플레이"}
+        className="col-span-2"
+      />
+      <HudLabelValue
+        label="SPATIAL PARAMETERS"
+        value={artworkData.dimensions || "가변적"}
+        className="col-span-2"
+      />
+    </div>
+
+    <HudDivider />
+
+    <div>
+      <p className="text-white font-mono text-sm">
+        {artworkData.shortDescription}
+      </p>
+    </div>
+  </HudPanel>
+);
+
+/**
+ * 이미지 패널 - 사진만 표시하는 패널
+ */
+export const ImagePanel = ({
+  imageSrc,
+  imageAlt,
+  title = "이미지",
+  refCode,
+}) => (
+  <HudPanel title={title} className="h-full flex flex-col">
+    <div className="flex-grow">
+      <HudImageFrame
+        src={imageSrc}
+        alt={imageAlt}
+        refCode={refCode}
+        className="h-full"
+      />
+    </div>
+  </HudPanel>
+);
+
+/**
+ * 텍스트 패널 - 텍스트 콘텐츠를 표시하는 패널
+ */
+export const TextPanel = ({ title, content }) => (
+  <HudPanel title={title} className="h-full">
+    <div className="text-white font-mono text-sm h-full">
+      {typeof content === "string" ? (
+        <p>{content}</p>
+      ) : (
+        <div className="prose text-white max-w-none font-mono text-sm h-full">
+          {content.part1 && <p>{content.part1}</p>}
+          {content.quote && <blockquote>{content.quote}</blockquote>}
+          {content.part2 && <p>{content.part2}</p>}
+          {content.inspirations && (
+            <ul>
+              {content.inspirations.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  </HudPanel>
+);
+
+/**
  * LCD 효과 스타일 (CSS-in-JS)
  */
 export const lcdStyles = `
