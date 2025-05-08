@@ -69,7 +69,7 @@ const MemberProfile = ({ member }) => {
         </div>
         <h3 className="text-xl font-medium mb-2 text-gray-800">{name}</h3>
         <p className="text-sm italic text-gray-600 mb-4 text-center">
-          "{comment}"
+          {comment}
         </p>
 
         {/* <a
