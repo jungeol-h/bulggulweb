@@ -16,6 +16,15 @@
   font-display: block; /* 폰트 로드될 때까지 텍스트 숨김(깜빡임 방지) */
 }
 
+@font-face {
+  font-family: "RixXladywatermelonR";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block; /* 폰트 로드될 때까지 텍스트 숨김(깜빡임 방지) */
+}
+
 :root {
   /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
   /* line-height: 1.5; */

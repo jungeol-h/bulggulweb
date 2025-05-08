@@ -54,7 +54,10 @@ const TeamSection = () => {
   ];
 
   return (
-    <section className="min-h-screen font-noto py-12 w-full">
+    <section
+      className="min-h-screen font-noto py-12 w-full"
+      style={{ fontFamily: "RixXladywatermelonR" }}
+    >
       <div className="container mx-auto min-h-screen pb-52 px-4 max-w-6xl">
         <div>
           <div
