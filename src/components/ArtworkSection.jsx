@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { artworkContent } from "../data/artworkContent";
 import {
   InfoPanel,
@@ -13,6 +13,31 @@ import StyledHeading from "./StyledHeading";
 
 const ArtworkSection = () => {
   const sectionRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Intersection Observer 설정
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 } // 10% 이상 보이면 활성화
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.disconnect();
+      }
+    };
+  }, []);
 
   // 작품 데이터 준비
   const artworkData = {
@@ -47,7 +72,12 @@ const ArtworkSection = () => {
 
       <div className="relative z-10 pt-12">
         <div className="container mx-auto min-h-screen pb-20 px-4">
-          <div className="flex flex-col gap-0.5 outline outline-2">
+          <div
+            ref={containerRef}
+            className={`flex flex-col gap-0.5 outline outline-2 ${
+              isVisible ? "animate-container" : "opacity-0"
+            }`}
+          >
             {/* Title row */}
             <div className="w-full py-3 flex items-center">
               <div className="mr-4 text-xs text-gray-400"></div>
@@ -137,6 +167,21 @@ const ArtworkSection = () => {
         #artwork,
         #artwork * {
           font-family: "NeoDunggeunmoPro", monospace !important;
+        }
+
+        .animate-container {
+          animation: slideInFromTop 0.8s ease-out forwards;
+        }
+
+        @keyframes slideInFromTop {
+          0% {
+            transform: translateY(-50px);
+            opacity: 0;
+          }
+          100% {
+            transform: translateY(0);
+            opacity: 1;
+          }
         }
       `}</style>
     </section>
