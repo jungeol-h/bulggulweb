@@ -24,8 +24,9 @@ const ArtworkSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="bg-black w-full text-white font-mono relative"
+      className="bg-black w-full text-white relative"
       id="artwork"
+      style={{ fontFamily: "NeoDunggeunmoPro" }}
     >
       <div className="relative z-10">
         <div className="container mx-auto min-h-screen py-20 px-4">
@@ -90,6 +91,14 @@ const ArtworkSection = () => {
       </div>
       {/* CSS for LCD and pixel effects */}
       <style jsx>{lcdStyles}</style>
+
+      {/* 컴포넌트 내 스타일 적용 */}
+      <style jsx global>{`
+        #artwork,
+        #artwork * {
+          font-family: "NeoDunggeunmoPro", monospace !important;
+        }
+      `}</style>
     </section>
   );
 };
