@@ -14,12 +14,12 @@ export const HudPanel = ({
   >
     {title && (
       <div
-        className={`px-4 py-2 text-sm uppercase tracking-widest ${titleColor} font-mono text-left w-full`}
+        className={`px-1 py-3 text-ldg uppercase tracking-widest ${titleColor} font-mono text-left w-full`}
       >
         {title}
       </div>
     )}
-    <div className="p-4 pixel-text flex-grow">{children}</div>
+    <div className="pixel-text flex-grow">{children}</div>
   </section>
 );
 
@@ -73,9 +73,9 @@ export const HudProgressBar = ({
 /**
  * 이미지 프레임 컴포넌트
  */
-export const HudImageFrame = ({ src, alt, className = "", refCode }) => (
+export const HudImageFrame = ({ src, alt, className = "" }) => (
   <div
-    className={`relative w-full h-full overflow-hidden lcd-frame ${className}`}
+    className={` relative w-full h-full overflow-hidden lcd-frame ${className}`}
   >
     <div className="absolute inset-0 z-10 pointer-events-none"></div>
     <img
@@ -83,11 +83,6 @@ export const HudImageFrame = ({ src, alt, className = "", refCode }) => (
       alt={alt}
       className="w-full h-full object-cover monochrome-filter"
     />
-    {refCode && (
-      <div className="absolute top-2 right-2 text-xs text-white bg-black/80 px-2 py-1 font-mono">
-        {refCode}
-      </div>
-    )}
   </div>
 );
 
@@ -142,20 +137,11 @@ export const InfoPanel = ({ artworkData }) => (
 /**
  * 이미지 패널 - 사진만 표시하는 패널
  */
-export const ImagePanel = ({
-  imageSrc,
-  imageAlt,
-  title = "이미지",
-  refCode,
-}) => (
-  <HudPanel title={title} className="h-full flex flex-col">
+export const ImagePanel = ({ imageSrc, imageAlt }) => (
+  <HudPanel className="h-full flex flex-col">
+    <div></div>
     <div className="flex-grow">
-      <HudImageFrame
-        src={imageSrc}
-        alt={imageAlt}
-        refCode={refCode}
-        className="h-full"
-      />
+      <HudImageFrame src={imageSrc} alt={imageAlt} className="h-full " />
     </div>
   </HudPanel>
 );

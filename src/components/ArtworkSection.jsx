@@ -29,43 +29,57 @@ const ArtworkSection = () => {
     >
       <div className="relative z-10">
         <div className="container mx-auto min-h-screen py-20 px-4">
-          {/* Title Header */}
-          <div className="mb-10 pb-3 flex items-center">
-            <div className="mr-4 text-xs text-gray-400">
-              <span>[</span>
-              작품명
-              <span>]</span>
-            </div>
-            <h1 className="text-white text-3xl font-bold tracking-wider">
-              <span className="lcd-text">나≠나</span>
-            </h1>
-          </div>
-
-          {/* Unified Grid Layout - All sections in one connected grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0.5 outline outline-2">
-            {/* Top row: Specs + Visual */}
-            <div className="col-span-1">
-              <InfoPanel artworkData={artworkData} />
+          <div className="flex flex-col gap-0.5 outline outline-2">
+            {/* Title row */}
+            <div className="w-full py-3 flex items-center">
+              <div className="mr-4 text-xs text-gray-400"></div>
+              <h1 className="text-white text-3xl font-bold tracking-wider">
+                <span className="lcd-text">나≠나</span>
+              </h1>
             </div>
 
-            <div className="col-span-1 lg:col-span-2">
+            {/* Second row: Specs + Visual */}
+            <div className="flex flex-col lg:flex-row gap-0.5">
+              <div className="w-full lg:w-1/3">
+                <InfoPanel artworkData={artworkData} />
+              </div>
+
+              <div className="w-full lg:w-2/3 p-4 outline outline-1">
+                <ImagePanel
+                  imageSrc="/images/artwork-main.png"
+                  imageAlt="나≠나 작품 대표 이미지"
+                  refCode="VIS.REF.01"
+                />
+              </div>
+            </div>
+
+            {/* Third row: Overview + Concept */}
+            <div className="flex flex-col lg:flex-row gap-0.5">
+              <div className="w-full lg:w-2/3">
+                <TextPanel
+                  title="프로젝트 요약"
+                  content={artworkContent.overview}
+                />
+              </div>
+
+              <div className="w-full lg:w-1/3">
+                <TextPanel
+                  title="문제의식/의도"
+                  content={artworkContent.intention}
+                />
+              </div>
+            </div>
+
+            {/* Fourth row: Image */}
+            <div className="w-full p-4 outline outline-1">
               <ImagePanel
                 imageSrc="/images/artwork-main.png"
                 imageAlt="나≠나 작품 대표 이미지"
-                title="이미지 #1"
                 refCode="VIS.REF.01"
               />
             </div>
 
-            {/* Bottom row: Overview + Concept */}
-            <div className="col-span-1 lg:col-span-2">
-              <TextPanel
-                title="프로젝트 요약"
-                content={artworkContent.overview}
-              />
-            </div>
-
-            <div className="col-span-1">
+            <div className="w-full lg:w-1/2">
               <TextPanel
                 title="문제의식/의도"
                 content={artworkContent.intention}
