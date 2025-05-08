@@ -9,7 +9,7 @@ export const members = [
   {
     name: "임나영",
     image: "/images/nayoung.png",
-    comment: "어쩌구",
+    comment: "살려주세요",
     notionUrl: "https://example.com/nayoung",
   },
   {
