@@ -187,12 +187,12 @@ export const StarryBackground = ({ className = "", count = 100 }) => {
  */
 export const InfoPanel = ({ artworkData, className = "" }) => (
   <HudPanel title=" " className={`h-full space-y-2 ${className}`}>
-    <div>
+    {/* <div>
       <p className="text-white font-mono text-sm">
         <TypewriterText text={artworkData.shortDescription} />
       </p>
-    </div>
-    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-4 mt-8">
+    </div> */}
+    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-4">
       {/* <HudLabelValue label="UNIT ID" value="VX-NANANA-25" /> */}
       <HudLabelValue
         label="CLASSIFICATION"

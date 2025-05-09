@@ -94,7 +94,7 @@ const ArtworkSection = () => {
             {/* Second row: Specs + Visual */}
             <div className="flex flex-col lg:flex-row gap-0.5">
               <div className="w-full lg:w-1/3">
-                <InfoPanel artworkData={artworkData} className="px-2" />
+                <InfoPanel artworkData={artworkData} className="px-4" />
               </div>
 
               <div className="w-full lg:w-2/3 p-4 outline outline-1 outline-white/70">
@@ -112,7 +112,7 @@ const ArtworkSection = () => {
                 <TextPanel
                   title="프로젝트 요약"
                   content={artworkContent.overview}
-                  className="px-2"
+                  className="px-4"
                 />
               </div>
 
@@ -120,7 +120,7 @@ const ArtworkSection = () => {
                 <TextPanel
                   title="문제의식/의도"
                   content={artworkContent.intention}
-                  className="px-2"
+                  className="px-4"
                 />
               </div>
             </div>
@@ -138,7 +138,7 @@ const ArtworkSection = () => {
                 <TextPanel
                   title="작품설명"
                   content={artworkContent.description}
-                  className="px-2"
+                  className="px-4"
                 />
               </div>
 
