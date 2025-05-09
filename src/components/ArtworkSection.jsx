@@ -53,7 +53,7 @@ const ArtworkSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="bg-black w-full text-white relative"
+      className="bg-black w-full text-white/70 relative"
       id="artwork"
       style={{ fontFamily: "NeoDunggeunmoPro" }}
     >
@@ -64,14 +64,14 @@ const ArtworkSection = () => {
         <div className="container mx-auto min-h-screen pb-20 px-4 max-w-6xl">
           <div
             ref={containerRef}
-            className={`flex flex-col gap-0.5 outline outline-2 ${
+            className={`flex flex-col gap-0.5 outline outline-2 outline-white/70 ${
               isVisible ? "animate-container" : "opacity-0"
             }`}
           >
             {/* Title row */}
             <div className="w-full py-3 flex items-center">
-              <div className="mr-4 text-xs text-gray-400"></div>
-              <h1 className="text-white text-3xl font-bold tracking-wider text-left">
+              <div className="mr-4 text-xs text-gray-700"></div>
+              <h1 className="text-white/70 text-3xl font-bold tracking-wider text-left">
                 <span className="lcd-text">
                   <TypewriterText text="나≠나" delay={30} />
                 </span>
@@ -84,7 +84,7 @@ const ArtworkSection = () => {
                 <InfoPanel artworkData={artworkData} className="px-2" />
               </div>
 
-              <div className="w-full lg:w-2/3 p-4 outline outline-1">
+              <div className="w-full lg:w-2/3 p-4 outline outline-1 outline-white/70">
                 <ImagePanel
                   imageSrc="/images/artwork-main.webp"
                   imageAlt="나≠나 작품 대표 이미지"
@@ -112,7 +112,7 @@ const ArtworkSection = () => {
               </div>
             </div>
 
-            <div className="w-full p-4 outline outline-1">
+            <div className="w-full p-4 outline outline-1 outline-white/70">
               <ImagePanel
                 imageSrc="/images/artwork-1.webp"
                 imageAlt="나≠나 작품 대표 이미지"
@@ -129,7 +129,7 @@ const ArtworkSection = () => {
                 />
               </div>
 
-              <div className="w-full p-4 outline outline-1 lg:w-1/3">
+              <div className="w-full p-4 outline outline-1 outline-white/70 lg:w-1/3">
                 <ImagePanel
                   imageSrc="/images/artwork-2.webp"
                   imageAlt="나≠나 작품 대표 이미지"
@@ -142,7 +142,7 @@ const ArtworkSection = () => {
       </div>
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center max-w-3xl mx-auto">
-          <p className="text-l mb-4">
+          <p className="text-white/70 text-l mb-4">
             본 작품은 숭실대학교 글로벌미디어학부<br></br> 2024년 졸업전시에
             출품되었습니다.
           </p>
@@ -152,7 +152,7 @@ const ArtworkSection = () => {
               href="https://afterglow2025.github.io/afterglow2025/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-8 py-3 bg-black/40 hover:bg-black/60 rounded-full text-white transition-colors text-lg border border-white/50 hover:border-white shadow-lg backdrop-blur-sm mb-16"
+              className="inline-block px-8 py-3 bg-black/70 hover:bg-black/60 rounded-full text-white/70 transition-colors text-lg border border-white/50 hover:border-white/70 shadow-lg backdrop-blur-sm mb-16"
             >
               전시 페이지 방문하기
             </a>

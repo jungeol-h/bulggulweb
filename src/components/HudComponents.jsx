@@ -49,7 +49,7 @@ export const TypewriterText = ({ text, delay = 30, className = "" }) => {
   }, [currentIndex, delay]);
 
   return (
-    <span className={className}>
+    <span className={`${className} pixel-text text-white/80`}>
       {displayText}
       {currentIndex < textRef.current.length && (
         <span className="blink">_</span>
