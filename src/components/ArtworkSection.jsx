@@ -157,7 +157,7 @@ const ArtworkSection = () => {
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center max-w-3xl mx-auto">
           <p className="text-white/70 text-l mb-4">
-            본 작품은 숭실대학교 글로벌미디어학부<br></br> 2024년 졸업전시에
+            본 작품은 숭실대학교 글로벌미디어학부<br></br> 2025년 졸업전시에
             출품되었습니다.
           </p>
 

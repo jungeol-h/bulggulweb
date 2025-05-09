@@ -35,19 +35,19 @@ const TeamSection = () => {
   const blogPosts = [
     {
       title: "첫번째 글",
-      date: "2024.03.15",
+      date: "2025.03.15",
       excerpt: "곧 글이 올라올 예정입니다.",
       url: "https://example.com/blog1",
     },
     {
       title: "두번째 글",
-      date: "2024.02.28",
+      date: "2025.02.28",
       excerpt: "곧 글이 올라올 예정입니다.",
       url: "https://example.com/blog2",
     },
     {
       title: "세번째 글",
-      date: "2024.01.20",
+      date: "2025.01.20",
       excerpt: "곧 글이 올라올 예정입니다.",
       url: "https://example.com/blog3",
     },
