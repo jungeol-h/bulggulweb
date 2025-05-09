@@ -60,21 +60,7 @@ const ArtworkSection = () => {
       {/* 흰색 글리터 배경 추가 */}
       <StarryBackground count={150} className="z-0" />
 
-      {/* Floating heads animation */}
-      {/* <FloatingHeads count={5} /> */}
-
-      {/* <div className="relative z-10 pt-12 px-8">
-        <div className="container mx-auto text-left">
-          <StyledHeading
-            text="작품 정보"
-            className="text-left text-gray-200 "
-            color="#fff"
-            fontSize="text-xl"
-          />
-        </div>
-      </div> */}
-
-      <div className="relative z-1 pt-12">
+      <div className="relative z-10 pt-12">
         <div className="container mx-auto min-h-screen pb-20 px-4 max-w-6xl">
           <div
             ref={containerRef}
@@ -154,9 +140,7 @@ const ArtworkSection = () => {
           </div>
         </div>
       </div>
-      <div className="relative z-20 max-w-6xl mx-auto">
-        {/* <StyledHeading text="큐레이터" className="mb-12 text-center" /> */}
-
+      <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center max-w-3xl mx-auto">
           <p className="text-l mb-4">
             본 작품은 숭실대학교 글로벌미디어학부<br></br> 2024년 졸업전시에
@@ -175,6 +159,19 @@ const ArtworkSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Scanline overlay - ArtworkSection에만 적용되도록 수정 */}
+      <div
+        className="absolute inset-0 z-50 pointer-events-none"
+        style={{
+          backgroundImage: "url('/images/scanline.png')",
+          backgroundRepeat: "repeat",
+          mixBlendMode: "soft-light",
+          opacity: 0.2,
+          filter: "blur(0.4px) contrast(110%) saturate(70%) brightness(1.1)",
+        }}
+      ></div>
+
       {/* CSS for LCD and pixel effects */}
       <style jsx>{lcdStyles}</style>
 
@@ -197,6 +194,15 @@ const ArtworkSection = () => {
           100% {
             transform: translateY(0);
             opacity: 1;
+          }
+        }
+
+        @keyframes scanline-shift {
+          0% {
+            transform: translateY(0);
+          }
+          100% {
+            transform: translateY(100px);
           }
         }
       `}</style>
