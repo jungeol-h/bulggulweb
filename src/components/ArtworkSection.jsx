@@ -9,6 +9,7 @@ import {
   StarryBackground,
   TypewriterText,
   FloatingHeads,
+  RetroImagePanel,
 } from "./HudComponents";
 import StyledHeading from "./StyledHeading";
 
@@ -98,7 +99,7 @@ const ArtworkSection = () => {
               </div>
 
               <div className="w-full lg:w-2/3 p-4 outline outline-1 outline-white/70">
-                <ImagePanel
+                <RetroImagePanel
                   imageSrc="/images/artwork-main.webp"
                   imageAlt="나≠나 작품 대표 이미지"
                   refCode="VIS.REF.01"
@@ -126,7 +127,7 @@ const ArtworkSection = () => {
             </div>
 
             <div className="w-full p-4 outline outline-1 outline-white/70">
-              <ImagePanel
+              <RetroImagePanel
                 imageSrc="/images/artwork-1.webp"
                 imageAlt="나≠나 작품 대표 이미지"
                 refCode="VIS.REF.01"
@@ -143,7 +144,7 @@ const ArtworkSection = () => {
               </div>
 
               <div className="w-full p-4 outline outline-1 outline-white/70 lg:w-1/3">
-                <ImagePanel
+                <RetroImagePanel
                   imageSrc="/images/artwork-2.webp"
                   imageAlt="나≠나 작품 대표 이미지"
                   refCode="VIS.REF.01"

@@ -355,6 +355,74 @@ export const FloatingHeads = ({ count = 8 }) => {
 };
 
 /**
+ * 레트로 스타일 이미지 패널 - 이미지가 라인별로 로딩되는 효과를 제공
+ */
+export const RetroImagePanel = ({ imageSrc, imageAlt, refCode }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [linesLoaded, setLinesLoaded] = useState(0);
+  const totalLines = 30; // 총 라인 수
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+
+      let currentLine = 0;
+      const loadInterval = setInterval(() => {
+        if (currentLine < totalLines) {
+          setLinesLoaded((prev) => prev + 1);
+          currentLine++;
+        } else {
+          clearInterval(loadInterval);
+        }
+      }, 80);
+
+      return () => clearInterval(loadInterval);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <HudPanel className="h-full flex flex-col">
+      <div></div>
+      <div className="flex-grow relative overflow-hidden">
+        {/* 실제 이미지 */}
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          className="w-full h-full object-cover"
+        />
+
+        {/* 로딩되지 않은 부분을 가리는 검은색 마스크 */}
+        <div
+          className="absolute inset-0 bg-black z-10 pointer-events-none"
+          style={{
+            height: `${100 - (linesLoaded / totalLines) * 100}%`,
+            top: `${(linesLoaded / totalLines) * 100}%`,
+            transition: "top 0.1s linear, height 0.1s linear",
+          }}
+        ></div>
+
+        {/* 현재 로딩 중인 라인 표시 */}
+        {isLoaded && linesLoaded < totalLines && (
+          <div
+            className="absolute w-full h-1 bg-white/10 z-20"
+            style={{ top: `${(linesLoaded / totalLines) * 100}%` }}
+          ></div>
+        )}
+
+        {/* 레퍼런스 코드 */}
+        {refCode && (
+          <div className="absolute bottom-2 right-2 text-xs text-white/60 bg-black/30 px-1 z-30">
+            {refCode}
+          </div>
+        )}
+      </div>
+    </HudPanel>
+  );
+};
+
+/**
  * LCD 효과 스타일 (CSS-in-JS)
  */
 export const lcdStyles = `
