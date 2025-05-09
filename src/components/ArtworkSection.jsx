@@ -68,14 +68,27 @@ const ArtworkSection = () => {
               isVisible ? "animate-container" : "opacity-0"
             }`}
           >
-            {/* Title row */}
-            <div className="w-full py-3 flex items-center">
-              <div className="mr-4 text-xs text-gray-700"></div>
-              <h1 className="text-white/70 text-3xl font-bold tracking-wider text-left">
-                <span className="lcd-text">
-                  <TypewriterText text="나≠나" delay={30} />
-                </span>
-              </h1>
+            {/* Title row - 레트로 창 UI 스타일 */}
+            <div className="w-full py-2 flex items-center justify-between bg-gray-500/80  ">
+              <div className="flex items-center ml-2">
+                {/* <div className="w-3 h-3 bg-green-400/80 rounded-full mr-1 border border-white/30"></div> */}
+                <h1 className="text-white/90 text-2xl font-bold tracking-wider text-left pl-2">
+                  <span className="lcd-text">
+                    <TypewriterText text="나≠나" delay={30} />
+                  </span>
+                </h1>
+              </div>
+              <div className="flex items-center mr-2">
+                <div className="w-6 h-5 border border-white/50 mx-1 flex items-center justify-center text-xs text-white/80">
+                  _
+                </div>
+                <div className="w-6 h-5 border border-white/50 mx-1 flex items-center justify-center text-xs text-white/80">
+                  □
+                </div>
+                <div className="w-6 h-5 border border-white/50 mx-1 flex items-center justify-center text-xs text-white/80">
+                  ×
+                </div>
+              </div>
             </div>
 
             {/* Second row: Specs + Visual */}
@@ -167,7 +180,7 @@ const ArtworkSection = () => {
           backgroundImage: "url('/images/scanline.png')",
           backgroundRepeat: "repeat",
           mixBlendMode: "soft-light",
-          opacity: 0.2,
+          opacity: 0.1,
           filter: "blur(0.4px) contrast(110%) saturate(70%) brightness(1.1)",
         }}
       ></div>
