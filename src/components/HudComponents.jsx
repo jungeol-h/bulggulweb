@@ -116,7 +116,7 @@ export const HudLabelValue = ({
     >
       <TypewriterText text={label} delay={30} />
     </span>
-    <span className={`text-lg ${valueColor} font-mono lcd-text`}>
+    <span className={`text-s ${valueColor} font-mono lcd-text`}>
       {useTypewriter ? <TypewriterText text={value} delay={40} /> : value}
     </span>
   </div>
@@ -127,26 +127,6 @@ export const HudLabelValue = ({
  */
 export const HudDivider = ({ className = "" }) => (
   <div className={`border-t border-gray-100 my-3 ${className}`}></div>
-);
-
-/**
- * 프로그레스 바 컴포넌트
- */
-export const HudProgressBar = ({
-  value = 0,
-  className = "",
-  showLabel = true,
-  barColor = "bg-white",
-}) => (
-  <div className={`flex items-center ${className}`}>
-    <div className="w-full bg-gray-900 h-1 relative">
-      <div
-        className={`absolute top-0 left-0 h-full ${barColor}`}
-        style={{ width: `${value}%` }}
-      ></div>
-    </div>
-    {showLabel && <span className="ml-2 text-xs text-white">{value}%</span>}
-  </div>
 );
 
 /**
@@ -263,7 +243,7 @@ export const ImagePanel = ({ imageSrc, imageAlt }) => (
  */
 export const TextPanel = ({ title, content, className }) => (
   <HudPanel title={title} className={`h-full ${className}`}>
-    <div className="text-white font-mono text-sm h-full">
+    <div className="text-white font-mono text-sm h-full pb-4">
       <TypewriterBlock content={content} />
     </div>
   </HudPanel>
