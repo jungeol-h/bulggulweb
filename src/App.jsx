@@ -1,7 +1,6 @@
 import React from "react";
 import ArtworkSection from "./components/ArtworkSection";
 import TeamSection from "./components/TeamSection";
-import CuratorSection from "./components/CuratorSection";
 import "./App.css";
 
 function App() {

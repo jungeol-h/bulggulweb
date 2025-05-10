@@ -222,6 +222,26 @@ export const InfoPanel = ({ artworkData, className = "" }) => (
         className="col-span-2"
         useTypewriter={true}
       />
+      {artworkData.venue && (
+        <HudLabelValue
+          label="EXHIBITION VENUE"
+          value={artworkData.venue}
+          className="col-span-2"
+          useTypewriter={true}
+        />
+      )}
+      {artworkData.exhibitionLink && (
+        <div className="col-span-2 mt-2">
+          <a
+            href={artworkData.exhibitionLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-300 hover:text-blue-200 underline text-sm font-mono"
+          >
+            전시정보 바로가기
+          </a>
+        </div>
+      )}
     </div>
   </HudPanel>
 );

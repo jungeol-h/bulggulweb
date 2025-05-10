@@ -49,6 +49,8 @@ const ArtworkSection = () => {
     category: "미디어아트",
     materials: "AI 모델, 카메라, 디스플레이, 나무판",
     dimensions: "가변적 (설치 공간에 따라 조정)",
+    venue: "마루아트센터",
+    exhibitionLink: "https://afterglow2025.github.io/afterglow2025/",
   };
 
   return (
