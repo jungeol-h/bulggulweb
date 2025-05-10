@@ -6,7 +6,6 @@ import {
   TextPanel,
   lcdStyles,
   GridBackground,
-  StarryBackground,
   TypewriterText,
   FloatingHeads,
   RetroImagePanel,
@@ -30,12 +29,13 @@ const ArtworkSection = () => {
       { threshold: 0.1 } // 10% 이상 보이면 활성화
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    const currentRef = containerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (containerRef.current) {
+      if (currentRef) {
         observer.disconnect();
       }
     };
@@ -54,13 +54,10 @@ const ArtworkSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="bg-black w-full text-white/70 relative"
+      className="w-full text-white/70 relative"
       id="artwork"
       style={{ fontFamily: "NeoDunggeunmoPro" }}
     >
-      {/* 흰색 글리터 배경 추가 */}
-      <StarryBackground count={150} className="z-0" />
-
       <div className="relative z-10 pt-12">
         <div className="container mx-auto min-h-screen pb-20 px-4 max-w-6xl">
           <div
@@ -72,7 +69,6 @@ const ArtworkSection = () => {
             {/* Title row - 레트로 창 UI 스타일 */}
             <div className="w-full py-2 flex items-center justify-between bg-gray-500/80  ">
               <div className="flex items-center ml-2">
-                {/* <div className="w-3 h-3 bg-green-400/80 rounded-full mr-1 border border-white/30"></div> */}
                 <h1 className="text-white/90 text-2xl font-bold tracking-wider text-left pl-2">
                   <span className="lcd-text">
                     <TypewriterText text="나≠나" delay={30} />
@@ -174,18 +170,6 @@ const ArtworkSection = () => {
         </div>
       </div>
 
-      {/* Scanline overlay - ArtworkSection에만 적용되도록 수정 */}
-      <div
-        className="absolute inset-0 z-50 pointer-events-none"
-        style={{
-          backgroundImage: "url('/images/scanline.png')",
-          backgroundRepeat: "repeat",
-          mixBlendMode: "soft-light",
-          opacity: 0.1,
-          filter: "blur(0.4px) contrast(110%) saturate(70%) brightness(1.1)",
-        }}
-      ></div>
-
       {/* CSS for LCD and pixel effects */}
       <style jsx>{lcdStyles}</style>
 
@@ -208,15 +192,6 @@ const ArtworkSection = () => {
           100% {
             transform: translateY(0);
             opacity: 1;
-          }
-        }
-
-        @keyframes scanline-shift {
-          0% {
-            transform: translateY(0);
-          }
-          100% {
-            transform: translateY(100px);
           }
         }
       `}</style>
