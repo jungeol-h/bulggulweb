@@ -152,25 +152,6 @@ const ArtworkSection = () => {
           </div>
         </div>
       </div>
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto">
-          <p className="text-white/70 text-l mb-4">
-            본 작품은 숭실대학교 글로벌미디어학부<br></br> 2025년 졸업전시에
-            출품되었습니다.
-          </p>
-
-          <div className="mt-10">
-            <a
-              href="https://afterglow2025.github.io/afterglow2025/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-8 py-3 bg-black/70 hover:bg-black/60 rounded-full text-white/70 transition-colors text-lg border border-white/50 hover:border-white/70 shadow-lg backdrop-blur-sm mb-16"
-            >
-              전시 페이지 방문하기
-            </a>
-          </div>
-        </div>
-      </div>
 
       {/* CSS for LCD and pixel effects */}
       <style jsx>{lcdStyles}</style>
