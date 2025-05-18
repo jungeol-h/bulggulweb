@@ -64,12 +64,12 @@ const TeamSection = () => {
             <div className="w-full p-6 bg-black/20 backdrop-blur-sm rounded">
               <p className="text-lg text-white/80 mb-6">우리는 벌꿀오소리다.</p>
               <a
-                href="https://notion.so/team-bulggul"
+                href="https://honeyosori.notion.site/?pvs=4"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-medium rounded transition-all duration-300"
               >
-                팀 노션 페이지
+                팀의 이야기 보러가기
               </a>
             </div>
 
@@ -95,7 +95,7 @@ const TeamSection = () => {
                         rel="noopener noreferrer"
                         className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-medium rounded transition-all duration-300"
                       >
-                        포트폴리오 보기
+                        개인 링크
                       </a>
                     </div>
                   </div>

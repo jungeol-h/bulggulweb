@@ -45,12 +45,12 @@ const ArtworkSection = () => {
   const artworkData = {
     shortDescription: artworkContent.shortDescription,
     year: "2025",
-    creator: "팀 '벌꿀오소리'",
+    // creator: "팀 '벌꿀오소리'",
     category: "미디어아트",
     materials: "AI 모델, 카메라, 디스플레이, 나무판",
     dimensions: "가변적 (설치 공간에 따라 조정)",
     venue: "마루아트센터",
-    exhibitionLink: "https://afterglow2025.github.io/afterglow2025/",
+    exhibitionLink: "https://afterglow2025.github.io/newafterglow/",
   };
 
   return (
@@ -100,7 +100,7 @@ const ArtworkSection = () => {
                 <RetroImagePanel
                   imageSrc="/images/artwork-main.webp"
                   imageAlt="나≠나 작품 대표 이미지"
-                  refCode="VIS.REF.01"
+                  refCode="VIS.01"
                 />
               </div>
             </div>
@@ -115,11 +115,18 @@ const ArtworkSection = () => {
                 />
               </div>
 
-              <div className="w-full lg:w-2/4">
+              {/* <div className="w-full lg:w-2/4">
                 <TextPanel
                   title="문제의식/의도"
                   content={artworkContent.intention}
                   className="px-4"
+                />
+              </div> */}
+              <div className="w-full p-4 outline outline-1 outline-white/70">
+                <RetroImagePanel
+                  imageSrc="/images/artwork-3.webp"
+                  imageAlt="나≠나 작품 이미지"
+                  refCode="VIS.02"
                 />
               </div>
             </div>
@@ -128,27 +135,27 @@ const ArtworkSection = () => {
               <RetroImagePanel
                 imageSrc="/images/artwork-1.webp"
                 imageAlt="나≠나 작품 대표 이미지"
-                refCode="VIS.REF.01"
+                refCode="VIS.03"
               />
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-0.5">
-              <div className="w-full lg:w-2/3">
+            {/* <div className="flex flex-col lg:flex-row gap-0.5"> */}
+            {/* <div className="w-full">
                 <TextPanel
                   title="작품설명"
                   content={artworkContent.description}
                   className="px-4"
                 />
-              </div>
+              </div> */}
 
-              <div className="w-full p-4 outline outline-1 outline-white/70 lg:w-1/3">
+            {/* <div className="w-full p-4 outline outline-1 outline-white/70 lg:w-1/3">
                 <RetroImagePanel
                   imageSrc="/images/artwork-2.webp"
                   imageAlt="나≠나 작품 대표 이미지"
                   refCode="VIS.REF.01"
                 />
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
         </div>
       </div>

@@ -18,11 +18,11 @@ export const InfoPanel = ({ artworkData, className = "" }) => (
         value={artworkData.year || "2025"}
         useTypewriter={true}
       />
-      <HudLabelValue
+      {/* <HudLabelValue
         label="OPERATOR"
         value={artworkData.creator || "팀 '벌꿀오소리'"}
         useTypewriter={true}
-      />
+      /> */}
 
       <HudLabelValue
         label="COMPONENTS"
