@@ -30,14 +30,14 @@ function App() {
             </div>
 
             {/* 페이지 전환을 위한 내비게이션 링크 */}
-            <nav className="relative z-20 py-4 px-6 flex justify-end">
+            {/* <nav className="relative z-20 py-4 px-6 flex justify-end">
               <Link
                 to="/exhibition"
                 className="bg-purple-900 hover:bg-purple-800 text-white py-2 px-4 rounded-md text-sm transition-all duration-300"
               >
                 전시장 모드
               </Link>
-            </nav>
+            </nav> */}
 
             {/* Artwork Section */}
             <div className="relative z-10">
