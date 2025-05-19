@@ -32,10 +32,20 @@ const LocalExhibitionPage = () => {
     if (introSequence < introTexts.length) {
       setIntroSequence((prev) => prev + 1);
     } else {
-      // 인트로 시퀀스가 끝나면 다음 스페이스바 입력에 메인 단계로 넘어갈 준비
+      // 인트로 시퀀스가 끝나면 메인 단계로 자동 진행
       setExhibitionPhase(PHASES.MAIN);
     }
   }, [introSequence]);
+
+  // 전역 advanceIntroSequence 함수 설정 (IntroPhase 컴포넌트에서 접근할 수 있도록)
+  useEffect(() => {
+    window.advanceIntroSequence = advanceIntroSequence;
+
+    // 언마운트시 정리
+    return () => {
+      window.advanceIntroSequence = undefined;
+    };
+  }, [advanceIntroSequence]);
 
   // 키보드 이벤트 처리
   useEffect(() => {
@@ -43,14 +53,12 @@ const LocalExhibitionPage = () => {
       if (event.code === "Space") {
         event.preventDefault();
 
-        if (exhibitionPhase === PHASES.INTRO) {
-          // 인트로 단계에서 스페이스바를 누르면 시퀀스 진행
+        if (exhibitionPhase === PHASES.INTRO && introSequence === 0) {
+          // 초기 인트로 단계(정면 응시 메시지)에서만 스페이스바가 작동하게 함
+          // 이후에는 자동으로 진행
           advanceIntroSequence();
-        } else if (
-          exhibitionPhase === PHASES.MAIN &&
-          introSequence >= introTexts.length
-        ) {
-          // 관리자가 인트로 시퀀스 종료 후 스페이스바를 누르면 아웃트로 단계로 진행
+        } else if (exhibitionPhase === PHASES.MAIN) {
+          // 메인 페이즈에서 스페이스바를 누르면 아웃트로 단계로 진행
           setExhibitionPhase(PHASES.OUTRO);
         }
       }
