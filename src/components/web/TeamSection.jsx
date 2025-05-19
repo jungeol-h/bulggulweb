@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { members } from "../data/members";
+import { members } from "../../data/members";
 
 const TeamSection = () => {
   const containerRef = useRef(null);

@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { StarryBackground } from "./HudComponents";
-import { IntroPhase, MainPhase, OutroPhase, DebugPanel } from "./exhibition";
+import { StarryBackground } from "../web/HudComponents";
+import { IntroPhase, MainPhase, OutroPhase, DebugPanel } from ".";
 // import useWebcam from "../hooks/useWebcam";
-import useVisitorData from "../hooks/useVisitorData";
-import { introTexts, PHASES } from "../constants/exhibitionConstants";
+import useVisitorData from "../../hooks/useVisitorData";
+import { introTexts, PHASES } from "../../constants/exhibitionConstants";
 
 /**
  * LocalExhibitionPage - 전시 현장에서 로컬 네트워크로 실행되는 전용 페이지

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { artworkContent } from "../data/artworkContent";
+import { artworkContent } from "../../data/artworkContent";
 import {
   InfoPanel,
   ImagePanel,
@@ -9,7 +9,7 @@ import {
   TypewriterText,
   FloatingHeads,
   RetroImagePanel,
-} from "./HudComponents";
+} from "../web/HudComponents";
 import StyledHeading from "./StyledHeading";
 
 const ArtworkSection = () => {

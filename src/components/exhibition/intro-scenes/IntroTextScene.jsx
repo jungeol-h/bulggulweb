@@ -1,5 +1,5 @@
 import React from "react";
-import { TypewriterText } from "../../HudComponents";
+import { TypewriterText } from "../../web/HudComponents";
 
 /**
  * 장면 1: 첫 번째 타이핑 텍스트

@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import ArtworkSection from "./components/ArtworkSection";
-import TeamSection from "./components/TeamSection";
-import LocalExhibitionPage from "./components/LocalExhibitionPage";
+import ArtworkSection from "./components/web/ArtworkSection";
+import TeamSection from "./components/web/TeamSection";
+import LocalExhibitionPage from "./components/exhibition/LocalExhibitionPage";
 import "./App.css";
 
 function App() {

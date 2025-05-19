@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TypewriterText } from "../../HudComponents";
+import { TypewriterText } from "../../web/HudComponents";
 
 /**
  * 장면 4+: 후속 텍스트 메시지들

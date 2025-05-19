@@ -14,7 +14,7 @@ import {
   ImagePanel,
   TextPanel,
   lcdStyles,
-} from "./hud";
+} from "../hud";
 
 // Re-export all components
 export {
