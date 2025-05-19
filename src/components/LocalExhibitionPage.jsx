@@ -13,6 +13,9 @@ const LocalExhibitionPage = () => {
   // 전시 단계 관리
   const [exhibitionPhase, setExhibitionPhase] = useState(PHASES.INTRO);
 
+  // 페이즈 전환 애니메이션 상태
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   // 인트로 시퀀스 관리
   const [introSequence, setIntroSequence] = useState(0);
 
@@ -29,13 +32,10 @@ const LocalExhibitionPage = () => {
 
   // 인트로 시퀀스 진행 함수
   const advanceIntroSequence = useCallback(() => {
-    if (introSequence < introTexts.length) {
-      setIntroSequence((prev) => prev + 1);
-    } else {
-      // 인트로 시퀀스가 끝나면 메인 단계로 자동 진행
-      setExhibitionPhase(PHASES.MAIN);
-    }
-  }, [introSequence]);
+    // 항상 다음 시퀀스로만 진행하고 메인 단계로는 자동 진행 안함
+    // (메인 단계로 진행은 마지막 시퀀스에서 스페이스바를 눌러야 함)
+    setIntroSequence((prev) => prev + 1);
+  }, []);
 
   // 전역 advanceIntroSequence 함수 설정 (IntroPhase 컴포넌트에서 접근할 수 있도록)
   useEffect(() => {
@@ -53,13 +53,29 @@ const LocalExhibitionPage = () => {
       if (event.code === "Space") {
         event.preventDefault();
 
-        if (exhibitionPhase === PHASES.INTRO && introSequence === 0) {
-          // 초기 인트로 단계(정면 응시 메시지)에서만 스페이스바가 작동하게 함
-          // 이후에는 자동으로 진행
-          advanceIntroSequence();
+        if (exhibitionPhase === PHASES.INTRO) {
+          if (introSequence === 0) {
+            // 초기 인트로 단계(정면 응시 메시지)에서 스페이스바가 작동하게 함
+            advanceIntroSequence();
+          } else if (introSequence === introTexts.length) {
+            // 인트로 마지막 시퀀스에서 스페이스바를 누르면 페이드 효과 후 메인 단계로 진행
+            setIsTransitioning(true);
+            setTimeout(() => {
+              setExhibitionPhase(PHASES.MAIN);
+              setTimeout(() => {
+                setIsTransitioning(false);
+              }, 500);
+            }, 1000);
+          }
         } else if (exhibitionPhase === PHASES.MAIN) {
-          // 메인 페이즈에서 스페이스바를 누르면 아웃트로 단계로 진행
-          setExhibitionPhase(PHASES.OUTRO);
+          // 메인 페이즈에서 스페이스바를 누르면 페이드 효과 후 아웃트로 단계로 진행
+          setIsTransitioning(true);
+          setTimeout(() => {
+            setExhibitionPhase(PHASES.OUTRO);
+            setTimeout(() => {
+              setIsTransitioning(false);
+            }, 500);
+          }, 1000);
         }
       }
     };
@@ -91,7 +107,11 @@ const LocalExhibitionPage = () => {
       </div>
 
       {/* 전시 단계에 따른 내용 렌더링 */}
-      <div className="relative z-10 container mx-auto">
+      <div
+        className={`relative z-10 container mx-auto transition-opacity duration-1000 ${
+          isTransitioning ? "opacity-0" : "opacity-100"
+        }`}
+      >
         {exhibitionPhase === PHASES.INTRO && (
           <IntroPhase
             introSequence={introSequence}
