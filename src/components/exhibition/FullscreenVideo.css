@@ -1,0 +1,36 @@
+/* 전체화면 모드에서의 비디오 스타일 */
+.video-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+  z-index: 9999;
+  background-color: #000;
+}
+
+/* 전체화면 모드일 때 비디오 컨테이너 스타일 */
+:fullscreen video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+}
+
+:-webkit-full-screen video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+}
+
+:-moz-full-screen video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+}
+
+:-ms-fullscreen video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import useEsp32Ws from "../../hooks/useEsp32Ws";
 import Esp32DebugPanel from "./Esp32DebugPanel";
+import "./FullscreenVideo.css"; // 전체화면 비디오 스타일을 위한 CSS 가져오기
 
 // ESP32 WebSocket URL
 const WS_URL = "ws://192.168.0.100:8080/keyboard";
@@ -40,10 +41,19 @@ const MainPhase = () => {
     // 전체화면 종료 이벤트 감지
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement) {
-        // 전체화면 종료 시 추가 처리가 필요하면 이곳에 구현
+        // 전체화면 종료 시 모든 비디오에서 추가된 CSS 클래스 제거
+        videoRefs.current.forEach((video) => {
+          if (video) {
+            video.classList.remove("video-fullscreen");
+          }
+        });
       }
     };
+
     document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 
     // 키보드 이벤트 핸들러 (숫자키 1-8 입력 시 해당 영상 전체화면)
     const handleKeyPress = (event) => {
@@ -82,6 +92,18 @@ const MainPhase = () => {
         close();
       }
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange
+      );
       window.removeEventListener("keydown", handleKeyPress);
     };
   }, [connect, onButton, close]);
@@ -90,9 +112,39 @@ const MainPhase = () => {
   const playFullscreen = (index) => {
     const video = videoRefs.current[index];
     if (video) {
-      video.requestFullscreen().catch((err) => {
-        console.error(`전체화면 전환 실패: ${err.message}`);
+      // 전체화면용 CSS 클래스 추가
+      video.classList.add("video-fullscreen");
+
+      // 먼저 비디오 재생 시도
+      video.play().catch((err) => {
+        console.warn(`비디오 재생 실패: ${err.message}`);
       });
+
+      // 전체화면 API - 브라우저 호환성을 위해 여러 접두사 시도
+      const requestFullscreen =
+        video.requestFullscreen ||
+        video.webkitRequestFullscreen ||
+        video.mozRequestFullScreen ||
+        video.msRequestFullscreen;
+
+      if (requestFullscreen) {
+        requestFullscreen
+          .call(video)
+          .then(() => {
+            console.log(`영상 ${index + 1} 전체화면 전환 성공`);
+            // 화면 방향 설정 (모바일에서 유용)
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock("landscape").catch((err) => {
+                console.warn(`화면 방향 설정 실패: ${err.message}`);
+              });
+            }
+          })
+          .catch((err) => {
+            console.error(`전체화면 전환 실패: ${err.message}`);
+          });
+      } else {
+        console.error("이 브라우저는 전체화면 API를 지원하지 않습니다.");
+      }
     }
   };
 
@@ -181,6 +233,7 @@ const MainPhase = () => {
                   }
                 }}
                 className="absolute inset-0 w-full h-full object-cover"
+                style={{ display: "block" }} // 전체화면에서 인라인 요소 깨지지 않도록
                 src={
                   SIMULATION_MODE
                     ? `https://picsum.photos/800/450?random=${i}`
