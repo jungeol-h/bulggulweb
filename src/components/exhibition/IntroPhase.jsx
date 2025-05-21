@@ -7,10 +7,17 @@ import {
 
 /**
  * 전시회의 인트로 단계를 렌더링하는 컴포넌트
- * 관리자가 최초에 스페이스바를 누르면 자동으로 플로우가 진행됩니다.
+ * 관리자가 최초에 성별을 선택하면 자동으로 플로우가 진행됩니다.
  * 각 장면(씬)은 독립적으로 표시되고 자동으로 전환됩니다.
  */
-const IntroPhase = ({ introSequence, introTexts }) => {
+const IntroPhase = ({
+  introSequence,
+  introTexts,
+  webcamRef,
+  webcamActive,
+  visitorSid,
+  webcamError,
+}) => {
   // 상태 정의
   const [entityTarget, setEntityTarget] = useState(null);
   const [entityScanning, setEntityScanning] = useState(false);
@@ -175,6 +182,9 @@ const IntroPhase = ({ introSequence, introTexts }) => {
         dnaSequenceVisible={dnaSequenceVisible}
         dnaSequence={dnaSequence}
         survivalTime={survivalTime}
+        webcamRef={webcamRef}
+        webcamActive={webcamActive}
+        webcamError={webcamError}
       />
     </div>
   );

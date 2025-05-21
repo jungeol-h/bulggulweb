@@ -17,6 +17,9 @@ const SceneManager = ({
   dnaSequenceVisible,
   dnaSequence,
   survivalTime,
+  webcamRef,
+  webcamActive,
+  webcamError,
 }) => {
   const [prevSequence, setPrevSequence] = useState(introSequence);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -26,7 +29,13 @@ const SceneManager = ({
   const updateCurrentScene = useCallback(
     (sequence) => {
       if (sequence === 0) {
-        setCurrentScene(<WelcomeScene />);
+        setCurrentScene(
+          <WelcomeScene
+            webcamRef={webcamRef}
+            webcamActive={webcamActive}
+            webcamError={webcamError}
+          />
+        );
       } else if (sequence === 1) {
         setCurrentScene(<IntroTextScene text={introTexts[0]} />);
       } else if (sequence === 2) {
@@ -69,6 +78,9 @@ const SceneManager = ({
       dnaSequenceVisible,
       dnaSequence,
       survivalTime,
+      webcamRef,
+      webcamActive,
+      webcamError,
     ]
   );
 

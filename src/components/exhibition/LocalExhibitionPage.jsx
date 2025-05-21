@@ -218,6 +218,7 @@ const LocalExhibitionPage = () => {
             webcamRef={webcamRef}
             webcamActive={webcamActive}
             visitorSid={visitorSid}
+            webcamError={webcamError}
           />
         )}
         {exhibitionPhase === PHASES.MAIN && <MainPhase />}
