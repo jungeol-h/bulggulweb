@@ -17,6 +17,7 @@ const IntroPhase = ({
   webcamActive,
   visitorSid,
   webcamError,
+  previewUrl,
 }) => {
   // 상태 정의
   const [entityTarget, setEntityTarget] = useState(null);
@@ -185,6 +186,7 @@ const IntroPhase = ({
         webcamRef={webcamRef}
         webcamActive={webcamActive}
         webcamError={webcamError}
+        previewUrl={previewUrl}
       />
     </div>
   );

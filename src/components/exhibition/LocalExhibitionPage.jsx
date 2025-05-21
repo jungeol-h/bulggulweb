@@ -31,6 +31,8 @@ const LocalExhibitionPage = () => {
     webcamRef,
     webcamActive,
     error: webcamError,
+    previewUrl,
+    captureImage,
   } = useWebcam(exhibitionPhase === PHASES.INTRO);
 
   // 방문자 SID 관리
@@ -49,30 +51,6 @@ const LocalExhibitionPage = () => {
     const max = 999999;
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }, []);
-
-  // 웹캠 이미지 캡처 함수
-  const captureImage = useCallback(() => {
-    if (webcamRef.current) {
-      const canvas = document.createElement("canvas");
-      canvas.width = webcamRef.current.video.videoWidth;
-      canvas.height = webcamRef.current.video.videoHeight;
-
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(webcamRef.current.video, 0, 0);
-
-      // 이미지를 Blob으로 변환
-      return new Promise((resolve) => {
-        canvas.toBlob(
-          (blob) => {
-            resolve(blob);
-          },
-          "image/jpeg",
-          0.9
-        );
-      });
-    }
-    return Promise.resolve(null);
-  }, [webcamRef]);
 
   // 방문자 데이터 서버 전송 함수
   const sendVisitorData = useCallback(
@@ -219,6 +197,7 @@ const LocalExhibitionPage = () => {
             webcamActive={webcamActive}
             visitorSid={visitorSid}
             webcamError={webcamError}
+            previewUrl={previewUrl}
           />
         )}
         {exhibitionPhase === PHASES.MAIN && <MainPhase />}

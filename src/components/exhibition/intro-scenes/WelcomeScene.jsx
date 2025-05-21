@@ -2,9 +2,9 @@ import React from "react";
 
 /**
  * 장면 0: 정면 응시 메시지 및 성별 선택 안내
- * Iriun Webcam으로 연결된 스마트폰 카메라 피드 표시
+ * IP 카메라로 연결된 스마트폰 카메라 피드 표시
  */
-const WelcomeScene = ({ webcamRef, webcamActive, webcamError }) => {
+const WelcomeScene = ({ webcamActive, webcamError, previewUrl }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* 카메라 관련 오류 메시지 표시 */}
@@ -13,25 +13,23 @@ const WelcomeScene = ({ webcamRef, webcamActive, webcamError }) => {
           <div className="font-bold mb-2">카메라 연결 오류:</div>
           <div>{webcamError}</div>
           <div className="mt-3 text-yellow-300 text-base">
-            스마트폰에서 Iriun Webcam 앱이 실행 중인지 확인해주세요.
+            IP 카메라가 실행 중인지 확인해주세요.
             <br />
-            컴퓨터와 같은 네트워크에 연결되어 있어야 합니다.
+            카메라 주소: 192.168.0.76:8080
           </div>
         </div>
       )}
 
-      {/* 웹캠 미리보기 (숨겨져 있지만 캡처를 위해 렌더링됨) */}
+      {/* IP 카메라 미리보기 */}
       <div
         className={
           webcamError ? "hidden" : "relative mb-8 overflow-hidden rounded-lg"
         }
       >
-        {webcamActive ? (
-          <video
-            ref={webcamRef}
-            autoPlay
-            playsInline
-            muted
+        {webcamActive && previewUrl ? (
+          <img
+            src={previewUrl}
+            alt="IP 카메라"
             className="w-64 h-48 border-2 border-white object-cover"
           />
         ) : (
