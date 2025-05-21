@@ -6,15 +6,6 @@ import { WebSocketServer } from "ws";
 export default defineConfig({
   server: {
     host: true, // 모든 네트워크 인터페이스에서 접근 가능하도록 설정
-    proxy: {
-      // API 요청을 위한 프록시 설정
-      "/api": {
-        target: "http://192.168.0.10:8000",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-        secure: false,
-      },
-    },
   },
   plugins: [
     react(),

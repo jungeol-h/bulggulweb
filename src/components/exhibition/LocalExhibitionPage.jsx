@@ -6,7 +6,7 @@ import useVisitorData from "../../hooks/useVisitorData";
 import { introTexts, PHASES } from "../../constants/exhibitionConstants";
 
 // 메인 서버 URL 및 API Key 상수
-const API_ENDPOINT = "/api/upload_image/";
+const API_ENDPOINT = "http://192.168.0.10:8000/upload_image/";
 const API_KEY = "bFd5omw*vR*>-o7M@^21g0FD-";
 
 /**
