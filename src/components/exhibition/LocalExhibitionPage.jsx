@@ -91,6 +91,7 @@ const LocalExhibitionPage = () => {
         }, 1000);
 
         // 백그라운드에서 API 요청 처리 (응답 기다리지 않음)
+        console.log("API 요청 URL:", API_ENDPOINT);
         fetch(API_ENDPOINT, {
           method: "POST",
           headers: {
