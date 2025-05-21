@@ -26,7 +26,7 @@ const LocalExhibitionPage = () => {
   // 방문자 데이터 관리
   const { visitorData, isLoading, error } = useVisitorData();
 
-  // 웹캠 관리 (인트로 단계에서만 활성화)
+  // 웹캠 관리 (필요할 때만 사용)
   const {
     webcamRef,
     webcamActive,
@@ -56,6 +56,9 @@ const LocalExhibitionPage = () => {
   const sendVisitorData = useCallback(
     async (gender) => {
       try {
+        // 로딩 상태 표시
+        console.log("이미지 캡처 중...");
+
         // 이미지 캡처
         const imageBlob = await captureImage();
         if (!imageBlob) {
@@ -69,6 +72,7 @@ const LocalExhibitionPage = () => {
         }
 
         const sid = visitorSid || generateSid();
+        console.log("방문자 데이터 전송 중...", { sid, gender });
 
         // FormData 객체 생성
         const formData = new FormData();
@@ -89,8 +93,9 @@ const LocalExhibitionPage = () => {
           throw new Error(`서버 응답 오류: ${response.status}`);
         }
 
-        const result = await response.json();
-        console.log("방문자 데이터 전송 성공:", result);
+        // 응답은 성공적으로 받았지만 결과는 사용하지 않음
+        await response.json();
+        console.log("방문자 데이터 전송 성공");
 
         // 성공적으로 전송 후 페이드 효과와 함께 메인 단계로 진행
         setIsTransitioning(true);
@@ -125,13 +130,8 @@ const LocalExhibitionPage = () => {
   // 키보드 이벤트 처리
   useEffect(() => {
     const handleKeyDown = (event) => {
-      // 키 입력 디버깅
-      console.log("키 입력 감지:", {
-        key: event.key,
-        code: event.code,
-        keyCode: event.keyCode,
-        charCode: event.charCode,
-      });
+      // 키 입력 디버깅 간소화
+      console.log("키 입력:", event.key, event.code);
 
       // 인트로 페이즈 처리
       if (exhibitionPhase === PHASES.INTRO) {

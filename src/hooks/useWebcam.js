@@ -10,16 +10,24 @@ const useWebcam = (isActive = false) => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [capturedImageUrl, setCapturedImageUrl] = useState(null);
 
+  // mediaStream 참조를 보관하기 위한 ref
+  const mediaStreamRef = useRef(null);
+
   // 웹캠 초기화
   useEffect(() => {
     // isActive가 true일 때만 웹캠 초기화
     if (isActive) {
       let currentWebcamRef = webcamRef.current;
       let mediaStream = null;
+      let initialized = false; // 초기화 상태 추적 변수 추가
 
       const initializeWebcam = async () => {
+        if (initialized) return; // 이미 초기화된 경우 중복 실행 방지
+
         try {
-          console.log("OBS Virtual Camera 연결 중...");
+          // 디버깅 로그 제거 (무한 로그 방지)
+          // console.log("OBS Virtual Camera 연결 중...");
+          initialized = true; // 초기화 상태 설정
 
           // 사용 가능한 모든 비디오 장치 가져오기
           const devices = await navigator.mediaDevices.enumerateDevices();
@@ -27,10 +35,13 @@ const useWebcam = (isActive = false) => {
             (device) => device.kind === "videoinput"
           );
 
+          // 디버깅 로그 제거 (무한 로그 방지)
+          /*
           console.log(
             "사용 가능한 비디오 장치:",
             videoDevices.map((d) => d.label)
           );
+          */
 
           // OBS Virtual Camera 찾기 (이름에 'OBS', 'Virtual' 또는 'Camera'가 포함된 장치)
           const obsDevice = videoDevices.find(
@@ -50,12 +61,14 @@ const useWebcam = (isActive = false) => {
 
           // OBS Virtual Camera가 있으면 해당 장치 ID 사용
           if (obsDevice) {
-            console.log("OBS Virtual Camera를 찾았습니다:", obsDevice.label);
+            // 디버깅 로그 제거 (무한 로그 방지)
+            // console.log("OBS Virtual Camera를 찾았습니다:", obsDevice.label);
             constraints.video.deviceId = { exact: obsDevice.deviceId };
           } else {
-            console.log(
-              "OBS Virtual Camera를 찾지 못했습니다. 기본 카메라를 사용합니다."
-            );
+            // 디버깅 로그 제거 (무한 로그 방지)
+            // console.log(
+            //   "OBS Virtual Camera를 찾지 못했습니다. 기본 카메라를 사용합니다."
+            // );
           }
 
           // 미디어 스트림 가져오기
@@ -67,7 +80,8 @@ const useWebcam = (isActive = false) => {
 
             // 비디오가 로드되면 활성화 상태로 변경
             webcamRef.current.onloadedmetadata = () => {
-              console.log("OBS Virtual Camera 스트림이 로드되었습니다.");
+              // 디버깅 로그 제거 (무한 로그 방지)
+              // console.log("OBS Virtual Camera 스트림이 로드되었습니다.");
               setWebcamActive(true);
 
               // 미리보기 이미지 생성을 위한 1회 캡처
@@ -150,13 +164,15 @@ const useWebcam = (isActive = false) => {
         setWebcamActive(false);
       };
     }
-  }, [isActive, previewUrl, capturedImageUrl]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isActive]); // previewUrl과 capturedImageUrl 의존성 제거
 
   // 웹캠에서 이미지 캡처하는 함수
   const captureImage = async () => {
     if (webcamRef.current && webcamRef.current.videoWidth > 0) {
       try {
-        console.log("OBS Virtual Camera에서 이미지 캡처 중...");
+        // 로그 제거
+        // console.log("OBS Virtual Camera에서 이미지 캡처 중...");
 
         const canvas = document.createElement("canvas");
         canvas.width = webcamRef.current.videoWidth;
@@ -175,7 +191,8 @@ const useWebcam = (isActive = false) => {
               }
               setCapturedImageUrl(URL.createObjectURL(blob));
 
-              console.log("이미지 캡처 성공");
+              // 로그 제거
+              // console.log("이미지 캡처 성공");
               resolve(blob);
             },
             "image/jpeg",
@@ -183,12 +200,12 @@ const useWebcam = (isActive = false) => {
           );
         });
       } catch (err) {
-        console.error("이미지 캡처 실패:", err);
+        console.error("이미지 캡처 실패:", err.message);
         setError("이미지 캡처 실패: " + err.message);
         return null;
       }
     } else {
-      console.error("웹캠이 준비되지 않았습니다.");
+      console.error("웹캠이 준비되지 않음");
       setError("웹캠이 준비되지 않아 이미지를 캡처할 수 없습니다.");
       return null;
     }
