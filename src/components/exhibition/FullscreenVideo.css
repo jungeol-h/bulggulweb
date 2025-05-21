@@ -1,36 +1,77 @@
-/* 전체화면 모드에서의 비디오 스타일 */
-.video-fullscreen {
+/* 가상 전체화면 모드 오버레이 */
+.overlay-container {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw !important;
-  height: 100vh !important;
-  object-fit: cover;
-  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 9000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fade-in 0.3s ease-in-out forwards;
+}
+
+/* 패딩이 있는 비디오 컨테이너 */
+.pseudo-fullscreen-video-container {
+  position: relative;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transform: scale(0.5);
+  animation: zoom-in 0.5s ease-out forwards;
+}
+
+/* 패딩이 있는 비디오 */
+.pseudo-fullscreen-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   background-color: #000;
 }
 
-/* 전체화면 모드일 때 비디오 컨테이너 스타일 */
-:fullscreen video {
-  width: 100vw !important;
-  height: 100vh !important;
-  object-fit: cover;
+/* 닫기 버튼 */
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9100;
+  opacity: 0;
+  animation: fade-in 0.5s ease-in-out 0.3s forwards;
 }
 
-:-webkit-full-screen video {
-  width: 100vw !important;
-  height: 100vh !important;
-  object-fit: cover;
+/* 줌인 효과 애니메이션 정의 */
+@keyframes zoom-in {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-:-moz-full-screen video {
-  width: 100vw !important;
-  height: 100vh !important;
-  object-fit: cover;
-}
-
-:-ms-fullscreen video {
-  width: 100vw !important;
-  height: 100vh !important;
-  object-fit: cover;
+/* 페이드인 효과 애니메이션 정의 */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

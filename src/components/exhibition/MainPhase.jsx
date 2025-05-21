@@ -22,6 +22,12 @@ const MainPhase = () => {
 
   // LED 상태 시각화를 위한 상태
   const [activeLeds, setActiveLeds] = useState([]);
+  
+  // 가상 전체화면 상태 관리
+  const [fullscreenState, setFullscreenState] = useState({
+    isActive: false,
+    videoIndex: -1
+  });
 
   useEffect(() => {
     // 시뮬레이션 모드가 아닐 때만 실제 WebSocket 연결 초기화
@@ -35,32 +41,44 @@ const MainPhase = () => {
 
     // ESP32로부터 버튼 이벤트 구독
     onButton((btnIdx) => {
+      // 현재 전체화면에 표시된 영상과 동일한 버튼을 누르면 전체화면 종료
+      if (fullscreenState.isActive && fullscreenState.videoIndex === btnIdx - 1) {
+        setFullscreenState({
+          isActive: false,
+          videoIndex: -1
+        });
+        console.log(`영상 ${btnIdx} 전체화면 종료`);
+        return;
+      }
+      
       playFullscreen(btnIdx - 1);
     });
 
-    // 전체화면 종료 이벤트 감지
-    const handleFullscreenChange = () => {
-      if (!document.fullscreenElement) {
-        // 전체화면 종료 시 모든 비디오에서 추가된 CSS 클래스 제거
-        videoRefs.current.forEach((video) => {
-          if (video) {
-            video.classList.remove("video-fullscreen");
-          }
-        });
-      }
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
-    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
-
-    // 키보드 이벤트 핸들러 (숫자키 1-8 입력 시 해당 영상 전체화면)
+    // 키보드 이벤트 핸들러 (숫자키 1-8 입력 시 해당 영상 전체화면 토글)
     const handleKeyPress = (event) => {
+      // ESC 키를 누르면 전체화면 종료
+      if (event.key === 'Escape') {
+        setFullscreenState({
+          isActive: false,
+          videoIndex: -1
+        });
+        return;
+      }
+      
       // 숫자키 1-8 (키코드 49-56 또는 키 값 '1'-'8')
       const keyNumber = parseInt(event.key);
       if (keyNumber >= 1 && keyNumber <= 8) {
         console.log(`숫자키 ${keyNumber} 입력됨`);
+        
+        // 현재 전체화면에 표시된 영상과 동일한 번호를 누르면 전체화면 종료
+        if (fullscreenState.isActive && fullscreenState.videoIndex === keyNumber - 1) {
+          setFullscreenState({
+            isActive: false,
+            videoIndex: -1
+          });
+          console.log(`영상 ${keyNumber} 전체화면 종료`);
+          return;
+        }
 
         if (SIMULATION_MODE) {
           // 시뮬레이션 모드에서는 ESP32로부터 버튼 이벤트가 오는 것처럼 시뮬레이션
@@ -91,59 +109,32 @@ const MainPhase = () => {
       if (!SIMULATION_MODE) {
         close();
       }
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-      document.removeEventListener(
-        "webkitfullscreenchange",
-        handleFullscreenChange
-      );
-      document.removeEventListener(
-        "mozfullscreenchange",
-        handleFullscreenChange
-      );
-      document.removeEventListener(
-        "MSFullscreenChange",
-        handleFullscreenChange
-      );
       window.removeEventListener("keydown", handleKeyPress);
     };
   }, [connect, onButton, close]);
 
-  // 영상 전체화면 전환 함수
+  // 가상 전체화면 전환 함수
   const playFullscreen = (index) => {
     const video = videoRefs.current[index];
     if (video) {
-      // 전체화면용 CSS 클래스 추가
-      video.classList.add("video-fullscreen");
-
       // 먼저 비디오 재생 시도
       video.play().catch((err) => {
         console.warn(`비디오 재생 실패: ${err.message}`);
       });
-
-      // 전체화면 API - 브라우저 호환성을 위해 여러 접두사 시도
-      const requestFullscreen =
-        video.requestFullscreen ||
-        video.webkitRequestFullscreen ||
-        video.mozRequestFullScreen ||
-        video.msRequestFullscreen;
-
-      if (requestFullscreen) {
-        requestFullscreen
-          .call(video)
-          .then(() => {
-            console.log(`영상 ${index + 1} 전체화면 전환 성공`);
-            // 화면 방향 설정 (모바일에서 유용)
-            if (screen.orientation && screen.orientation.lock) {
-              screen.orientation.lock("landscape").catch((err) => {
-                console.warn(`화면 방향 설정 실패: ${err.message}`);
-              });
-            }
-          })
-          .catch((err) => {
-            console.error(`전체화면 전환 실패: ${err.message}`);
-          });
-      } else {
-        console.error("이 브라우저는 전체화면 API를 지원하지 않습니다.");
+      
+      // 가상 전체화면 상태 설정
+      setFullscreenState({
+        isActive: true,
+        videoIndex: index
+      });
+      
+      console.log(`영상 ${index + 1} 가상 전체화면 전환 성공`);
+      
+      // 모바일에서 가로 방향 권장 (API 사용은 선택적)
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock("landscape").catch((err) => {
+          console.warn(`화면 방향 설정 실패: ${err.message}`);
+        });
       }
     }
   };
@@ -167,6 +158,17 @@ const MainPhase = () => {
   // ESP32 버튼 시뮬레이션 핸들러
   const handleButtonPress = (buttonIndex) => {
     console.log(`시뮬레이션: ESP32 버튼 ${buttonIndex} 입력`);
+    
+    // 현재 전체화면에 표시된 영상과 동일한 버튼을 누르면 전체화면 종료
+    if (fullscreenState.isActive && fullscreenState.videoIndex === buttonIndex - 1) {
+      setFullscreenState({
+        isActive: false,
+        videoIndex: -1
+      });
+      console.log(`영상 ${buttonIndex} 전체화면 종료`);
+      return;
+    }
+    
     playFullscreen(buttonIndex - 1);
   };
 
@@ -204,6 +206,26 @@ const MainPhase = () => {
           activeLeds={activeLeds}
           onButtonPress={handleButtonPress}
         />
+      )}
+
+      {/* 가상 전체화면 오버레이 */}
+      {fullscreenState.isActive && (
+        <div className="overlay-container">
+          <div className="pseudo-fullscreen-video-container">
+            <video
+              className="pseudo-fullscreen-video"
+              src={
+                SIMULATION_MODE
+                  ? `https://picsum.photos/800/450?random=${fullscreenState.videoIndex}`
+                  : `/videos/video-${fullscreenState.videoIndex + 1}.mp4`
+              }
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          </div>
+        </div>
       )}
 
       <div className="grid grid-cols-4 grid-rows-2 gap-4">
@@ -270,14 +292,14 @@ const MainPhase = () => {
           </h3>
           <ul className="text-green-400 font-mono text-sm list-disc pl-5 space-y-1">
             <li>
-              키보드 숫자키(1-8)를 누르면 해당 영상이 전체화면으로 재생됩니다.
+              키보드 숫자키(1-8)를 누르면 해당 영상이 오버레이 모드로 재생됩니다.
             </li>
-            <li>영상 썸네일을 클릭해도 해당 영상이 전체화면으로 재생됩니다.</li>
+            <li>영상 썸네일을 클릭해도 해당 영상이 오버레이 모드로 재생됩니다.</li>
             <li>
               위 디버그 패널에서 버튼을 클릭하여 ESP32 버튼 입력을 시뮬레이션할
               수 있습니다.
             </li>
-            <li>ESC 키를 눌러 전체화면을 종료할 수 있습니다.</li>
+            <li>같은 버튼을 한번 더 누르거나 ESC 키를 눌러 오버레이 모드를 종료할 수 있습니다.</li>
             <li>
               녹색 표시등은 해당 비디오가 로드되어 LED가 켜진 상태를 나타냅니다.
             </li>

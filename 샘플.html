@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Image Upload Test</title>
+  </head>
+  <body>
+    <h2>Upload Image to MainServer</h2>
+    <form id="uploadForm">
+      <input type="file" id="fileInput" name="file" required />
+      <button type="submit">Upload</button>
+    </form>
+    <pre id="response"></pre>
+
+    <script>
+      const API_KEY = "bFd5omw*vR*>-o7M@^21g0FD-"; // 여기에 실제 API 키를 입력하세요
+      const MAIN_SERVER_URL = "http://10.21.32.158:8000/upload_image/";
+
+      const form = document.getElementById("uploadForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const fileInput = document.getElementById("fileInput");
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        try {
+          const response = await fetch(MAIN_SERVER_URL, {
+            method: "POST",
+            headers: {
+              "X-API-KEY": API_KEY,
+            },
+            body: formData,
+          });
+
+          const result = await response.json();
+          document.getElementById("response").textContent = JSON.stringify(
+            result,
+            null,
+            2
+          );
+        } catch (err) {
+          document.getElementById("response").textContent = "Error: " + err;
+        }
+      });
+    </script>
+  </body>
+</html>
