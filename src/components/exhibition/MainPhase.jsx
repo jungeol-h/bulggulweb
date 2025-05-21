@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import useEsp32Ws from "../../hooks/useEsp32Ws";
 import "./FullscreenVideo.css"; // 전체화면 비디오 스타일을 위한 CSS 가져오기
+import Esp32DebugPanel from "./Esp32DebugPanel"; // ESP32 디버그 패널 컴포넌트 가져오기
 
-// ESP32 WebSocket URL
-const WS_URL = "ws://192.168.0.100:8080/keyboard";
+// ESP32 WebSocket URL - ESP32 직접 연결 또는 Vite 서버 프록시 경로
+const WS_URL = import.meta.env.PROD
+  ? "ws://10.21.37.97:5173/keyboard" // 프로덕션: ESP32 직접 연결 (ESP32의 IP와 포트 사용)
+  : "ws://localhost:5173/keyboard"; // 개발: Vite 서버를 통한 프록시 (현재 Vite 서버 포트 사용)
 
 /**
  * 전시회의 메인 단계를 렌더링하는 컴포넌트
@@ -25,12 +28,20 @@ const MainPhase = () => {
     videoIndex: -1,
   });
 
+  // 디버그 모드 상태
+  const [showDebug, setShowDebug] = useState(
+    !import.meta.env.PROD || localStorage.getItem("debugMode") === "true"
+  );
+
   useEffect(() => {
     // WebSocket 연결 초기화
     connect(WS_URL);
+    console.log(`ESP32 WebSocket ${WS_URL}에 연결 시도`);
 
     // ESP32로부터 버튼 이벤트 구독
     onButton((btnIdx) => {
+      console.log(`ESP32 버튼 ${btnIdx} 눌림`);
+      
       // 현재 전체화면에 표시된 영상과 동일한 버튼을 누르면 전체화면 종료
       if (
         fullscreenState.isActive &&
@@ -49,6 +60,16 @@ const MainPhase = () => {
 
     // 키보드 이벤트 핸들러 (숫자키 1-8 입력 시 해당 영상 전체화면 토글)
     const handleKeyPress = (event) => {
+      // D 키를 누르면 디버그 패널 토글
+      if (event.key === "d" || event.key === "D") {
+        setShowDebug((prev) => {
+          const newValue = !prev;
+          localStorage.setItem("debugMode", newValue);
+          return newValue;
+        });
+        return;
+      }
+      
       // ESC 키를 누르면 전체화면 종료
       if (event.key === "Escape") {
         setFullscreenState({
@@ -129,8 +150,50 @@ const MainPhase = () => {
     setActiveLeds(ledIndices);
   };
 
+  // ESP32 디버그 패널에서 버튼 클릭 처리
+  const handleButtonPress = (btnIdx) => {
+    // ESP32 버튼 눌림과 동일한 로직 사용
+    if (
+      fullscreenState.isActive &&
+      fullscreenState.videoIndex === btnIdx - 1
+    ) {
+      setFullscreenState({
+        isActive: false,
+        videoIndex: -1,
+      });
+      return;
+    }
+
+    playFullscreen(btnIdx - 1);
+  };
+
   return (
     <div className="min-h-screen p-8">
+      {/* ESP32 디버그 패널 (개발 환경 또는 디버그 모드에서만 표시) */}
+      {showDebug && (
+        <Esp32DebugPanel 
+          activeLeds={activeLeds} 
+          onButtonPress={handleButtonPress}
+        />
+      )}
+
+      {/* 디버그 모드 토글 버튼 */}
+      <div className="absolute top-2 right-2 z-50">
+        <button
+          onClick={() => {
+            setShowDebug((prev) => {
+              const newValue = !prev;
+              localStorage.setItem("debugMode", newValue);
+              return newValue;
+            });
+          }}
+          className="bg-gray-800 text-gray-400 hover:text-green-400 p-1 rounded-full w-8 h-8 flex items-center justify-center text-xs"
+          title="디버그 패널 토글 (D 키)"
+        >
+          {showDebug ? "✕" : "⚙"}
+        </button>
+      </div>
+
       {/* 가상 전체화면 오버레이 */}
       {fullscreenState.isActive && (
         <div className="overlay-container">

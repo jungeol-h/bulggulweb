@@ -10,6 +10,8 @@ const useEsp32Ws = () => {
   const reconnectAttemptRef = useRef(0);
   const reconnectTimeoutRef = useRef(null);
   const buttonCallbackRef = useRef(null);
+  const maxReconnectAttempts = 10;
+  const reconnectDelay = 2000; // 2초
 
   /**
    * WebSocket 연결 종료 함수
@@ -21,6 +23,7 @@ const useEsp32Ws = () => {
     }
 
     if (wsRef.current) {
+      console.log("ESP32 WebSocket 연결 종료");
       wsRef.current.close();
       wsRef.current = null;
     }
@@ -30,19 +33,20 @@ const useEsp32Ws = () => {
 
   /**
    * ESP32로 LED 상태 전송
-   * @param {Array<number>} indices - 켜진 LED의 인덱스 배열
+   * @param {Array<number>} indices - 켜진 LED의 인덱스 배열 (1-based)
    */
   const sendLed = useCallback((indices) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-      console.warn("WebSocket is not connected. Cannot send LED data.");
+      console.warn("WebSocket이 연결되지 않음. LED 데이터를 보낼 수 없습니다.");
       return;
     }
 
     try {
       const message = JSON.stringify({ led: indices });
       wsRef.current.send(message);
+      console.log(`ESP32로 LED 상태 전송: ${message}`);
     } catch (error) {
-      console.error("Failed to send LED data:", error);
+      console.error("LED 데이터 전송 실패:", error);
     }
   }, []);
 
@@ -56,19 +60,21 @@ const useEsp32Ws = () => {
 
   /**
    * WebSocket 연결 시도
-   * @param {string} url - WebSocket 서버 URL
+   * @param {string} url - WebSocket 서버 URL (예: ws://192.168.0.100:8080/keyboard)
    */
   const connect = useCallback(
     (url) => {
       // 기존 연결 정리
       close();
 
+      console.log(`ESP32 WebSocket에 연결 시도: ${url}`);
+
       try {
         wsRef.current = new WebSocket(url);
 
         // 연결 성공 이벤트
         wsRef.current.onopen = () => {
-          console.log("WebSocket connected to ESP32");
+          console.log("✅ ESP32 WebSocket 연결 성공");
           reconnectAttemptRef.current = 0; // 재연결 시도 카운트 초기화
         };
 
@@ -76,47 +82,43 @@ const useEsp32Ws = () => {
         wsRef.current.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
+            console.log("ESP32로부터 메시지 수신:", data);
 
-            // 버튼 데이터 수신 처리
+            // 버튼 데이터 수신 처리 {"btn": 2}
             if (data.btn !== undefined && buttonCallbackRef.current) {
+              console.log(`버튼 ${data.btn} 눌림`);
               buttonCallbackRef.current(data.btn);
             }
           } catch (error) {
-            console.error("Failed to parse WebSocket message:", error);
+            console.error("WebSocket 메시지 파싱 실패:", error);
           }
         };
 
         // 연결 종료 이벤트
         wsRef.current.onclose = () => {
-          console.warn(
-            "WebSocket connection closed. Attempting to reconnect..."
-          );
-
-          // LED 초기화 (여기서는 빈 배열을 보내 모든 LED를 끔)
-          if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            sendLed([]);
-          }
+          console.warn("WebSocket 연결 종료. 재연결 시도 중...");
 
           // 재연결 시도
-          if (reconnectAttemptRef.current < 10) {
+          if (reconnectAttemptRef.current < maxReconnectAttempts) {
             reconnectTimeoutRef.current = setTimeout(() => {
               reconnectAttemptRef.current += 1;
+              console.log(`재연결 시도 ${reconnectAttemptRef.current}/${maxReconnectAttempts}`);
               connect(url);
-            }, 2000);
+            }, reconnectDelay);
           } else {
-            console.error("Failed to reconnect to WebSocket after 10 attempts");
+            console.error(`${maxReconnectAttempts}회 재연결 시도 후 실패`);
           }
         };
 
         // 오류 처리
         wsRef.current.onerror = (error) => {
-          console.error("WebSocket error:", error);
+          console.error("WebSocket 오류:", error);
         };
       } catch (error) {
-        console.error("Failed to create WebSocket connection:", error);
+        console.error("WebSocket 연결 생성 실패:", error);
       }
     },
-    [close, sendLed]
+    [close]
   );
 
   return { connect, sendLed, onButton, close };

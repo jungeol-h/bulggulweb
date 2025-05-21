@@ -3,6 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import ArtworkSection from "./components/web/ArtworkSection";
 import TeamSection from "./components/web/TeamSection";
 import LocalExhibitionPage from "./components/exhibition/LocalExhibitionPage";
+import { Esp32TestPage } from "./components/exhibition";
 import "./App.css";
 
 function App() {
@@ -30,14 +31,20 @@ function App() {
             </div>
 
             {/* 페이지 전환을 위한 내비게이션 링크 */}
-            {/* <nav className="relative z-20 py-4 px-6 flex justify-end">
+            <nav className="relative z-20 py-4 px-6 flex justify-end gap-3">
               <Link
                 to="/exhibition"
                 className="bg-purple-900 hover:bg-purple-800 text-white py-2 px-4 rounded-md text-sm transition-all duration-300"
               >
                 전시장 모드
               </Link>
-            </nav> */}
+              <Link
+                to="/esp32-test"
+                className="bg-green-700 hover:bg-green-600 text-white py-2 px-4 rounded-md text-sm transition-all duration-300"
+              >
+                ESP32 테스트
+              </Link>
+            </nav>
 
             {/* Artwork Section */}
             <div className="relative z-10">
@@ -58,6 +65,16 @@ function App() {
         element={
           <div>
             <LocalExhibitionPage />
+          </div>
+        }
+      />
+      
+      {/* ESP32 테스트 페이지 라우트 */}
+      <Route
+        path="/esp32-test"
+        element={
+          <div>
+            <Esp32TestPage />
           </div>
         }
       />
