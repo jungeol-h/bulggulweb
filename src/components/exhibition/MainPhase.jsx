@@ -22,11 +22,11 @@ const MainPhase = () => {
 
   // LED 상태 시각화를 위한 상태
   const [activeLeds, setActiveLeds] = useState([]);
-  
+
   // 가상 전체화면 상태 관리
   const [fullscreenState, setFullscreenState] = useState({
     isActive: false,
-    videoIndex: -1
+    videoIndex: -1,
   });
 
   useEffect(() => {
@@ -42,39 +42,45 @@ const MainPhase = () => {
     // ESP32로부터 버튼 이벤트 구독
     onButton((btnIdx) => {
       // 현재 전체화면에 표시된 영상과 동일한 버튼을 누르면 전체화면 종료
-      if (fullscreenState.isActive && fullscreenState.videoIndex === btnIdx - 1) {
+      if (
+        fullscreenState.isActive &&
+        fullscreenState.videoIndex === btnIdx - 1
+      ) {
         setFullscreenState({
           isActive: false,
-          videoIndex: -1
+          videoIndex: -1,
         });
         console.log(`영상 ${btnIdx} 전체화면 종료`);
         return;
       }
-      
+
       playFullscreen(btnIdx - 1);
     });
 
     // 키보드 이벤트 핸들러 (숫자키 1-8 입력 시 해당 영상 전체화면 토글)
     const handleKeyPress = (event) => {
       // ESC 키를 누르면 전체화면 종료
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setFullscreenState({
           isActive: false,
-          videoIndex: -1
+          videoIndex: -1,
         });
         return;
       }
-      
+
       // 숫자키 1-8 (키코드 49-56 또는 키 값 '1'-'8')
       const keyNumber = parseInt(event.key);
       if (keyNumber >= 1 && keyNumber <= 8) {
         console.log(`숫자키 ${keyNumber} 입력됨`);
-        
+
         // 현재 전체화면에 표시된 영상과 동일한 번호를 누르면 전체화면 종료
-        if (fullscreenState.isActive && fullscreenState.videoIndex === keyNumber - 1) {
+        if (
+          fullscreenState.isActive &&
+          fullscreenState.videoIndex === keyNumber - 1
+        ) {
           setFullscreenState({
             isActive: false,
-            videoIndex: -1
+            videoIndex: -1,
           });
           console.log(`영상 ${keyNumber} 전체화면 종료`);
           return;
@@ -121,15 +127,15 @@ const MainPhase = () => {
       video.play().catch((err) => {
         console.warn(`비디오 재생 실패: ${err.message}`);
       });
-      
+
       // 가상 전체화면 상태 설정
       setFullscreenState({
         isActive: true,
-        videoIndex: index
+        videoIndex: index,
       });
-      
+
       console.log(`영상 ${index + 1} 가상 전체화면 전환 성공`);
-      
+
       // 모바일에서 가로 방향 권장 (API 사용은 선택적)
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch((err) => {
@@ -158,17 +164,20 @@ const MainPhase = () => {
   // ESP32 버튼 시뮬레이션 핸들러
   const handleButtonPress = (buttonIndex) => {
     console.log(`시뮬레이션: ESP32 버튼 ${buttonIndex} 입력`);
-    
+
     // 현재 전체화면에 표시된 영상과 동일한 버튼을 누르면 전체화면 종료
-    if (fullscreenState.isActive && fullscreenState.videoIndex === buttonIndex - 1) {
+    if (
+      fullscreenState.isActive &&
+      fullscreenState.videoIndex === buttonIndex - 1
+    ) {
       setFullscreenState({
         isActive: false,
-        videoIndex: -1
+        videoIndex: -1,
       });
       console.log(`영상 ${buttonIndex} 전체화면 종료`);
       return;
     }
-    
+
     playFullscreen(buttonIndex - 1);
   };
 
@@ -292,14 +301,20 @@ const MainPhase = () => {
           </h3>
           <ul className="text-green-400 font-mono text-sm list-disc pl-5 space-y-1">
             <li>
-              키보드 숫자키(1-8)를 누르면 해당 영상이 오버레이 모드로 재생됩니다.
+              키보드 숫자키(1-8)를 누르면 해당 영상이 오버레이 모드로
+              재생됩니다.
             </li>
-            <li>영상 썸네일을 클릭해도 해당 영상이 오버레이 모드로 재생됩니다.</li>
+            <li>
+              영상 썸네일을 클릭해도 해당 영상이 오버레이 모드로 재생됩니다.
+            </li>
             <li>
               위 디버그 패널에서 버튼을 클릭하여 ESP32 버튼 입력을 시뮬레이션할
               수 있습니다.
             </li>
-            <li>같은 버튼을 한번 더 누르거나 ESC 키를 눌러 오버레이 모드를 종료할 수 있습니다.</li>
+            <li>
+              같은 버튼을 한번 더 누르거나 ESC 키를 눌러 오버레이 모드를 종료할
+              수 있습니다.
+            </li>
             <li>
               녹색 표시등은 해당 비디오가 로드되어 LED가 켜진 상태를 나타냅니다.
             </li>
