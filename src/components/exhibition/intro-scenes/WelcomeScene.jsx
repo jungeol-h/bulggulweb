@@ -48,11 +48,14 @@ const WelcomeScene = ({ webcamRef, webcamActive, webcamError, previewUrl }) => {
       </div>
       <div className="flex space-x-8 mt-4">
         <div className="text-white text-xl border border-white px-6 py-2 rounded-lg">
-          <span className="font-bold mr-2">M</span> 남성
+          <span className="font-bold mr-2">M / ㅡ / 1</span> 남성
         </div>
         <div className="text-white text-xl border border-white px-6 py-2 rounded-lg">
-          <span className="font-bold mr-2">F</span> 여성
+          <span className="font-bold mr-2">F / ㄹ / 2</span> 여성
         </div>
+      </div>
+      <div className="text-yellow-300 text-lg mt-4">
+        키가 작동하지 않으면 한/영 전환 후 시도해보세요.
       </div>
     </div>
   );

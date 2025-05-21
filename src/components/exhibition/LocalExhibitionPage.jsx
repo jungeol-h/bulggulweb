@@ -125,15 +125,35 @@ const LocalExhibitionPage = () => {
   // 키보드 이벤트 처리
   useEffect(() => {
     const handleKeyDown = (event) => {
+      // 키 입력 디버깅
+      console.log("키 입력 감지:", {
+        key: event.key,
+        code: event.code,
+        keyCode: event.keyCode,
+        charCode: event.charCode,
+      });
+
       // 인트로 페이즈 처리
       if (exhibitionPhase === PHASES.INTRO) {
         if (introSequence === 0) {
-          // 초기 인트로 단계(정면 응시 메시지)에서 m 또는 f 키로 성별 선택하고 진행
-          if (event.key === "m" || event.key === "M") {
+          // 초기 인트로 단계에서 성별 선택 (영문 m/f, 한글 ㅡ/ㄹ 또는 1/2 번호키 지원)
+          if (
+            event.key === "m" ||
+            event.key === "M" ||
+            event.code === "KeyM" ||
+            event.key === "ㅡ" ||
+            event.key === "1"
+          ) {
             event.preventDefault();
             console.log("성별 선택: 남성");
             sendVisitorData("m");
-          } else if (event.key === "f" || event.key === "F") {
+          } else if (
+            event.key === "f" ||
+            event.key === "F" ||
+            event.code === "KeyF" ||
+            event.key === "ㄹ" ||
+            event.key === "2"
+          ) {
             event.preventDefault();
             console.log("성별 선택: 여성");
             sendVisitorData("f");
