@@ -13,24 +13,6 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         secure: false,
-        configure: (proxy, options) => {
-          // 프록시 요청 로깅
-          proxy.on("error", (err) => {
-            console.error("프록시 오류:", err);
-          });
-          proxy.on("proxyReq", (proxyReq, req) => {
-            console.log(
-              "프록시 요청:",
-              req.method,
-              req.url,
-              "→",
-              options.target
-            );
-          });
-          proxy.on("proxyRes", (proxyRes, req) => {
-            console.log("프록시 응답:", proxyRes.statusCode, req.url);
-          });
-        },
       },
     },
   },
