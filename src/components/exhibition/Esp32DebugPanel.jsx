@@ -8,7 +8,7 @@ const Esp32DebugPanel = ({ activeLeds: propActiveLeds, onButtonPress }) => {
   const [wsUrl, setWsUrl] = useState(
     import.meta.env.PROD
       ? "ws://10.21.37.97:5173/keyboard" // 프로덕션: ESP32 IP 사용
-      : "ws://localhost:5173/keyboard" // 개발: 로컬호스트
+      : "ws://10.21.37.97:5173/keyboard" // 개발: 로컬호스트
   );
   const [isConnected, setIsConnected] = useState(false);
   const [buttonEvents, setButtonEvents] = useState([]);
