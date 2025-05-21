@@ -41,7 +41,7 @@ const Esp32TestPage = () => {
                   </li>
                   <li>
                     <strong>WebSocket:</strong> 브라우저와 ESP32 간 WebSocket
-                    연결 확인 (ws://10.21.37.97:5173/keyboard)
+                    연결 확인 (ws://192.168.0.1:5173/keyboard)
                   </li>
                   <li>
                     <strong>버튼 테스트:</strong> 숫자키 1-8 또는 아케이드 버튼
