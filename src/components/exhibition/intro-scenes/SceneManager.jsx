@@ -17,6 +17,7 @@ const SceneManager = ({
   dnaSequenceVisible,
   dnaSequence,
   survivalTime,
+  webcamRef,
   webcamActive,
   webcamError,
   previewUrl,
@@ -31,6 +32,7 @@ const SceneManager = ({
       if (sequence === 0) {
         setCurrentScene(
           <WelcomeScene
+            webcamRef={webcamRef}
             webcamActive={webcamActive}
             webcamError={webcamError}
             previewUrl={previewUrl}
@@ -78,6 +80,7 @@ const SceneManager = ({
       dnaSequenceVisible,
       dnaSequence,
       survivalTime,
+      webcamRef,
       webcamActive,
       webcamError,
       previewUrl,

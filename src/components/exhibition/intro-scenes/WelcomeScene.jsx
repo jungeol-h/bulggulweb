@@ -2,9 +2,9 @@ import React from "react";
 
 /**
  * 장면 0: 정면 응시 메시지 및 성별 선택 안내
- * IP 카메라로 연결된 스마트폰 카메라 피드 표시
+ * OBS Virtual Camera로 연결된 카메라 피드 표시
  */
-const WelcomeScene = ({ webcamActive, webcamError, previewUrl }) => {
+const WelcomeScene = ({ webcamRef, webcamActive, webcamError, previewUrl }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* 카메라 관련 오류 메시지 표시 */}
@@ -13,27 +13,28 @@ const WelcomeScene = ({ webcamActive, webcamError, previewUrl }) => {
           <div className="font-bold mb-2">카메라 연결 오류:</div>
           <div>{webcamError}</div>
           <div className="mt-3 text-yellow-300 text-base">
-            IP 카메라가 실행 중인지 확인해주세요.
-            <br />
-            카메라 주소: 192.168.0.76:8080
+            OBS Studio에서 Virtual Camera가 활성화되어 있는지 확인해주세요.
           </div>
         </div>
       )}
 
-      {/* IP 카메라 미리보기 */}
+      {/* 카메라 비디오 표시 (실제 비디오 피드) */}
       <div
         className={
           webcamError ? "hidden" : "relative mb-8 overflow-hidden rounded-lg"
         }
       >
-        {webcamActive && previewUrl ? (
-          <img
-            src={previewUrl}
-            alt="IP 카메라"
-            className="w-64 h-48 border-2 border-white object-cover"
-          />
-        ) : (
-          <div className="w-64 h-48 border-2 border-white flex items-center justify-center">
+        <video
+          ref={webcamRef}
+          autoPlay
+          playsInline
+          muted
+          className="w-64 h-48 border-2 border-white object-cover"
+        />
+
+        {/* 비디오가 로드되지 않았을 때 대체 표시 */}
+        {!webcamActive && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="text-sm text-gray-200">카메라 연결 중...</div>
           </div>
         )}
