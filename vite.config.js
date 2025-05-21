@@ -4,6 +4,17 @@ import { WebSocketServer } from "ws";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      // API 요청을 위한 프록시 설정
+      "/api": {
+        target: "http://192.168.0.10:8000",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+        secure: false,
+      },
+    },
+  },
   plugins: [
     react(),
     {

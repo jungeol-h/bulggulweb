@@ -6,7 +6,7 @@ import useVisitorData from "../../hooks/useVisitorData";
 import { introTexts, PHASES } from "../../constants/exhibitionConstants";
 
 // 메인 서버 URL 및 API Key 상수
-const MAIN_SERVER_URL = "http://192.168.0.10:8000/upload_image/";
+const API_ENDPOINT = "/api/upload_image/";
 const API_KEY = "bFd5omw*vR*>-o7M@^21g0FD-";
 
 /**
@@ -91,7 +91,7 @@ const LocalExhibitionPage = () => {
         }, 1000);
 
         // 백그라운드에서 API 요청 처리 (응답 기다리지 않음)
-        fetch(MAIN_SERVER_URL, {
+        fetch(API_ENDPOINT, {
           method: "POST",
           headers: {
             "X-API-KEY": API_KEY,
