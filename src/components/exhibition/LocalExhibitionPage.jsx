@@ -80,24 +80,8 @@ const LocalExhibitionPage = () => {
         formData.append("gender", gender === "m" ? "1" : "2"); // 남자(m):1, 여자(f):2
         formData.append("sid", sid.toString());
 
-        // 서버로 데이터 전송
-        const response = await fetch(MAIN_SERVER_URL, {
-          method: "POST",
-          headers: {
-            "X-API-KEY": API_KEY,
-          },
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error(`서버 응답 오류: ${response.status}`);
-        }
-
-        // 응답은 성공적으로 받았지만 결과는 사용하지 않음
-        await response.json();
-        console.log("방문자 데이터 전송 성공");
-
-        // 성공적으로 전송 후 페이드 효과와 함께 메인 단계로 진행
+        // 성공적으로 이미지 캡처 후 즉시 다음 단계로 진행
+        // 페이드 효과와 함께 메인 단계로 진행
         setIsTransitioning(true);
         setTimeout(() => {
           setExhibitionPhase(PHASES.MAIN);
@@ -105,6 +89,27 @@ const LocalExhibitionPage = () => {
             setIsTransitioning(false);
           }, 500);
         }, 1000);
+
+        // 백그라운드에서 API 요청 처리 (응답 기다리지 않음)
+        fetch(MAIN_SERVER_URL, {
+          method: "POST",
+          headers: {
+            "X-API-KEY": API_KEY,
+          },
+          body: formData,
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`서버 응답 오류: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(() => {
+            console.log("방문자 데이터 전송 성공 (백그라운드)");
+          })
+          .catch((err) => {
+            console.error("방문자 데이터 전송 실패 (백그라운드):", err);
+          });
       } catch (err) {
         console.error("방문자 데이터 전송 실패:", err);
       }
