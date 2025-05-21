@@ -5,8 +5,8 @@ import Esp32DebugPanel from "./Esp32DebugPanel"; // ESP32 디버그 패널 컴�
 
 // ESP32 WebSocket URL - ESP32 직접 연결 또는 Vite 서버 프록시 경로
 const WS_URL = import.meta.env.PROD
-  ? "ws://192.168.0.1:5173/keyboard" // 프로덕션: ESP32 직접 연결 (ESP32의 IP와 포트 사용)
-  : "ws://192.168.0.1:5173/keyboard"; // 개발: Vite 서버를 통한 프록시 (현재 Vite 서버 포트 사용)
+  ? "ws://192.168.0.10:5173/keyboard" // 프로덕션: ESP32 직접 연결 (ESP32의 IP와 포트 사용)
+  : "ws://192.168.0.10:5173/keyboard"; // 개발: Vite 서버를 통한 프록시 (현재 Vite 서버 포트 사용)
 
 /**
  * 전시회의 메인 단계를 렌더링하는 컴포넌트

@@ -60,7 +60,7 @@ const useEsp32Ws = () => {
 
   /**
    * WebSocket 연결 시도
-   * @param {string} url - WebSocket 서버 URL (예: ws://192.168.0.100:8080/keyboard)
+   * @param {string} url - WebSocket 서버 URL (예: ws://192.168.0.1000:8080/keyboard)
    */
   const connect = useCallback(
     (url) => {
