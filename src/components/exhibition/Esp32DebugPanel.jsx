@@ -20,7 +20,7 @@ const Esp32DebugPanel = ({ activeLeds: propActiveLeds, onButtonPress }) => {
     if (onButtonPress) {
       onButtonPress(index);
     }
-    
+
     // 이벤트 기록
     const timestamp = new Date().toLocaleTimeString();
     setButtonEvents((prev) => [
@@ -51,13 +51,13 @@ const Esp32DebugPanel = ({ activeLeds: propActiveLeds, onButtonPress }) => {
   const toggleLed = (ledIndex) => {
     const newLeds = [...selectedLeds];
     const idx = newLeds.indexOf(ledIndex);
-    
+
     if (idx !== -1) {
       newLeds.splice(idx, 1); // 이미 선택된 LED라면 제거
     } else {
       newLeds.push(ledIndex); // 선택되지 않은 LED라면 추가
     }
-    
+
     setSelectedLeds(newLeds);
     sendLed(newLeds);
   };
@@ -67,7 +67,9 @@ const Esp32DebugPanel = ({ activeLeds: propActiveLeds, onButtonPress }) => {
 
   return (
     <div className="bg-gray-900 border border-green-700 p-4 rounded-lg mb-4">
-      <h2 className="text-green-400 font-mono text-lg mb-3">ESP32 디버그 패널</h2>
+      <h2 className="text-green-400 font-mono text-lg mb-3">
+        ESP32 디버그 패널
+      </h2>
 
       {/* WebSocket 연결 컨트롤 */}
       <div className="mb-4">

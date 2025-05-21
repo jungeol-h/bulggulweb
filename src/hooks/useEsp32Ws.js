@@ -102,7 +102,9 @@ const useEsp32Ws = () => {
           if (reconnectAttemptRef.current < maxReconnectAttempts) {
             reconnectTimeoutRef.current = setTimeout(() => {
               reconnectAttemptRef.current += 1;
-              console.log(`재연결 시도 ${reconnectAttemptRef.current}/${maxReconnectAttempts}`);
+              console.log(
+                `재연결 시도 ${reconnectAttemptRef.current}/${maxReconnectAttempts}`
+              );
               connect(url);
             }, reconnectDelay);
           } else {

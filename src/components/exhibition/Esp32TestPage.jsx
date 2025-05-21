@@ -40,16 +40,16 @@ const Esp32TestPage = () => {
                     있는지 확인
                   </li>
                   <li>
-                    <strong>WebSocket:</strong> 브라우저와 ESP32 간 WebSocket 연결
-                    확인 (ws://10.21.37.97:5173/keyboard)
+                    <strong>WebSocket:</strong> 브라우저와 ESP32 간 WebSocket
+                    연결 확인 (ws://10.21.37.97:5173/keyboard)
                   </li>
                   <li>
                     <strong>버튼 테스트:</strong> 숫자키 1-8 또는 아케이드 버튼
                     클릭 시 영상 전체화면 전환
                   </li>
                   <li>
-                    <strong>LED 테스트:</strong> 영상 로드 완료 시 ESP32의 해당 LED
-                    점등 확인
+                    <strong>LED 테스트:</strong> 영상 로드 완료 시 ESP32의 해당
+                    LED 점등 확인
                   </li>
                 </ul>
               </div>

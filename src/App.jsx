@@ -68,7 +68,7 @@ function App() {
           </div>
         }
       />
-      
+
       {/* ESP32 테스트 페이지 라우트 */}
       <Route
         path="/esp32-test"

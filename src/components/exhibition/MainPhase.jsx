@@ -41,7 +41,7 @@ const MainPhase = () => {
     // ESP32로부터 버튼 이벤트 구독
     onButton((btnIdx) => {
       console.log(`ESP32 버튼 ${btnIdx} 눌림`);
-      
+
       // 현재 전체화면에 표시된 영상과 동일한 버튼을 누르면 전체화면 종료
       if (
         fullscreenState.isActive &&
@@ -69,7 +69,7 @@ const MainPhase = () => {
         });
         return;
       }
-      
+
       // ESC 키를 누르면 전체화면 종료
       if (event.key === "Escape") {
         setFullscreenState({
@@ -153,10 +153,7 @@ const MainPhase = () => {
   // ESP32 디버그 패널에서 버튼 클릭 처리
   const handleButtonPress = (btnIdx) => {
     // ESP32 버튼 눌림과 동일한 로직 사용
-    if (
-      fullscreenState.isActive &&
-      fullscreenState.videoIndex === btnIdx - 1
-    ) {
+    if (fullscreenState.isActive && fullscreenState.videoIndex === btnIdx - 1) {
       setFullscreenState({
         isActive: false,
         videoIndex: -1,
@@ -171,8 +168,8 @@ const MainPhase = () => {
     <div className="min-h-screen p-8">
       {/* ESP32 디버그 패널 (개발 환경 또는 디버그 모드에서만 표시) */}
       {showDebug && (
-        <Esp32DebugPanel 
-          activeLeds={activeLeds} 
+        <Esp32DebugPanel
+          activeLeds={activeLeds}
           onButtonPress={handleButtonPress}
         />
       )}
