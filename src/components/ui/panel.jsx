@@ -1,5 +1,6 @@
 import React from "react";
 import { TypewriterText } from "./text";
+import { colors } from "../../theme/theme";
 
 /**
  * Panel - 기본 패널 컴포넌트
@@ -12,11 +13,11 @@ import { TypewriterText } from "./text";
 export const Panel = ({
   children,
   title = "",
-  titleColor = "text-white",
+  titleColor = "text-ui-text-primary",
   className = "",
 }) => (
   <section
-    className={`bg-black relative h-full flex flex-col outline outline-1 outline-white/70 ${className}`}
+    className={`bg-ui-background-primary relative h-full flex flex-col outline outline-1 outline-ui-text-primary/70 ${className}`}
   >
     {title && (
       <div
@@ -44,21 +45,21 @@ export const WindowPanel = ({
   className = "",
 }) => (
   <div
-    className={`flex flex-col outline outline-2 outline-white/70 ${className}`}
+    className={`flex flex-col outline outline-2 outline-ui-text-primary/70 ${className}`}
   >
     {/* 타이틀 바 */}
-    <div className="w-full py-2 flex items-center justify-between bg-gray-500/80">
+    <div className="w-full py-2 flex items-center justify-between bg-ui-background-tertiary/80">
       <div className="flex items-center ml-2">
-        <h1 className="text-white/90 text-2xl font-bold tracking-wider text-left pl-2">
+        <h1 className="text-ui-text-primary/90 text-2xl font-bold tracking-wider text-left pl-2">
           <span className="lcd-text">{title}</span>
         </h1>
       </div>
       {showControls && (
         <div className="flex items-center mr-2">
-          <div className="w-6 h-5 border border-white/50 mx-1 flex items-center justify-center text-xs text-white/80">
+          <div className="w-6 h-5 border border-ui-text-primary/50 mx-1 flex items-center justify-center text-xs text-ui-text-primary/80">
             _
           </div>
-          <div className="w-6 h-5 border border-white/50 mx-1 flex items-center justify-center text-xs text-white/80">
+          <div className="w-6 h-5 border border-ui-text-primary/50 mx-1 flex items-center justify-center text-xs text-ui-text-primary/80">
             □
           </div>
           <div className="w-6 h-5 border border-white/50 mx-1 flex items-center justify-center text-xs text-white/80">

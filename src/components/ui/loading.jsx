@@ -1,4 +1,5 @@
 import React from "react";
+import { colors } from "../../theme/theme";
 
 /**
  * Spinner - 스피너 로딩 컴포넌트
@@ -9,7 +10,7 @@ import React from "react";
  */
 export const Spinner = ({
   size = "md",
-  color = "border-green-500",
+  color = "border-brand-primary",
   className = "",
 }) => {
   const getSizeClasses = () => {
@@ -46,7 +47,7 @@ export const LoadingIndicator = ({
 }) => (
   <div className={`flex flex-col items-center justify-center ${className}`}>
     <Spinner size={size} />
-    {text && <p className="mt-4 text-green-400 font-mono">{text}</p>}
+    {text && <p className="mt-4 text-brand-secondary font-mono">{text}</p>}
   </div>
 );
 

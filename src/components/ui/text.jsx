@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { colors } from "../../theme/theme";
 
 /**
  * TypewriterText - 타이핑 효과가 있는 텍스트 컴포넌트

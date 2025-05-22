@@ -1,4 +1,5 @@
 import React from "react";
+import { colors } from "../../theme/theme";
 
 /**
  * StarryBackground - 별이 빛나는 배경 효과를 제공하는 컴포넌트
@@ -23,7 +24,7 @@ export const StarryBackground = ({ count = 150, className = "" }) => {
       {stars.map((star) => (
         <div
           key={star.id}
-          className="absolute rounded-full bg-white animate-twinkle"
+          className="absolute rounded-full bg-ui-text-primary animate-twinkle"
           style={{
             top: star.top,
             left: star.left,

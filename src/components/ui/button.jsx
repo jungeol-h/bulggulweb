@@ -1,4 +1,5 @@
 import React from "react";
+import { colors } from "../../theme/theme";
 
 /**
  * Button - 기본 버튼 컴포넌트
@@ -22,13 +23,13 @@ export const Button = ({
   const getVariantClasses = () => {
     switch (variant) {
       case "primary":
-        return "bg-green-700 hover:bg-green-600 text-white";
+        return `bg-btn-primary-base hover:bg-btn-primary-hover text-ui-text-primary`;
       case "secondary":
-        return "bg-gray-700 hover:bg-gray-600 text-white";
+        return `bg-btn-secondary-base hover:bg-btn-secondary-hover text-ui-text-primary`;
       case "danger":
-        return "bg-red-700 hover:bg-red-600 text-white";
+        return `bg-btn-danger-base hover:bg-btn-danger-hover text-ui-text-primary`;
       default:
-        return "bg-green-700 hover:bg-green-600 text-white";
+        return `bg-btn-primary-base hover:bg-btn-primary-hover text-ui-text-primary`;
     }
   };
 
@@ -54,7 +55,7 @@ export const Button = ({
         ${getSizeClasses()} 
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
         transition-colors duration-200 
-        rounded font-mono focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
+        rounded font-mono focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary
         ${className}
       `}
       {...props}
@@ -88,13 +89,13 @@ export const IconButton = ({
   const getVariantClasses = () => {
     switch (variant) {
       case "primary":
-        return "bg-green-700 hover:bg-green-600 text-white";
+        return `bg-btn-primary-base hover:bg-btn-primary-hover text-ui-text-primary`;
       case "secondary":
-        return "bg-gray-800 text-gray-400 hover:text-green-400";
+        return `bg-ui-background-tertiary text-ui-text-muted hover:text-brand-primary`;
       case "danger":
-        return "bg-red-700 hover:bg-red-600 text-white";
+        return `bg-btn-danger-base hover:bg-btn-danger-hover text-ui-text-primary`;
       default:
-        return "bg-green-700 hover:bg-green-600 text-white";
+        return `bg-btn-primary-base hover:bg-btn-primary-hover text-ui-text-primary`;
     }
   };
 
@@ -122,7 +123,7 @@ export const IconButton = ({
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
         transition-colors duration-200 
         rounded-full flex items-center justify-center
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary
         ${className}
       `}
       {...props}
@@ -154,8 +155,12 @@ export const SelectionButton = ({
   return (
     <div
       className={`
-        text-white text-xl border 
-        ${selected ? "border-green-500 bg-green-900/30" : "border-white"} 
+        text-ui-text-primary text-xl border 
+        ${
+          selected
+            ? "border-brand-primary bg-brand-accent/30"
+            : "border-ui-text-primary"
+        } 
         px-6 py-2 rounded-lg
         ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
         transition-colors duration-200

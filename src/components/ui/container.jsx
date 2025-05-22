@@ -1,4 +1,5 @@
 import React from "react";
+import { colors } from "../../theme/theme";
 
 /**
  * ContentContainer - 기본 컨텐츠 컨테이너 컴포넌트
@@ -51,7 +52,7 @@ export const OverlayContainer = ({
 
   return (
     <div
-      className={`fixed inset-0 bg-black/95 z-50 flex justify-center items-center ${className}`}
+      className={`fixed inset-0 bg-ui-background-primary/95 z-50 flex justify-center items-center ${className}`}
       style={{
         opacity: 0,
         animation: "fade-in 0.3s ease-in-out forwards",
