@@ -28,13 +28,13 @@ const FollowupTextScene = ({ text, isLastScene }) => {
           <TypewriterText text={text} delay={50} />
         </div>
 
-        {showSpacebarHint && (
+        {/* {showSpacebarHint && (
           <div className="mt-16 text-center">
             <BlinkingText className="text-white text-xl font-mono border border-green-500 py-3 px-6 bg-black bg-opacity-50 inline-block">
               [ 스페이스바를 눌러 계속하세요 ]
             </BlinkingText>
           </div>
-        )}
+        )} */}
       </Panel>
     </CenteredContainer>
   );

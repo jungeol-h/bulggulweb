@@ -94,40 +94,44 @@ const IntroPhase = ({
   // 엔티티 그리드 생성 효과
   useEffect(() => {
     if (introSequence === 2) {
-      // 엔티티 스크롤링 시작
-      setTimeout(() => {
-        setEntityScanning(true);
-      }, 1000);
+      // EntityScanScene이 비활성화되었으므로 특별한 처리 필요 없음
+      // 이 useEffect는 나중에 EntityScanScene을 다시 활성화할 때 사용됨
+      console.log("EntityScanScene 비활성화 상태 - 추가 처리 건너뜀");
+
+      // 나중에 다시 활성화할 때 사용할 코드 (현재는 주석 처리)
+      // setTimeout(() => {
+      //   setEntityScanning(true);
+      // }, 1000);
     }
   }, [introSequence]);
 
   // 엔티티 스캐닝 시뮬레이션
   useEffect(() => {
     if (introSequence === 2 && entityScanning && gridScrollRef.current) {
-      const scrollAnimation = () => {
-        const gridScroll = gridScrollRef.current;
+      // EntityScanScene이 비활성화되었으므로 특별한 처리 필요 없음
+      // 이 useEffect는 나중에 EntityScanScene을 다시 활성화할 때 사용됨
+      console.log("EntityScanScene 비활성화 상태 - 스캐닝 시뮬레이션 건너뜀");
 
-        // 스크롤 애니메이션
-        gridScroll.style.transform = `translateX(0)`;
-        gridScroll.style.transition =
-          "transform 5s cubic-bezier(0.2, 0.8, 0.8, 1)";
-
-        // 스캔 완료 후 타겟 하이라이트
-        setTimeout(() => {
-          setEntityTarget(targetId);
-          setEntityHighlighted(true);
-          setEntityScanning(false);
-
-          // 약간의 대기 시간 후 다음 단계로 진행
-          setTimeout(() => {
-            if (window.advanceIntroSequence) {
-              window.advanceIntroSequence();
-            }
-          }, 3000);
-        }, 5000);
-      };
-
-      scrollAnimation();
+      // 나중에 다시 활성화할 때 사용할 코드 (현재는 주석 처리)
+      // const scrollAnimation = () => {
+      //   const gridScroll = gridScrollRef.current;
+      //   gridScroll.style.transform = `translateX(0)`;
+      //   gridScroll.style.transition = "transform 5s cubic-bezier(0.2, 0.8, 0.8, 1)";
+      //
+      //   setTimeout(() => {
+      //     setEntityTarget(targetId);
+      //     setEntityHighlighted(true);
+      //     setEntityScanning(false);
+      //
+      //     setTimeout(() => {
+      //       if (window.advanceIntroSequence) {
+      //         window.advanceIntroSequence();
+      //       }
+      //     }, 3000);
+      //   }, 5000);
+      // };
+      //
+      // scrollAnimation();
     }
   }, [entityScanning, introSequence, targetId]);
 

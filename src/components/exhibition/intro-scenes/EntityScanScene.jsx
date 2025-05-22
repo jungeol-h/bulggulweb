@@ -5,6 +5,10 @@ import { GridBackground } from "../../ui/background";
 
 /**
  * 장면 2: 엔티티 그리드 스캐닝
+ *
+ * 참고: 이 장면은 현재 임시적으로 비활성화되어 있습니다.
+ * SceneManager.jsx에서 이 장면을 스킵하도록 설정되어 있습니다.
+ * 나중에 다시 활성화하려면 SceneManager.jsx와 IntroPhase.jsx 파일의 관련 코드를 수정해야 합니다.
  */
 const EntityScanScene = ({
   entityIds,

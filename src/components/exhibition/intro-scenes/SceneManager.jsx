@@ -43,16 +43,24 @@ const SceneManager = ({
         // IntroTextScene - 첫 번째 텍스트 씬
         setCurrentScene(<IntroTextScene text={introTexts[0]} />);
       } else if (sequence === 2) {
-        // EntityScanScene - 엔티티 스캔 씬
+        // Skip EntityScanScene and go directly to InfoDisplayScene
+        // This will be reactivated later
+        console.log("Skipping EntityScanScene (temporarily disabled)");
+        // Auto-advance to next sequence after a brief delay
+        setTimeout(() => {
+          if (window.advanceIntroSequence) {
+            window.advanceIntroSequence();
+          }
+        }, 500);
+
+        // Show a placeholder or loading message
         setCurrentScene(
-          <EntityScanScene
-            entityIds={entityIds}
-            entityHighlighted={entityHighlighted}
-            entityTarget={entityTarget}
-            targetId={targetId}
-            gridScrollRef={window.gridScrollRef}
-            targetEntityRef={window.targetEntityRef}
-          />
+          <div className="text-green-500 font-mono text-2xl text-center p-8">
+            데이터 스캔 중... <br />
+            {/* <span className="text-sm opacity-70">
+              (EntityScanScene 임시 비활성화됨)
+            </span> */}
+          </div>
         );
       } else if (sequence === 3) {
         // InfoDisplayScene - 정보 표시 씬
