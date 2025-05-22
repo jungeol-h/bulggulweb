@@ -1,9 +1,14 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { StarryBackground } from "../web/HudComponents";
 import { IntroPhase, MainPhase, OutroPhase, DebugPanel } from ".";
 import useWebcam from "../../hooks/useWebcam";
 import useVisitorData from "../../hooks/useVisitorData";
 import { introTexts, PHASES } from "../../constants/exhibitionConstants";
+import {
+  BackgroundContainer,
+  ContentContainer,
+  ScanlineEffect,
+  StarryBackground,
+} from "../ui";
 
 // 메인 서버 URL 및 API Key 상수
 const API_ENDPOINT = "http://192.168.0.10:8000/upload_image/";
@@ -193,28 +198,9 @@ const LocalExhibitionPage = () => {
   const combinedError = error || webcamError;
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      {/* 배경 효과 */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <StarryBackground count={150} />
-        <div
-          className="scanline-effect"
-          style={{
-            backgroundImage: "url('/images/scanline.png')",
-            backgroundRepeat: "repeat",
-            mixBlendMode: "soft-light",
-            opacity: 0.15,
-            filter: "blur(0.4px) contrast(110%) saturate(70%) brightness(1.1)",
-          }}
-        ></div>
-      </div>
-
+    <BackgroundContainer stars={true} scanline={true}>
       {/* 전시 단계에 따른 내용 렌더링 */}
-      <div
-        className={`relative z-10 container mx-auto transition-opacity duration-1000 ${
-          isTransitioning ? "opacity-0" : "opacity-100"
-        }`}
-      >
+      <ContentContainer isTransitioning={isTransitioning}>
         {exhibitionPhase === PHASES.INTRO && (
           <IntroPhase
             introSequence={introSequence}
@@ -230,7 +216,7 @@ const LocalExhibitionPage = () => {
           <MainPhase sessionId={visitorSid} />
         )}
         {exhibitionPhase === PHASES.OUTRO && <OutroPhase />}
-      </div>
+      </ContentContainer>
 
       {/* 디버그 정보 표시 (개발 중에만 활성화) */}
       <DebugPanel
@@ -241,7 +227,7 @@ const LocalExhibitionPage = () => {
         isLoading={isLoading}
         error={combinedError}
       />
-    </div>
+    </BackgroundContainer>
   );
 };
 
