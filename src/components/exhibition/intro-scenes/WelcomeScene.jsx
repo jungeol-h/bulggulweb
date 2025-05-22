@@ -43,8 +43,14 @@ const WelcomeScene = ({ webcamRef, webcamActive, webcamError, previewUrl }) => {
         )}
       </div>
 
-      <GlitchText text="정면을 응시해주세요" className="text-white text-3xl font-bold mb-8" />
-      <MonoLabel text="키보드로 성별을 선택해주세요:" className="text-white text-xl mb-4" />
+      <GlitchText
+        text="정면을 응시해주세요"
+        className="text-white text-3xl font-bold mb-8"
+      />
+      <MonoLabel
+        text="키보드로 성별을 선택해주세요:"
+        className="text-white text-xl mb-4"
+      />
       <div className="flex space-x-8 mt-4">
         <div className="text-white text-xl border border-white px-6 py-2 rounded-lg">
           <span className="font-bold mr-2">M / ㅡ / 1</span> 남성

@@ -17,7 +17,7 @@ const InfoDisplayScene = ({
     id: targetId,
     type: "유기체",
     survivalTime: `${survivalTime.hours}h ${survivalTime.minutes}min`,
-    dna: dnaSequence
+    dna: dnaSequence,
   };
 
   // 필드 정의
@@ -25,15 +25,15 @@ const InfoDisplayScene = ({
     id: "고유 식별코드",
     type: "물체 정보",
     survivalTime: "생존 기간",
-    ...(dnaSequenceVisible && { dna: "DNA 염기 서열" })
+    ...(dnaSequenceVisible && { dna: "DNA 염기 서열" }),
   };
 
   return (
     <CenteredContainer>
       <WindowPanel title="객체 분석 결과" className="max-w-4xl w-full">
-        <InfoPanel 
-          data={infoData} 
-          fields={fields} 
+        <InfoPanel
+          data={infoData}
+          fields={fields}
           useTypewriter={true}
           className="p-8"
         />
