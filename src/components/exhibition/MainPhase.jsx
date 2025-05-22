@@ -11,7 +11,7 @@ const WS_URL = import.meta.env.PROD
 
 // API 서버 URL 및 상수 설정
 const API_SERVER_URL =
-  import.meta.env.VITE_API_SERVER_URL || "http://localhost:8000";
+  import.meta.env.VITE_API_SERVER_URL || "http://192.168.0.10:8000";
 const POLLING_INTERVAL = 5000; // 5초마다 서버에 비디오 확인
 
 /**
@@ -183,20 +183,50 @@ const MainPhase = ({ sessionId }) => {
     setFetchingStatus({ isFetching: true, lastFetched: null, error: null });
 
     try {
-      // API 서버에 GET 요청하여 비디오 URL 목록 가져오기
-      const response = await axios.get(
-        `${API_SERVER_URL}/videos/urls?sessionId=${sessionId}`
-      );
+      console.log(`세션 ID ${sessionId}의 비디오 URL 확인 중...`);
 
-      const urls = response.data.urls || [];
-      setVideoUrls(urls);
+      // 모든 비디오 URL 확인 (8개 인덱스)
+      const newUrls = Array(8).fill(null);
+      const checkPromises = [];
+
+      for (let i = 0; i < 8; i++) {
+        const videoUrl = `${API_SERVER_URL}/uploads/${sessionId}/result_output_${i}.mp4`;
+
+        // HEAD 요청으로 파일 존재 여부 확인
+        checkPromises.push(
+          axios
+            .head(videoUrl)
+            .then(() => {
+              // 파일이 존재하면 URL 배열에 추가
+              newUrls[i] = videoUrl;
+              return { index: i, url: videoUrl };
+            })
+            .catch(() => null) // 파일이 없으면 null 반환
+        );
+      }
+
+      // 모든 요청 결과 처리
+      await Promise.allSettled(checkPromises);
+
+      // 로드된 비디오 확인
+      const loadedCount = newUrls.filter((url) => url !== null).length;
+      console.log(`초기 로드 완료: ${loadedCount}개의 비디오 발견됨`);
+
+      setVideoUrls(newUrls);
 
       // 로드된 비디오 인덱스 업데이트
       const loadedIndices = new Set();
-      urls.forEach((_, index) => loadedIndices.add(index + 1));
+      newUrls.forEach((url, index) => {
+        if (url) loadedIndices.add(index + 1);
+      });
+
       setActiveLeds(Array.from(loadedIndices));
 
-      console.log("비디오 URL 목록 가져오기 성공:", urls);
+      setFetchingStatus({
+        isFetching: false,
+        lastFetched: new Date().toISOString(),
+        error: null,
+      });
     } catch (error) {
       console.error("비디오 URL 목록 가져오기 실패:", error);
       setFetchingStatus({
@@ -230,33 +260,47 @@ const MainPhase = ({ sessionId }) => {
         return;
       }
 
-      console.log(`서버에서 다음 비디오 요청 중: ${missingIndices.join(", ")}`);
+      console.log(`서버에서 다음 비디오 확인 중: ${missingIndices.join(", ")}`);
 
-      // 세션 ID와 필요한 인덱스를 사용하여 비디오 요청
-      const response = await axios.get(`${API_SERVER_URL}/get_videos`, {
-        params: {
-          session_id: sessionId,
-          indices: missingIndices.join(","),
-        },
-        headers: {
-          "X-API-KEY":
-            import.meta.env.VITE_API_KEY || localStorage.getItem("apiKey"),
-        },
-      });
+      // 새 비디오 URL 업데이트 배열 준비
+      const newVideoUrls = [...videoUrls];
+      const checkPromises = [];
 
-      if (response.data && response.data.videos) {
-        // 새 비디오 URL 업데이트
-        const newVideoUrls = [...videoUrls];
+      // 각 인덱스별로 비디오가 존재하는지 확인
+      for (const idx of missingIndices) {
+        const videoUrl = `${API_SERVER_URL}/uploads/${sessionId}/result_output_${
+          idx - 1
+        }.mp4`;
 
-        for (const video of response.data.videos) {
-          const index = video.index - 1; // 0-based 인덱스로 변환
-          if (index >= 0 && index < 8) {
-            newVideoUrls[index] = video.url;
-            console.log(`비디오 ${index + 1} 로드됨: ${video.url}`);
-          }
-        }
+        // HEAD 요청으로 파일 존재 여부 확인
+        checkPromises.push(
+          axios
+            .head(videoUrl)
+            .then(() => {
+              // 파일이 존재하면 URL 배열에 추가
+              const index = idx - 1; // 0-based 인덱스로 변환
+              newVideoUrls[index] = videoUrl;
+              console.log(`비디오 ${idx} 로드됨: ${videoUrl}`);
+              return { index, url: videoUrl };
+            })
+            .catch((err) => {
+              console.log(`비디오 ${idx}는 아직 없음:`, err.message);
+              return null;
+            })
+        );
+      }
 
+      // 모든 요청 결과 처리
+      const results = await Promise.allSettled(checkPromises);
+      const loadedVideos = results
+        .filter((result) => result.status === "fulfilled" && result.value)
+        .map((result) => result.value);
+
+      if (loadedVideos.length > 0) {
         setVideoUrls(newVideoUrls);
+        console.log(`${loadedVideos.length}개의 새 비디오 발견됨`);
+      } else {
+        console.log("새로 추가된 비디오 없음");
       }
 
       setFetchingStatus({
@@ -368,17 +412,17 @@ const MainPhase = ({ sessionId }) => {
                 videoUrls.filter((url) => url !== null).length
               }/8 비디오 로드됨`}
         </div>
-        
+
         {/* 재시도 버튼 */}
-        {(!videoUrls.every(url => url !== null) || fetchingStatus.error) && (
-          <button 
+        {(!videoUrls.every((url) => url !== null) || fetchingStatus.error) && (
+          <button
             onClick={handleRetryFetch}
             className="bg-blue-700 hover:bg-blue-600 text-white text-xs px-2 py-1 rounded-full"
           >
             재시도
           </button>
         )}
-        
+
         {/* 세션 ID 표시 */}
         <div className="bg-gray-800 text-gray-300 px-2 py-1 rounded-full text-xs">
           세션 ID: {sessionId}
@@ -391,10 +435,7 @@ const MainPhase = ({ sessionId }) => {
           <div className="pseudo-fullscreen-video-container">
             <video
               className="pseudo-fullscreen-video"
-              src={
-                videoUrls[fullscreenState.videoIndex] ||
-                `/videos/video-${fullscreenState.videoIndex + 1}.mp4`
-              }
+              src={videoUrls[fullscreenState.videoIndex] || ""}
               autoPlay
               loop
               muted
@@ -434,7 +475,7 @@ const MainPhase = ({ sessionId }) => {
                 }}
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ display: "block" }} // 전체화면에서 인라인 요소 깨지지 않도록
-                src={videoUrls[i] || `/videos/video-${i + 1}.mp4`}
+                src={videoUrls[i] || ""}
                 poster={`https://picsum.photos/800/450?random=${i}`}
                 preload="auto"
                 muted
