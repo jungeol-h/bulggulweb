@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import useEsp32Ws from "../../hooks/useEsp32Ws";
 import "./FullscreenVideo.css"; // 전체화면 비디오 스타일을 위한 CSS 가져오기
-import Esp32DebugPanel from "./Esp32DebugPanel"; // ESP32 디버그 패널 컴포넌트 가져오기
+// import Esp32DebugPanel from "./Esp32DebugPanel"; // ESP32 디버그 패널 컴포넌트 제거
 import VideoService from "../../services/VideoService"; // 비디오 서비스 가져오기
 import { WS_URL, POLLING_INTERVAL } from "../../constants/apiConstants"; // API 상수 가져오기
 
@@ -29,10 +29,7 @@ const MainPhase = ({
     videoIndex: -1,
   });
 
-  // 디버그 모드 상태
-  const [showDebug, setShowDebug] = useState(
-    !import.meta.env.PROD || localStorage.getItem("debugMode") === "true"
-  );
+  // 디버그 모드 상태 제거
 
   // 서버에서 가져온 비디오 URL 상태
   const [videoUrls, setVideoUrls] = useState(
@@ -85,7 +82,8 @@ const MainPhase = ({
 
     // 키보드 이벤트 핸들러 (숫자키 1-8 입력 시 해당 영상 전체화면 토글)
     const handleKeyPress = (event) => {
-      // D 키를 누르면 디버그 패널 토글
+      // 디버그 패널 토글 기능 비활성화
+      /*
       if (event.key === "d" || event.key === "D") {
         setShowDebug((prev) => {
           const newValue = !prev;
@@ -94,6 +92,7 @@ const MainPhase = ({
         });
         return;
       }
+      */
 
       // ESC 키를 누르면 전체화면 종료
       if (event.key === "Escape") {
@@ -182,19 +181,7 @@ const MainPhase = ({
     console.log(`비디오 ${index} 로드 완료`);
   };
 
-  // ESP32 디버그 패널에서 버튼 클릭 처리
-  const handleButtonPress = (btnIdx) => {
-    // ESP32 버튼 눌림과 동일한 로직 사용
-    if (fullscreenState.isActive && fullscreenState.videoIndex === btnIdx - 1) {
-      setFullscreenState({
-        isActive: false,
-        videoIndex: -1,
-      });
-      return;
-    }
-
-    playFullscreen(btnIdx - 1);
-  };
+  // ESP32 디버그 패널 버튼 클릭 핸들러 제거
 
   // 서버에서 비디오 URL 가져오기
   const fetchVideoUrls = useCallback(async () => {
@@ -301,7 +288,8 @@ const MainPhase = ({
 
   return (
     <div className="min-h-screen p-8">
-      {/* ESP32 디버그 패널 (개발 환경 또는 디버그 모드에서만 표시) */}
+      {/* ESP32 디버그 패널 및 토글 버튼 비활성화 */}
+      {/* 
       {showDebug && (
         <Esp32DebugPanel
           activeLeds={activeLeds}
@@ -309,7 +297,6 @@ const MainPhase = ({
         />
       )}
 
-      {/* 디버그 모드 토글 버튼 */}
       <div className="absolute top-2 right-2 z-50">
         <button
           onClick={() => {
@@ -325,6 +312,7 @@ const MainPhase = ({
           {showDebug ? "✕" : "⚙"}
         </button>
       </div>
+      */}
 
       {/* 비디오 로딩 상태 표시 */}
       <div className="absolute top-2 left-2 z-50 flex items-center space-x-2">
