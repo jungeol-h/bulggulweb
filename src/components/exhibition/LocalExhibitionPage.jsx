@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { IntroPhase, MainPhase, OutroPhase, DebugPanel } from ".";
 import useWebcam from "../../hooks/useWebcam";
 import useVisitorData from "../../hooks/useVisitorData";
+import useVideoPreload from "../../hooks/useVideoPreload";
 import { introTexts, PHASES } from "../../constants/exhibitionConstants";
 import {
   BackgroundContainer,
@@ -42,6 +43,14 @@ const LocalExhibitionPage = () => {
 
   // 방문자 SID 관리
   const [visitorSid, setVisitorSid] = useState(null);
+
+  // 비디오 사전 로드 훅 사용 (introSequence가 1 이상일 때만 활성화)
+  const {
+    atLeastOneLoaded,
+    videoUrls,
+    loadedIndices,
+    loading: videoLoading,
+  } = useVideoPreload(visitorSid, introSequence >= 1);
 
   // 인트로 시퀀스 진행 함수
   const advanceIntroSequence = useCallback(() => {
@@ -208,6 +217,25 @@ const LocalExhibitionPage = () => {
   // 웹캠 에러가 있으면 전체 에러 상태에 반영
   const combinedError = error || webcamError;
 
+  // 비디오가 로드되면 메인 단계로 자동 전환
+  useEffect(() => {
+    if (
+      atLeastOneLoaded &&
+      exhibitionPhase === PHASES.INTRO &&
+      introSequence >= 1
+    ) {
+      console.log("비디오 로드 감지: 자동으로 메인 단계로 전환합니다.");
+
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setExhibitionPhase(PHASES.MAIN);
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 500);
+      }, 1000);
+    }
+  }, [atLeastOneLoaded, exhibitionPhase, introSequence]);
+
   return (
     <BackgroundContainer stars={true} scanline={true}>
       {/* 전시 단계에 따른 내용 렌더링 */}
@@ -224,20 +252,24 @@ const LocalExhibitionPage = () => {
           />
         )}
         {exhibitionPhase === PHASES.MAIN && (
-          <MainPhase sessionId={visitorSid} />
+          <MainPhase
+            sessionId={visitorSid}
+            initialVideoUrls={videoUrls}
+            initialLoadedIndices={loadedIndices}
+          />
         )}
         {exhibitionPhase === PHASES.OUTRO && <OutroPhase />}
       </ContentContainer>
 
       {/* 디버그 정보 표시 (개발 중에만 활성화) */}
-      <DebugPanel
+      {/* <DebugPanel
         visitorData={visitorData}
         exhibitionPhase={exhibitionPhase}
         introSequence={introSequence}
         introTexts={introTexts}
         isLoading={isLoading}
         error={combinedError}
-      />
+      /> */}
     </BackgroundContainer>
   );
 };

@@ -8,7 +8,11 @@ import { WS_URL, POLLING_INTERVAL } from "../../constants/apiConstants"; // API 
 /**
  * 전시회의 메인 단계를 렌더링하는 컴포넌트
  */
-const MainPhase = ({ sessionId }) => {
+const MainPhase = ({
+  sessionId,
+  initialVideoUrls = null,
+  initialLoadedIndices = [],
+}) => {
   // ESP32 WebSocket 연결 훅
   const { connect, sendLed, onButton, close } = useEsp32Ws();
 
@@ -31,12 +35,28 @@ const MainPhase = ({ sessionId }) => {
   );
 
   // 서버에서 가져온 비디오 URL 상태
-  const [videoUrls, setVideoUrls] = useState(Array(8).fill(null));
+  const [videoUrls, setVideoUrls] = useState(
+    initialVideoUrls || Array(8).fill(null)
+  );
   const [fetchingStatus, setFetchingStatus] = useState({
     isFetching: false,
     lastFetched: null,
     error: null,
   });
+
+  // 초기 로드된 인덱스 설정
+  useEffect(() => {
+    if (initialLoadedIndices && initialLoadedIndices.length > 0) {
+      initialLoadedIndices.forEach((idx) => {
+        loadedIndices.current.add(idx);
+      });
+      setActiveLeds(initialLoadedIndices);
+
+      console.log(
+        `초기 로드된 비디오 인덱스: ${initialLoadedIndices.join(", ")}`
+      );
+    }
+  }, [initialLoadedIndices]);
 
   useEffect(() => {
     // WebSocket 연결 초기화
@@ -145,6 +165,11 @@ const MainPhase = ({ sessionId }) => {
 
   // 비디오 로딩 완료 처리
   const handleVideoLoaded = (index) => {
+    // 이미 로드된 경우 중복 처리 방지
+    if (loadedIndices.current.has(index)) {
+      return;
+    }
+
     loadedIndices.current.add(index);
     const ledIndices = [...loadedIndices.current];
 
@@ -153,6 +178,8 @@ const MainPhase = ({ sessionId }) => {
 
     // LED 상태 시각화를 위해 상태 업데이트
     setActiveLeds(ledIndices);
+
+    console.log(`비디오 ${index} 로드 완료`);
   };
 
   // ESP32 디버그 패널에서 버튼 클릭 처리
