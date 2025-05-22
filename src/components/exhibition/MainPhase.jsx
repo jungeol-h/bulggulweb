@@ -287,33 +287,7 @@ const MainPhase = ({
   };
 
   return (
-    <div className="min-h-screen p-8">
-      {/* ESP32 디버그 패널 및 토글 버튼 비활성화 */}
-      {/* 
-      {showDebug && (
-        <Esp32DebugPanel
-          activeLeds={activeLeds}
-          onButtonPress={handleButtonPress}
-        />
-      )}
-
-      <div className="absolute top-2 right-2 z-50">
-        <button
-          onClick={() => {
-            setShowDebug((prev) => {
-              const newValue = !prev;
-              localStorage.setItem("debugMode", newValue);
-              return newValue;
-            });
-          }}
-          className="bg-gray-800 text-gray-400 hover:text-green-400 p-1 rounded-full w-8 h-8 flex items-center justify-center text-xs"
-          title="디버그 패널 토글 (D 키)"
-        >
-          {showDebug ? "✕" : "⚙"}
-        </button>
-      </div>
-      */}
-
+    <div className="min-h-screen p-8 flex flex-col justify-center">
       {/* 비디오 로딩 상태 표시 */}
       <div className="absolute top-2 left-2 z-50 flex items-center space-x-2">
         <div
@@ -338,16 +312,6 @@ const MainPhase = ({
               }/8 비디오 로드됨`}
         </div>
 
-        {/* 재시도 버튼 */}
-        {(!videoUrls.every((url) => url !== null) || fetchingStatus.error) && (
-          <button
-            onClick={handleRetryFetch}
-            className="bg-blue-700 hover:bg-blue-600 text-white text-xs px-2 py-1 rounded-full"
-          >
-            재시도
-          </button>
-        )}
-
         {/* 세션 ID 표시 */}
         <div className="bg-gray-800 text-gray-300 px-2 py-1 rounded-full text-xs">
           세션 ID: {sessionId}
@@ -370,7 +334,7 @@ const MainPhase = ({
         </div>
       )}
 
-      <div className="grid grid-cols-4 grid-rows-2 gap-4">
+      <div className="grid grid-cols-4 grid-rows-2 gap-6 w-full max-w-6xl mx-auto my-auto">
         {[...Array(8)].map((_, i) => {
           const isActive = activeLeds.includes(i + 1);
           return (

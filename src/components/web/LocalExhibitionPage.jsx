@@ -108,7 +108,7 @@ const LocalExhibitionPage = () => {
 
       {/* 전시 단계에 따른 내용 렌더링 */}
       <div
-        className={`relative z-10 container mx-auto transition-opacity duration-1000 ${
+        className={`relative z-10 container mx-auto min-h-screen flex flex-col justify-center transition-opacity duration-1000 ${
           isTransitioning ? "opacity-0" : "opacity-100"
         }`}
       >
