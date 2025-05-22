@@ -1,12 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import useEsp32Ws from "../../hooks/useEsp32Ws";
 import "./FullscreenVideo.css"; // 전체화면 비디오 스타일을 위한 CSS 가져오기
 import Esp32DebugPanel from "./Esp32DebugPanel"; // ESP32 디버그 패널 컴포넌트 가져오기
+import axios from "axios"; // HTTP 요청을 위한 axios 추가
 
 // ESP32 WebSocket URL - ESP32 직접 연결 또는 Vite 서버 프록시 경로
 const WS_URL = import.meta.env.PROD
   ? "ws://192.168.0.10:5173/keyboard" // 프로덕션: ESP32 직접 연결 (ESP32의 IP와 포트 사용)
   : "ws://192.168.0.10:5173/keyboard"; // 개발: Vite 서버를 통한 프록시 (현재 Vite 서버 포트 사용)
+
+// API 서버 URL 및 상수 설정
+const API_SERVER_URL =
+  import.meta.env.VITE_API_SERVER_URL || "http://localhost:8000";
+const SESSION_ID =
+  import.meta.env.VITE_SESSION_ID || localStorage.getItem("sessionId") || "1"; // 세션 ID 가져오기
+const POLLING_INTERVAL = 5000; // 5초마다 서버에 비디오 확인
 
 /**
  * 전시회의 메인 단계를 렌더링하는 컴포넌트
@@ -32,6 +40,14 @@ const MainPhase = () => {
   const [showDebug, setShowDebug] = useState(
     !import.meta.env.PROD || localStorage.getItem("debugMode") === "true"
   );
+
+  // 서버에서 가져온 비디오 URL 상태
+  const [videoUrls, setVideoUrls] = useState(Array(8).fill(null));
+  const [fetchingStatus, setFetchingStatus] = useState({
+    isFetching: false,
+    lastFetched: null,
+    error: null,
+  });
 
   useEffect(() => {
     // WebSocket 연결 초기화
@@ -164,6 +180,145 @@ const MainPhase = () => {
     playFullscreen(btnIdx - 1);
   };
 
+  // 서버에서 비디오 URL 가져오기
+  const fetchVideoUrls = useCallback(async () => {
+    setFetchingStatus({ isFetching: true, lastFetched: null, error: null });
+
+    try {
+      // API 서버에 GET 요청하여 비디오 URL 목록 가져오기
+      const response = await axios.get(
+        `${API_SERVER_URL}/videos/urls?sessionId=${SESSION_ID}`
+      );
+
+      const urls = response.data.urls || [];
+      setVideoUrls(urls);
+
+      // 로드된 비디오 인덱스 업데이트
+      const loadedIndices = new Set();
+      urls.forEach((_, index) => loadedIndices.add(index + 1));
+      setActiveLeds(Array.from(loadedIndices));
+
+      console.log("비디오 URL 목록 가져오기 성공:", urls);
+    } catch (error) {
+      console.error("비디오 URL 목록 가져오기 실패:", error);
+      setFetchingStatus({
+        isFetching: false,
+        lastFetched: null,
+        error: error.message,
+      });
+    }
+  }, []);
+
+  // 비디오를 서버에서 가져오는 함수
+  const fetchVideosFromServer = useCallback(async () => {
+    try {
+      setFetchingStatus((prev) => ({ ...prev, isFetching: true, error: null }));
+
+      // 현재 로드되지 않은 비디오만 요청
+      const missingIndices = [];
+      for (let i = 0; i < 8; i++) {
+        if (!videoUrls[i]) {
+          missingIndices.push(i + 1); // 1-based 인덱스로 변환
+        }
+      }
+
+      if (missingIndices.length === 0) {
+        console.log("모든 비디오가 이미 로드되었습니다.");
+        setFetchingStatus((prev) => ({
+          ...prev,
+          isFetching: false,
+          lastFetched: new Date().toISOString(),
+        }));
+        return;
+      }
+
+      console.log(`서버에서 다음 비디오 요청 중: ${missingIndices.join(", ")}`);
+
+      // 세션 ID와 필요한 인덱스를 사용하여 비디오 요청
+      const response = await axios.get(`${API_SERVER_URL}/get_videos`, {
+        params: {
+          session_id: SESSION_ID,
+          indices: missingIndices.join(","),
+        },
+        headers: {
+          "X-API-KEY":
+            import.meta.env.VITE_API_KEY || localStorage.getItem("apiKey"),
+        },
+      });
+
+      if (response.data && response.data.videos) {
+        // 새 비디오 URL 업데이트
+        const newVideoUrls = [...videoUrls];
+
+        for (const video of response.data.videos) {
+          const index = video.index - 1; // 0-based 인덱스로 변환
+          if (index >= 0 && index < 8) {
+            newVideoUrls[index] = video.url;
+            console.log(`비디오 ${index + 1} 로드됨: ${video.url}`);
+          }
+        }
+
+        setVideoUrls(newVideoUrls);
+      }
+
+      setFetchingStatus({
+        isFetching: false,
+        lastFetched: new Date().toISOString(),
+        error: null,
+      });
+    } catch (error) {
+      console.error("비디오 가져오기 오류:", error);
+      setFetchingStatus({
+        isFetching: false,
+        lastFetched: new Date().toISOString(),
+        error: error.message,
+      });
+    }
+  }, [videoUrls]);
+
+  // 컴포넌트 마운트 시 비디오 URL 가져오기
+  useEffect(() => {
+    fetchVideoUrls();
+  }, [fetchVideoUrls]);
+
+  // 비디오 폴링 효과 설정
+  useEffect(() => {
+    // 초기 로드
+    fetchVideosFromServer();
+
+    // 주기적인 폴링 설정
+    const pollingInterval = setInterval(() => {
+      // 아직 모든 비디오가 로드되지 않았다면 계속 폴링
+      const allVideosLoaded = videoUrls.every((url) => url !== null);
+      if (!allVideosLoaded) {
+        fetchVideosFromServer();
+      } else {
+        // 모든 비디오가 로드되면 폴링 중지
+        console.log("모든 비디오 로드 완료, 폴링 중지");
+        clearInterval(pollingInterval);
+      }
+    }, POLLING_INTERVAL);
+
+    // 컴포넌트 언마운트 시 인터벌 정리
+    return () => {
+      clearInterval(pollingInterval);
+    };
+  }, [fetchVideosFromServer, videoUrls]);
+
+  // 비디오 클릭 시 새로고침 처리
+  const handleVideoClick = (index) => {
+    if (!videoUrls[index]) {
+      console.log(`비디오 ${index + 1} 수동 새로고침 시도`);
+      fetchVideosFromServer();
+    }
+  };
+
+  // 세션 ID 표시 및 재시도 버튼
+  const handleRetryFetch = () => {
+    console.log("비디오 로딩 수동 재시도");
+    fetchVideosFromServer();
+  };
+
   return (
     <div className="min-h-screen p-8">
       {/* ESP32 디버그 패널 (개발 환경 또는 디버그 모드에서만 표시) */}
@@ -191,13 +346,41 @@ const MainPhase = () => {
         </button>
       </div>
 
+      {/* 비디오 로딩 상태 표시 */}
+      <div className="absolute top-2 left-2 z-50">
+        <div
+          className={`px-3 py-1 rounded-full text-xs ${
+            fetchingStatus.isFetching
+              ? "bg-yellow-800 text-yellow-200"
+              : fetchingStatus.error
+              ? "bg-red-800 text-red-200"
+              : videoUrls.every((url) => url !== null)
+              ? "bg-green-800 text-green-200"
+              : "bg-blue-800 text-blue-200"
+          }`}
+        >
+          {fetchingStatus.isFetching
+            ? "비디오 로딩 중..."
+            : fetchingStatus.error
+            ? `오류: ${fetchingStatus.error}`
+            : videoUrls.every((url) => url !== null)
+            ? "모든 비디오 로드 완료"
+            : `${
+                videoUrls.filter((url) => url !== null).length
+              }/8 비디오 로드됨`}
+        </div>
+      </div>
+
       {/* 가상 전체화면 오버레이 */}
       {fullscreenState.isActive && (
         <div className="overlay-container">
           <div className="pseudo-fullscreen-video-container">
             <video
               className="pseudo-fullscreen-video"
-              src={`/videos/video-${fullscreenState.videoIndex + 1}.mp4`}
+              src={
+                videoUrls[fullscreenState.videoIndex] ||
+                `/videos/video-${fullscreenState.videoIndex + 1}.mp4`
+              }
               autoPlay
               loop
               muted
@@ -217,7 +400,10 @@ const MainPhase = () => {
                 isActive
                   ? "border-green-400 ring-2 ring-green-400"
                   : "border-green-800"
-              } aspect-video flex items-center justify-center relative overflow-hidden`}
+              } aspect-video flex items-center justify-center relative overflow-hidden ${
+                !videoUrls[i] ? "cursor-pointer" : ""
+              }`}
+              onClick={() => !videoUrls[i] && handleVideoClick(i)}
             >
               <video
                 ref={(el) => {
@@ -234,13 +420,14 @@ const MainPhase = () => {
                 }}
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ display: "block" }} // 전체화면에서 인라인 요소 깨지지 않도록
-                src={`/videos/video-${i + 1}.mp4`}
+                src={videoUrls[i] || `/videos/video-${i + 1}.mp4`}
                 poster={`https://picsum.photos/800/450?random=${i}`}
                 preload="auto"
                 muted
                 loop
                 onCanPlayThrough={() => handleVideoLoaded(i + 1)}
                 playsInline
+                onClick={() => handleVideoClick(i)} // 비디오 클릭 시 새로고침 핸들러 추가
               />
               {/* LED 상태 표시기 */}
               {isActive && (
@@ -250,10 +437,19 @@ const MainPhase = () => {
                 <p className="text-green-500 font-mono text-center">
                   영상 {i + 1}
                   <span className="ml-2 text-xs">
-                    {isActive ? "(로드됨)" : ""}
+                    {isActive
+                      ? "(로드됨)"
+                      : videoUrls[i]
+                      ? "(재생 준비 중)"
+                      : "(로딩 중...)"}
                   </span>
                 </p>
               </div>
+              {!videoUrls[i] && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+                </div>
+              )}
             </div>
           );
         })}
