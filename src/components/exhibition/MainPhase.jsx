@@ -12,14 +12,12 @@ const WS_URL = import.meta.env.PROD
 // API 서버 URL 및 상수 설정
 const API_SERVER_URL =
   import.meta.env.VITE_API_SERVER_URL || "http://localhost:8000";
-const SESSION_ID =
-  import.meta.env.VITE_SESSION_ID || localStorage.getItem("sessionId") || "1"; // 세션 ID 가져오기
 const POLLING_INTERVAL = 5000; // 5초마다 서버에 비디오 확인
 
 /**
  * 전시회의 메인 단계를 렌더링하는 컴포넌트
  */
-const MainPhase = () => {
+const MainPhase = ({ sessionId }) => {
   // ESP32 WebSocket 연결 훅
   const { connect, sendLed, onButton, close } = useEsp32Ws();
 
@@ -187,7 +185,7 @@ const MainPhase = () => {
     try {
       // API 서버에 GET 요청하여 비디오 URL 목록 가져오기
       const response = await axios.get(
-        `${API_SERVER_URL}/videos/urls?sessionId=${SESSION_ID}`
+        `${API_SERVER_URL}/videos/urls?sessionId=${sessionId}`
       );
 
       const urls = response.data.urls || [];
@@ -207,7 +205,7 @@ const MainPhase = () => {
         error: error.message,
       });
     }
-  }, []);
+  }, [sessionId]);
 
   // 비디오를 서버에서 가져오는 함수
   const fetchVideosFromServer = useCallback(async () => {
@@ -237,7 +235,7 @@ const MainPhase = () => {
       // 세션 ID와 필요한 인덱스를 사용하여 비디오 요청
       const response = await axios.get(`${API_SERVER_URL}/get_videos`, {
         params: {
-          session_id: SESSION_ID,
+          session_id: sessionId,
           indices: missingIndices.join(","),
         },
         headers: {
@@ -274,12 +272,13 @@ const MainPhase = () => {
         error: error.message,
       });
     }
-  }, [videoUrls]);
+  }, [videoUrls, sessionId]);
 
   // 컴포넌트 마운트 시 비디오 URL 가져오기
   useEffect(() => {
     fetchVideoUrls();
-  }, [fetchVideoUrls]);
+    console.log(`세션 ID ${sessionId}로 비디오 로드 시작`);
+  }, [fetchVideoUrls, sessionId]);
 
   // 비디오 폴링 효과 설정
   useEffect(() => {
@@ -347,7 +346,7 @@ const MainPhase = () => {
       </div>
 
       {/* 비디오 로딩 상태 표시 */}
-      <div className="absolute top-2 left-2 z-50">
+      <div className="absolute top-2 left-2 z-50 flex items-center space-x-2">
         <div
           className={`px-3 py-1 rounded-full text-xs ${
             fetchingStatus.isFetching
@@ -368,6 +367,21 @@ const MainPhase = () => {
             : `${
                 videoUrls.filter((url) => url !== null).length
               }/8 비디오 로드됨`}
+        </div>
+        
+        {/* 재시도 버튼 */}
+        {(!videoUrls.every(url => url !== null) || fetchingStatus.error) && (
+          <button 
+            onClick={handleRetryFetch}
+            className="bg-blue-700 hover:bg-blue-600 text-white text-xs px-2 py-1 rounded-full"
+          >
+            재시도
+          </button>
+        )}
+        
+        {/* 세션 ID 표시 */}
+        <div className="bg-gray-800 text-gray-300 px-2 py-1 rounded-full text-xs">
+          세션 ID: {sessionId}
         </div>
       </div>
 

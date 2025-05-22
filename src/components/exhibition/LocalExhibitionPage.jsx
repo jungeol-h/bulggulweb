@@ -226,7 +226,7 @@ const LocalExhibitionPage = () => {
             previewUrl={previewUrl}
           />
         )}
-        {exhibitionPhase === PHASES.MAIN && <MainPhase />}
+        {exhibitionPhase === PHASES.MAIN && <MainPhase sessionId={visitorSid} />}
         {exhibitionPhase === PHASES.OUTRO && <OutroPhase />}
       </div>
 
