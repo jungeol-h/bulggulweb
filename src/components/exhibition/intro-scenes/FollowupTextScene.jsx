@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { TypewriterText } from "../../web/HudComponents";
+import { TypewriterText, BlinkingText } from "../../ui/text";
+import { CenteredContainer } from "../../ui/container";
+import { Panel } from "../../ui/panel";
 
 /**
  * 장면 4+: 후속 텍스트 메시지들
@@ -20,19 +22,21 @@ const FollowupTextScene = ({ text, isLastScene }) => {
   }, [isLastScene, text]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="max-w-4xl w-full p-8">
+    <CenteredContainer>
+      <Panel className="max-w-4xl w-full p-8">
         <div className="text-green-400 text-2xl font-mono text-center">
           <TypewriterText text={text} delay={50} />
         </div>
 
-        {/* {showSpacebarHint && (
-          <div className="mt-16 text-white text-xl font-mono text-center animate-pulse border border-green-500 py-3 px-6 bg-black bg-opacity-50 inline-block mx-auto">
-            [ 스페이스바를 눌러 계속하세요 ]
+        {showSpacebarHint && (
+          <div className="mt-16 text-center">
+            <BlinkingText className="text-white text-xl font-mono border border-green-500 py-3 px-6 bg-black bg-opacity-50 inline-block">
+              [ 스페이스바를 눌러 계속하세요 ]
+            </BlinkingText>
           </div>
-        )} */}
-      </div>
-    </div>
+        )}
+      </Panel>
+    </CenteredContainer>
   );
 };
 

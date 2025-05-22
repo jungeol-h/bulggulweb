@@ -1,4 +1,7 @@
 import React from "react";
+import { CenteredContainer } from "../../ui/container";
+import { InfoPanel, WindowPanel } from "../../ui/panel";
+import { LabelValue } from "../../ui/text";
 
 /**
  * 장면 3: 기본 정보 및 DNA 시퀀스
@@ -9,28 +12,33 @@ const InfoDisplayScene = ({
   dnaSequence,
   targetId,
 }) => {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="max-w-4xl w-full p-8 text-left font-mono">
-        <p className="text-green-400 text-xl mb-4">고유 식별코드: {targetId}</p>
-        <p className="text-green-400 text-xl mb-4">물체 정보: 유기체.</p>
-        <p className="text-green-400 text-xl mb-4">
-          생존 기간:{" "}
-          <span>
-            {survivalTime.hours}h {survivalTime.minutes}min
-          </span>
-        </p>
+  // InfoPanel에 표시할 데이터 정의
+  const infoData = {
+    id: targetId,
+    type: "유기체",
+    survivalTime: `${survivalTime.hours}h ${survivalTime.minutes}min`,
+    dna: dnaSequence
+  };
 
-        {dnaSequenceVisible && (
-          <>
-            <p className="text-green-400 text-xl mb-2">DNA 염기 서열:</p>
-            <div className="bg-black bg-opacity-70 p-4 font-mono text-green-500 text-sm overflow-hidden overflow-ellipsis break-all max-h-40">
-              {dnaSequence}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+  // 필드 정의
+  const fields = {
+    id: "고유 식별코드",
+    type: "물체 정보",
+    survivalTime: "생존 기간",
+    ...(dnaSequenceVisible && { dna: "DNA 염기 서열" })
+  };
+
+  return (
+    <CenteredContainer>
+      <WindowPanel title="객체 분석 결과" className="max-w-4xl w-full">
+        <InfoPanel 
+          data={infoData} 
+          fields={fields} 
+          useTypewriter={true}
+          className="p-8"
+        />
+      </WindowPanel>
+    </CenteredContainer>
   );
 };
 

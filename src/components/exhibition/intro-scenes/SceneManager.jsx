@@ -4,6 +4,7 @@ import IntroTextScene from "./IntroTextScene";
 import EntityScanScene from "./EntityScanScene";
 import InfoDisplayScene from "./InfoDisplayScene";
 import FollowupTextScene from "./FollowupTextScene";
+import { ContentContainer } from "../../ui/container";
 // import { generateRandomEntityId } from "./utils";
 
 // 시퀀스별 씬을 매핑
@@ -114,13 +115,9 @@ const SceneManager = ({
 
   // 페이드 효과가 적용된 컨테이너로 씬 렌더링
   return (
-    <div
-      className={`transition-opacity duration-1000 ease-in-out ${
-        isTransitioning ? "opacity-0" : "opacity-100"
-      }`}
-    >
+    <ContentContainer isTransitioning={isTransitioning}>
       {currentScene}
-    </div>
+    </ContentContainer>
   );
 };
 

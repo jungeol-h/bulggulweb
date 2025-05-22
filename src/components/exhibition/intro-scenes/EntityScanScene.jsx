@@ -1,4 +1,7 @@
 import React from "react";
+import { CenteredContainer } from "../../ui/container";
+import { Panel } from "../../ui/panel";
+import { GridBackground } from "../../ui/background";
 
 /**
  * 장면 2: 엔티티 그리드 스캐닝
@@ -12,8 +15,9 @@ const EntityScanScene = ({
   targetEntityRef,
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="w-full h-48 overflow-hidden relative">
+    <CenteredContainer>
+      <Panel className="w-full h-48 overflow-hidden relative">
+        <GridBackground className="opacity-20" />
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
           <div className="h-full w-0.5 bg-green-500 opacity-80"></div>
         </div>
@@ -40,8 +44,8 @@ const EntityScanScene = ({
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </Panel>
+    </CenteredContainer>
   );
 };
 

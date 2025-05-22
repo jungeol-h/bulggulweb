@@ -4,6 +4,7 @@ import {
   generateRandomEntityId,
   simulateDnaSequence,
 } from "./intro-scenes";
+import { BackgroundContainer, ScanlineEffect } from "../ui";
 
 /**
  * 전시회의 인트로 단계를 렌더링하는 컴포넌트
@@ -172,23 +173,25 @@ const IntroPhase = ({
 
   // SceneManager를 통해 현재 씬을 렌더링
   return (
-    <div className="relative">
-      <SceneManager
-        introSequence={introSequence}
-        introTexts={introTexts}
-        entityIds={entityIds}
-        entityHighlighted={entityHighlighted}
-        entityTarget={entityTarget}
-        targetId={targetId}
-        dnaSequenceVisible={dnaSequenceVisible}
-        dnaSequence={dnaSequence}
-        survivalTime={survivalTime}
-        webcamRef={webcamRef}
-        webcamActive={webcamActive}
-        webcamError={webcamError}
-        previewUrl={previewUrl}
-      />
-    </div>
+    <BackgroundContainer stars={true} grid={true} scanline={true}>
+      <div className="relative">
+        <SceneManager
+          introSequence={introSequence}
+          introTexts={introTexts}
+          entityIds={entityIds}
+          entityHighlighted={entityHighlighted}
+          entityTarget={entityTarget}
+          targetId={targetId}
+          dnaSequenceVisible={dnaSequenceVisible}
+          dnaSequence={dnaSequence}
+          survivalTime={survivalTime}
+          webcamRef={webcamRef}
+          webcamActive={webcamActive}
+          webcamError={webcamError}
+          previewUrl={previewUrl}
+        />
+      </div>
+    </BackgroundContainer>
   );
 };
 

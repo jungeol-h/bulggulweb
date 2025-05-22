@@ -1,18 +1,20 @@
 import React from "react";
-import { TypewriterText } from "../../web/HudComponents";
+import { TypewriterText } from "../../ui/text";
+import { CenteredContainer } from "../../ui/container";
+import { Panel } from "../../ui/panel";
 
 /**
  * 장면 1: 첫 번째 타이핑 텍스트
  */
 const IntroTextScene = ({ text }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="max-w-4xl w-full p-8">
+    <CenteredContainer>
+      <Panel className="max-w-4xl w-full p-8 bg-opacity-50">
         <div className="text-green-400 text-3xl font-mono text-center">
           <TypewriterText text={text} delay={50} />
         </div>
-      </div>
-    </div>
+      </Panel>
+    </CenteredContainer>
   );
 };
 
