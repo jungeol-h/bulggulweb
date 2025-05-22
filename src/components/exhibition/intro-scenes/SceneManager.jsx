@@ -40,8 +40,10 @@ const SceneManager = ({
           />
         );
       } else if (sequence === 1) {
+        // IntroTextScene - 첫 번째 텍스트 씬
         setCurrentScene(<IntroTextScene text={introTexts[0]} />);
       } else if (sequence === 2) {
+        // EntityScanScene - 엔티티 스캔 씬
         setCurrentScene(
           <EntityScanScene
             entityIds={entityIds}
@@ -53,6 +55,7 @@ const SceneManager = ({
           />
         );
       } else if (sequence === 3) {
+        // InfoDisplayScene - 정보 표시 씬
         setCurrentScene(
           <InfoDisplayScene
             survivalTime={survivalTime}
@@ -62,6 +65,7 @@ const SceneManager = ({
           />
         );
       } else if (sequence <= introTexts.length) {
+        // FollowupTextScene - 추가 텍스트 씬
         setCurrentScene(
           <FollowupTextScene
             text={introTexts[sequence - 1]}

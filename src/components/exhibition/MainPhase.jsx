@@ -2,17 +2,8 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import useEsp32Ws from "../../hooks/useEsp32Ws";
 import "./FullscreenVideo.css"; // 전체화면 비디오 스타일을 위한 CSS 가져오기
 import Esp32DebugPanel from "./Esp32DebugPanel"; // ESP32 디버그 패널 컴포넌트 가져오기
-import axios from "axios"; // HTTP 요청을 위한 axios 추가
-
-// ESP32 WebSocket URL - ESP32 직접 연결 또는 Vite 서버 프록시 경로
-const WS_URL = import.meta.env.PROD
-  ? "ws://192.168.0.10:5173/keyboard" // 프로덕션: ESP32 직접 연결 (ESP32의 IP와 포트 사용)
-  : "ws://192.168.0.10:5173/keyboard"; // 개발: Vite 서버를 통한 프록시 (현재 Vite 서버 포트 사용)
-
-// API 서버 URL 및 상수 설정
-const API_SERVER_URL =
-  import.meta.env.VITE_API_SERVER_URL || "http://192.168.0.10:8000";
-const POLLING_INTERVAL = 5000; // 5초마다 서버에 비디오 확인
+import VideoService from "../../services/VideoService"; // 비디오 서비스 가져오기
+import { WS_URL, POLLING_INTERVAL } from "../../constants/apiConstants"; // API 상수 가져오기
 
 /**
  * 전시회의 메인 단계를 렌더링하는 컴포넌트
@@ -183,44 +174,12 @@ const MainPhase = ({ sessionId }) => {
     setFetchingStatus({ isFetching: true, lastFetched: null, error: null });
 
     try {
-      console.log(`세션 ID ${sessionId}의 비디오 URL 확인 중...`);
+      const { urls, loadedIndices } = await VideoService.fetchInitialVideoUrls(
+        sessionId
+      );
 
-      // 모든 비디오 URL 확인 (8개 인덱스)
-      const newUrls = Array(8).fill(null);
-      const checkPromises = [];
-
-      for (let i = 0; i < 8; i++) {
-        const videoUrl = `${API_SERVER_URL}/uploads/${sessionId}/result_output_${i}.mp4`;
-
-        // HEAD 요청으로 파일 존재 여부 확인
-        checkPromises.push(
-          axios
-            .head(videoUrl)
-            .then(() => {
-              // 파일이 존재하면 URL 배열에 추가
-              newUrls[i] = videoUrl;
-              return { index: i, url: videoUrl };
-            })
-            .catch(() => null) // 파일이 없으면 null 반환
-        );
-      }
-
-      // 모든 요청 결과 처리
-      await Promise.allSettled(checkPromises);
-
-      // 로드된 비디오 확인
-      const loadedCount = newUrls.filter((url) => url !== null).length;
-      console.log(`초기 로드 완료: ${loadedCount}개의 비디오 발견됨`);
-
-      setVideoUrls(newUrls);
-
-      // 로드된 비디오 인덱스 업데이트
-      const loadedIndices = new Set();
-      newUrls.forEach((url, index) => {
-        if (url) loadedIndices.add(index + 1);
-      });
-
-      setActiveLeds(Array.from(loadedIndices));
+      setVideoUrls(urls);
+      setActiveLeds(loadedIndices);
 
       setFetchingStatus({
         isFetching: false,
@@ -242,62 +201,13 @@ const MainPhase = ({ sessionId }) => {
     try {
       setFetchingStatus((prev) => ({ ...prev, isFetching: true, error: null }));
 
-      // 현재 로드되지 않은 비디오만 요청
-      const missingIndices = [];
-      for (let i = 0; i < 8; i++) {
-        if (!videoUrls[i]) {
-          missingIndices.push(i + 1); // 1-based 인덱스로 변환
-        }
-      }
-
-      if (missingIndices.length === 0) {
-        console.log("모든 비디오가 이미 로드되었습니다.");
-        setFetchingStatus((prev) => ({
-          ...prev,
-          isFetching: false,
-          lastFetched: new Date().toISOString(),
-        }));
-        return;
-      }
-
-      console.log(`서버에서 다음 비디오 확인 중: ${missingIndices.join(", ")}`);
-
-      // 새 비디오 URL 업데이트 배열 준비
-      const newVideoUrls = [...videoUrls];
-      const checkPromises = [];
-
-      // 각 인덱스별로 비디오가 존재하는지 확인
-      for (const idx of missingIndices) {
-        const videoUrl = `${API_SERVER_URL}/uploads/${sessionId}/result_output_${
-          idx - 1
-        }.mp4`;
-
-        // HEAD 요청으로 파일 존재 여부 확인
-        checkPromises.push(
-          axios
-            .head(videoUrl)
-            .then(() => {
-              // 파일이 존재하면 URL 배열에 추가
-              const index = idx - 1; // 0-based 인덱스로 변환
-              newVideoUrls[index] = videoUrl;
-              console.log(`비디오 ${idx} 로드됨: ${videoUrl}`);
-              return { index, url: videoUrl };
-            })
-            .catch((err) => {
-              console.log(`비디오 ${idx}는 아직 없음:`, err.message);
-              return null;
-            })
-        );
-      }
-
-      // 모든 요청 결과 처리
-      const results = await Promise.allSettled(checkPromises);
-      const loadedVideos = results
-        .filter((result) => result.status === "fulfilled" && result.value)
-        .map((result) => result.value);
+      const { urls, loadedVideos } = await VideoService.fetchMissingVideos(
+        sessionId,
+        videoUrls
+      );
 
       if (loadedVideos.length > 0) {
-        setVideoUrls(newVideoUrls);
+        setVideoUrls(urls);
         console.log(`${loadedVideos.length}개의 새 비디오 발견됨`);
       } else {
         console.log("새로 추가된 비디오 없음");

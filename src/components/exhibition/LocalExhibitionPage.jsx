@@ -85,11 +85,12 @@ const LocalExhibitionPage = () => {
         formData.append("gender", gender === "m" ? "1" : "2"); // 남자(m):1, 여자(f):2
         formData.append("sid", sid.toString());
 
-        // 성공적으로 이미지 캡처 후 즉시 다음 단계로 진행
-        // 페이드 효과와 함께 메인 단계로 진행
+        // 성공적으로 이미지 캡처 후 인트로 시퀀스를 시작합니다
+        // 페이드 효과와 함께 인트로 시퀀스 시작
         setIsTransitioning(true);
         setTimeout(() => {
-          setExhibitionPhase(PHASES.MAIN);
+          // 초기 시퀀스로 넘어가 IntroTextScene으로 시작
+          setIntroSequence(1);
           setTimeout(() => {
             setIsTransitioning(false);
           }, 500);
@@ -170,9 +171,19 @@ const LocalExhibitionPage = () => {
             sendVisitorData("f");
           }
         }
-        // 마지막 시퀀스에서는 더 이상 키보드 입력 필요 없음
-        else if (introSequence === introTexts.length) {
-          // 이전 코드에서 성별 선택 기능을 초기 단계로 이동했으므로 이 부분은 비워둠
+        // 마지막 시퀀스에서 스페이스바를 누르면 메인 단계로 진행
+        else if (
+          introSequence === introTexts.length &&
+          event.code === "Space"
+        ) {
+          event.preventDefault();
+          setIsTransitioning(true);
+          setTimeout(() => {
+            setExhibitionPhase(PHASES.MAIN);
+            setTimeout(() => {
+              setIsTransitioning(false);
+            }, 500);
+          }, 1000);
         }
       }
       // 메인 페이즈에서 스페이스바를 누르면 아웃트로로 진행
