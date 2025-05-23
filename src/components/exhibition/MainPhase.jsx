@@ -19,10 +19,10 @@ const MainPhase = ({
   // 비디오 참조 및 로딩된 비디오 인덱스 추적
   const videoRefs = useRef([]);
   const loadedIndices = useRef(new Set());
-  
+
   // 이미 재생된 비디오 추적 (한 번 본 영상은 LED 꺼짐 유지)
   const [playedVideos, setPlayedVideos] = useState(new Set());
-  
+
   // 반복 재생 가능한 비디오 (깜빡이는 LED)
   const [availableVideos, setAvailableVideos] = useState([]);
 
@@ -50,16 +50,16 @@ const MainPhase = ({
       initialLoadedIndices.forEach((idx) => {
         loadedIndices.current.add(idx);
       });
-      
+
       // 초기 로드된 비디오는 재생 가능한 비디오로 설정
       setAvailableVideos(initialLoadedIndices);
-      
+
       console.log(
         `초기 로드된 비디오 인덱스: ${initialLoadedIndices.join(", ")}`
       );
     }
   }, [initialLoadedIndices]);
-  
+
   // LED 상태가 변경될 때마다 업데이트
   useEffect(() => {
     // 첫 렌더링 시에는 실행하지 않음
@@ -87,7 +87,7 @@ const MainPhase = ({
           videoIndex: -1,
         });
         console.log(`영상 ${btnIdx} 전체화면 종료`);
-        
+
         // 전체화면 종료 시 LED 상태 업데이트
         setTimeout(() => updateLedState(), 100);
         return;
@@ -104,7 +104,7 @@ const MainPhase = ({
           isActive: false,
           videoIndex: -1,
         });
-        
+
         // 전체화면 종료 시 LED 상태 업데이트
         setTimeout(() => updateLedState(), 100);
         return;
@@ -125,7 +125,7 @@ const MainPhase = ({
             videoIndex: -1,
           });
           console.log(`영상 ${keyNumber} 전체화면 종료`);
-          
+
           // 전체화면 종료 시 LED 상태 업데이트
           setTimeout(() => updateLedState(), 100);
           return;
@@ -144,7 +144,14 @@ const MainPhase = ({
       close();
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [connect, onButton, close, fullscreenState, playFullscreen, updateLedState]);
+  }, [
+    connect,
+    onButton,
+    close,
+    fullscreenState,
+    playFullscreen,
+    updateLedState,
+  ]);
 
   // 가상 전체화면 전환 함수
   const playFullscreen = (index) => {
@@ -160,14 +167,14 @@ const MainPhase = ({
         isActive: true,
         videoIndex: index,
       });
-      
+
       // 이 비디오를 본 비디오로 표시
-      setPlayedVideos(prev => {
+      setPlayedVideos((prev) => {
         const newSet = new Set(prev);
         newSet.add(index + 1); // 1-based index로 저장
         return newSet;
       });
-      
+
       // LED 상태 업데이트
       setTimeout(() => updateLedState(), 100);
 
@@ -190,36 +197,44 @@ const MainPhase = ({
     }
 
     loadedIndices.current.add(index);
-    
+
     // 새로 로드된 비디오는 재생 가능한 비디오 목록에 추가
-    setAvailableVideos(prev => {
+    setAvailableVideos((prev) => {
       if (!prev.includes(index)) {
         return [...prev, index];
       }
       return prev;
     });
-    
+
     // LED 상태 업데이트
     updateLedState();
 
     console.log(`비디오 ${index} 로드 완료`);
   };
-  
+
   // LED 상태 업데이트 (전체화면, 가능한 비디오, 재생된 비디오)
   const updateLedState = useCallback(() => {
     // 전체화면 비디오의 LED는 항상 켜짐
-    const currentPlaying = fullscreenState.isActive ? [fullscreenState.videoIndex + 1] : [];
-    
+    const currentPlaying = fullscreenState.isActive
+      ? [fullscreenState.videoIndex + 1]
+      : [];
+
     // 반복 재생 가능한 비디오의 LED는 깜빡임 (이미 재생한 비디오 제외)
-    const blinkingVideos = availableVideos.filter(idx => !playedVideos.has(idx));
-    
+    const blinkingVideos = availableVideos.filter(
+      (idx) => !playedVideos.has(idx)
+    );
+
     // 통합 API로 LED 상태 전송
     sendLedStatus({
       on: currentPlaying,
-      blink: blinkingVideos
+      blink: blinkingVideos,
     });
-    
-    console.log(`LED 상태 업데이트: 켜짐=${currentPlaying.join(',')}, 깜빡임=${blinkingVideos.join(',')}`);
+
+    console.log(
+      `LED 상태 업데이트: 켜짐=${currentPlaying.join(
+        ","
+      )}, 깜빡임=${blinkingVideos.join(",")}`
+    );
   }, [fullscreenState, availableVideos, playedVideos, sendLedStatus]);
 
   // ESP32 디버그 패널 버튼 클릭 핸들러 제거
@@ -234,7 +249,7 @@ const MainPhase = ({
       );
 
       setVideoUrls(urls);
-      
+
       // 로드된 비디오 인덱스를 재생 가능한 비디오로 설정
       setAvailableVideos(loadedIndices);
 
@@ -373,10 +388,12 @@ const MainPhase = ({
 
       <div className="grid grid-cols-4 grid-rows-2 gap-6 w-full max-w-6xl mx-auto my-auto">
         {[...Array(8)].map((_, i) => {
-          const isFullscreen = fullscreenState.isActive && fullscreenState.videoIndex === i;
-          const isAvailable = availableVideos.includes(i + 1) && !playedVideos.has(i + 1);
+          const isFullscreen =
+            fullscreenState.isActive && fullscreenState.videoIndex === i;
+          const isAvailable =
+            availableVideos.includes(i + 1) && !playedVideos.has(i + 1);
           const wasPlayed = playedVideos.has(i + 1);
-          
+
           return (
             <div
               key={i}
