@@ -83,7 +83,7 @@ export const BackgroundContainer = ({
   children,
 }) => {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="relative w-screen h-screen min-h-screen bg-black text-white overflow-hidden">
       {/* 배경 효과 */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         {stars && <StarryBackground count={150} />}
@@ -92,7 +92,7 @@ export const BackgroundContainer = ({
       </div>
 
       {/* 컨텐츠 */}
-      <div className="relative z-10">{children}</div>
+      <div className="relative z-10 w-full h-full">{children}</div>
     </div>
   );
 };
