@@ -365,7 +365,7 @@ const MainPhase = ({
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ display: "block" }} // 전체화면에서 인라인 요소 깨지지 않도록
                 src={videoUrls[i] || ""}
-                poster={`https://picsum.photos/800/450?random=${i}`}
+                // poster={`https://picsum.photos/800/450?random=${i}`}
                 preload="auto"
                 muted
                 loop
