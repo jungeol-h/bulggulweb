@@ -11,7 +11,7 @@ import { colors } from "../../theme/theme";
  */
 export const TypewriterText = ({
   text = "",
-  delay = 50,
+  delay = 70,  // 기본 타이핑 속도를 더 느리게 조정 (50ms → 70ms)
   loop = false,
   className = "",
 }) => {

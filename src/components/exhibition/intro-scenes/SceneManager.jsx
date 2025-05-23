@@ -45,13 +45,14 @@ const SceneManager = ({
       } else if (sequence === 2) {
         // Skip EntityScanScene and go directly to InfoDisplayScene
         // This will be reactivated later
-        console.log("Skipping EntityScanScene (temporarily disabled)");
-        // Auto-advance to next sequence after a brief delay
+        console.log("EntityScanScene 건너뛰기 (임시적으로 비활성화됨)");
+        // Auto-advance to next sequence after a longer delay
         setTimeout(() => {
+          console.log("장면 2: 6초 후 다음 장면으로 자동 진행");
           if (window.advanceIntroSequence) {
             window.advanceIntroSequence();
           }
-        }, 500);
+        }, 6000); // 장면 2 표시 시간 증가
 
         // Show a placeholder or loading message
         setCurrentScene(
@@ -106,17 +107,20 @@ const SceneManager = ({
     if (prevSequence !== introSequence) {
       // 페이드아웃 시작
       setIsTransitioning(true);
+      console.log(`씬 전환: ${prevSequence} -> ${introSequence} (페이드아웃 시작)`);
 
-      // 페이드아웃 후 컴포넌트 변경 (페이드아웃에 1000ms 소요)
+      // 페이드아웃 후 컴포넌트 변경 (페이드아웃에 1500ms 소요)
       const timer = setTimeout(() => {
         setPrevSequence(introSequence);
         updateCurrentScene(introSequence);
+        console.log(`씬 ${introSequence} 로딩 완료, 페이드인 준비`);
 
-        // 페이드인 시작 (짧은 지연 후 시작)
+        // 페이드인 시작 (약간의 지연 후 시작)
         setTimeout(() => {
           setIsTransitioning(false);
-        }, 50);
-      }, 1000); // 페이드아웃 완료 시간
+          console.log(`씬 ${introSequence} 페이드인 시작`);
+        }, 200); // 페이드인 시작 전 딜레이 증가
+      }, 1500); // 페이드아웃 시간 증가
 
       return () => clearTimeout(timer);
     } else if (currentScene === null) {

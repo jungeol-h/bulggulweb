@@ -11,7 +11,7 @@ const IntroTextScene = ({ text }) => {
     <CenteredContainer>
       <Panel className="max-w-4xl w-full p-8 bg-opacity-50">
         <div className="text-green-400 text-3xl font-mono text-center">
-          <TypewriterText text={text} delay={50} />
+          <TypewriterText text={text} delay={70} />
         </div>
       </Panel>
     </CenteredContainer>

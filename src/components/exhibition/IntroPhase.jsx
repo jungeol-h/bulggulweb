@@ -79,7 +79,9 @@ const IntroPhase = ({
   useEffect(() => {
     if (introSequence === 1) {
       // 첫 번째 메시지 타이핑 효과 후, 자동으로 다음 단계로 진행
-      const typingDelay = introTexts[0].length * 50 + 1500; // 타이핑 시간 + 추가 지연시간
+      const typingDelay = introTexts[0].length * 70 + 5000; // 타이핑 시간(70ms) + 장문 읽기 시간
+      console.log(`장면 1: ${typingDelay}ms 후 다음 장면으로 진행`);
+      
       const timer = setTimeout(() => {
         // 다음 단계로 자동 진행
         if (window.advanceIntroSequence) {
@@ -142,13 +144,15 @@ const IntroPhase = ({
       const timer = setTimeout(() => {
         setDnaSequenceVisible(true);
         simulateDnaSequence(setDnaSequence);
+        console.log("DNA 시퀀스 표시 시작");
 
         // DNA 시퀀스가 적절히 표시된 후 다음 단계로 진행
         const nextSceneTimer = setTimeout(() => {
+          console.log("DNA 시퀀스 표시 완료, 다음 장면으로 진행");
           if (window.advanceIntroSequence) {
             window.advanceIntroSequence();
           }
-        }, 5000);
+        }, 7000); // DNA 시퀀스 읽는 시간 증가
 
         return () => clearTimeout(nextSceneTimer);
       }, 1500);
@@ -163,8 +167,9 @@ const IntroPhase = ({
     if (introSequence >= 4 && introSequence < introTexts.length) {
       // 각 텍스트마다 적절한 지연 시간 후 다음 시퀀스로 진행
       const currentText = introTexts[introSequence - 1] || "";
-      const typingDelay = currentText.length * 50 + 2000; // 타이핑 시간 + 추가 지연시간
-
+      const typingDelay = currentText.length * 70 + 5000; // 타이핑 시간(70ms) + 텍스트 읽기 시간
+      console.log(`장면 ${introSequence}: ${typingDelay}ms 후 다음 장면으로 진행`);
+      
       const timer = setTimeout(() => {
         if (window.advanceIntroSequence) {
           window.advanceIntroSequence();

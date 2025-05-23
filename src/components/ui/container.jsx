@@ -14,7 +14,7 @@ export const ContentContainer = ({
   className = "",
 }) => (
   <div
-    className={`relative z-10 container mx-auto min-h-screen flex flex-col justify-center transition-opacity duration-1000 ${
+    className={`relative z-10 container mx-auto min-h-screen flex flex-col justify-center transition-opacity duration-1500 ${
       isTransitioning ? "opacity-0" : "opacity-100"
     } ${className}`}
   >

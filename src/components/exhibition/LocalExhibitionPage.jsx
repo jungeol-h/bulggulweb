@@ -95,6 +95,9 @@ const LocalExhibitionPage = () => {
         formData.append("sid", sid.toString());
 
         // 성공적으로 이미지 캡처 후 인트로 시퀀스를 시작합니다
+        // 전시 통로를 걸어 입장하는 시간을 고려해 5초 딜레이 후 시작
+        console.log("이미지 캡처 완료: 5초 후 인트로 시퀀스 시작");
+        
         // 페이드 효과와 함께 인트로 시퀀스 시작
         setIsTransitioning(true);
         setTimeout(() => {
@@ -102,8 +105,8 @@ const LocalExhibitionPage = () => {
           setIntroSequence(1);
           setTimeout(() => {
             setIsTransitioning(false);
-          }, 500);
-        }, 1000);
+          }, 800); // 페이드인 시간 증가
+        }, 5000); // 입장 시간을 고려한 더 긴 딜레이
 
         // 백그라운드에서 API 요청 처리 (응답 기다리지 않음)
         console.log("API 요청 URL:", API_ENDPOINT);
@@ -186,25 +189,27 @@ const LocalExhibitionPage = () => {
           event.code === "Space"
         ) {
           event.preventDefault();
+          console.log("마지막 인트로 씬에서 메인 단계로 진행");
           setIsTransitioning(true);
           setTimeout(() => {
             setExhibitionPhase(PHASES.MAIN);
             setTimeout(() => {
               setIsTransitioning(false);
-            }, 500);
-          }, 1000);
+            }, 800); // 페이드인 시간 증가
+          }, 1500); // 페이드아웃 시간 증가
         }
       }
       // 메인 페이즈에서 스페이스바를 누르면 아웃트로로 진행
       else if (exhibitionPhase === PHASES.MAIN && event.code === "Space") {
         event.preventDefault();
+        console.log("메인 단계에서 아웃트로 단계로 진행");
         setIsTransitioning(true);
         setTimeout(() => {
           setExhibitionPhase(PHASES.OUTRO);
           setTimeout(() => {
             setIsTransitioning(false);
-          }, 500);
-        }, 1000);
+          }, 800); // 페이드인 시간 증가
+        }, 1500); // 페이드아웃 시간 증가
       }
     };
 
@@ -231,8 +236,8 @@ const LocalExhibitionPage = () => {
         setExhibitionPhase(PHASES.MAIN);
         setTimeout(() => {
           setIsTransitioning(false);
-        }, 500);
-      }, 1000);
+        }, 800); // 페이드인 시간 증가
+      }, 1500); // 페이드아웃 시간 증가
     }
   }, [atLeastOneLoaded, exhibitionPhase, introSequence]);
 
