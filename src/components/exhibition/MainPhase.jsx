@@ -398,6 +398,11 @@ const MainPhase = ({
           );
         })}
       </div>
+
+      {/* 사용자 안내 메시지 */}
+      <div className="text-center mt-6 text-green-400 text-lg font-medium">
+        버튼을 누르면 영상이 확대됩니다.
+      </div>
     </div>
   );
 };
