@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
           activateSection("entity-grid");
         }, 10000);
       });
-    }, 500);
+    }, 10000);
   }
 
   // Initialize entity grid section
