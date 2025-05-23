@@ -49,6 +49,46 @@ const useEsp32Ws = () => {
       console.error("LED 데이터 전송 실패:", error);
     }
   }, []);
+  
+  /**
+   * ESP32로 깜빡이는 LED 상태 전송
+   * @param {Array<number>} indices - 깜빡일 LED의 인덱스 배열 (1-based)
+   */
+  const sendBlink = useCallback((indices) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+      console.warn("WebSocket이 연결되지 않음. Blink 데이터를 보낼 수 없습니다.");
+      return;
+    }
+
+    try {
+      const message = JSON.stringify({ blink: indices });
+      wsRef.current.send(message);
+      console.log(`ESP32로 Blink 상태 전송: ${message}`);
+    } catch (error) {
+      console.error("Blink 데이터 전송 실패:", error);
+    }
+  }, []);
+  
+  /**
+   * ESP32로 통합 LED 상태 전송
+   * @param {Object} params - LED 상태 매개변수
+   * @param {Array<number>} params.on - 켜진 LED의 인덱스 배열 (1-based)
+   * @param {Array<number>} params.blink - 깜빡일 LED의 인덱스 배열 (1-based)
+   */
+  const sendLedStatus = useCallback(({ on = [], blink = [] }) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+      console.warn("WebSocket이 연결되지 않음. LED 상태 데이터를 보낼 수 없습니다.");
+      return;
+    }
+
+    try {
+      const message = JSON.stringify({ led: on, blink: blink });
+      wsRef.current.send(message);
+      console.log(`ESP32로 통합 LED 상태 전송: ${message}`);
+    } catch (error) {
+      console.error("통합 LED 상태 데이터 전송 실패:", error);
+    }
+  }, []);
 
   /**
    * ESP32로부터 버튼 이벤트 수신 콜백 설정
@@ -123,7 +163,7 @@ const useEsp32Ws = () => {
     [close]
   );
 
-  return { connect, sendLed, onButton, close };
+  return { connect, sendLed, sendBlink, sendLedStatus, onButton, close };
 };
 
 export default useEsp32Ws;

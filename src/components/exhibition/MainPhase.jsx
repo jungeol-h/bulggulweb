@@ -14,14 +14,17 @@ const MainPhase = ({
   initialLoadedIndices = [],
 }) => {
   // ESP32 WebSocket 연결 훅
-  const { connect, sendLed, onButton, close } = useEsp32Ws();
+  const { connect, sendLedStatus, onButton, close } = useEsp32Ws();
 
   // 비디오 참조 및 로딩된 비디오 인덱스 추적
   const videoRefs = useRef([]);
   const loadedIndices = useRef(new Set());
-
-  // LED 상태 시각화를 위한 상태
-  const [activeLeds, setActiveLeds] = useState([]);
+  
+  // 이미 재생된 비디오 추적 (한 번 본 영상은 LED 꺼짐 유지)
+  const [playedVideos, setPlayedVideos] = useState(new Set());
+  
+  // 반복 재생 가능한 비디오 (깜빡이는 LED)
+  const [availableVideos, setAvailableVideos] = useState([]);
 
   // 가상 전체화면 상태 관리
   const [fullscreenState, setFullscreenState] = useState({
@@ -47,13 +50,23 @@ const MainPhase = ({
       initialLoadedIndices.forEach((idx) => {
         loadedIndices.current.add(idx);
       });
-      setActiveLeds(initialLoadedIndices);
-
+      
+      // 초기 로드된 비디오는 재생 가능한 비디오로 설정
+      setAvailableVideos(initialLoadedIndices);
+      
       console.log(
         `초기 로드된 비디오 인덱스: ${initialLoadedIndices.join(", ")}`
       );
     }
   }, [initialLoadedIndices]);
+  
+  // LED 상태가 변경될 때마다 업데이트
+  useEffect(() => {
+    // 첫 렌더링 시에는 실행하지 않음
+    if (availableVideos.length > 0) {
+      updateLedState();
+    }
+  }, [fullscreenState, availableVideos, playedVideos, updateLedState]);
 
   useEffect(() => {
     // WebSocket 연결 초기화
@@ -74,6 +87,9 @@ const MainPhase = ({
           videoIndex: -1,
         });
         console.log(`영상 ${btnIdx} 전체화면 종료`);
+        
+        // 전체화면 종료 시 LED 상태 업데이트
+        setTimeout(() => updateLedState(), 100);
         return;
       }
 
@@ -82,24 +98,15 @@ const MainPhase = ({
 
     // 키보드 이벤트 핸들러 (숫자키 1-8 입력 시 해당 영상 전체화면 토글)
     const handleKeyPress = (event) => {
-      // 디버그 패널 토글 기능 비활성화
-      /*
-      if (event.key === "d" || event.key === "D") {
-        setShowDebug((prev) => {
-          const newValue = !prev;
-          localStorage.setItem("debugMode", newValue);
-          return newValue;
-        });
-        return;
-      }
-      */
-
       // ESC 키를 누르면 전체화면 종료
       if (event.key === "Escape") {
         setFullscreenState({
           isActive: false,
           videoIndex: -1,
         });
+        
+        // 전체화면 종료 시 LED 상태 업데이트
+        setTimeout(() => updateLedState(), 100);
         return;
       }
 
@@ -118,6 +125,9 @@ const MainPhase = ({
             videoIndex: -1,
           });
           console.log(`영상 ${keyNumber} 전체화면 종료`);
+          
+          // 전체화면 종료 시 LED 상태 업데이트
+          setTimeout(() => updateLedState(), 100);
           return;
         }
 
@@ -134,7 +144,7 @@ const MainPhase = ({
       close();
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [connect, onButton, close, fullscreenState]);
+  }, [connect, onButton, close, fullscreenState, playFullscreen, updateLedState]);
 
   // 가상 전체화면 전환 함수
   const playFullscreen = (index) => {
@@ -150,6 +160,16 @@ const MainPhase = ({
         isActive: true,
         videoIndex: index,
       });
+      
+      // 이 비디오를 본 비디오로 표시
+      setPlayedVideos(prev => {
+        const newSet = new Set(prev);
+        newSet.add(index + 1); // 1-based index로 저장
+        return newSet;
+      });
+      
+      // LED 상태 업데이트
+      setTimeout(() => updateLedState(), 100);
 
       console.log(`영상 ${index + 1} 가상 전체화면 전환 성공`);
 
@@ -170,16 +190,37 @@ const MainPhase = ({
     }
 
     loadedIndices.current.add(index);
-    const ledIndices = [...loadedIndices.current];
-
-    // ESP32에 현재 로딩된 모든 영상 인덱스 전송
-    sendLed(ledIndices);
-
-    // LED 상태 시각화를 위해 상태 업데이트
-    setActiveLeds(ledIndices);
+    
+    // 새로 로드된 비디오는 재생 가능한 비디오 목록에 추가
+    setAvailableVideos(prev => {
+      if (!prev.includes(index)) {
+        return [...prev, index];
+      }
+      return prev;
+    });
+    
+    // LED 상태 업데이트
+    updateLedState();
 
     console.log(`비디오 ${index} 로드 완료`);
   };
+  
+  // LED 상태 업데이트 (전체화면, 가능한 비디오, 재생된 비디오)
+  const updateLedState = useCallback(() => {
+    // 전체화면 비디오의 LED는 항상 켜짐
+    const currentPlaying = fullscreenState.isActive ? [fullscreenState.videoIndex + 1] : [];
+    
+    // 반복 재생 가능한 비디오의 LED는 깜빡임 (이미 재생한 비디오 제외)
+    const blinkingVideos = availableVideos.filter(idx => !playedVideos.has(idx));
+    
+    // 통합 API로 LED 상태 전송
+    sendLedStatus({
+      on: currentPlaying,
+      blink: blinkingVideos
+    });
+    
+    console.log(`LED 상태 업데이트: 켜짐=${currentPlaying.join(',')}, 깜빡임=${blinkingVideos.join(',')}`);
+  }, [fullscreenState, availableVideos, playedVideos, sendLedStatus]);
 
   // ESP32 디버그 패널 버튼 클릭 핸들러 제거
 
@@ -193,7 +234,9 @@ const MainPhase = ({
       );
 
       setVideoUrls(urls);
-      setActiveLeds(loadedIndices);
+      
+      // 로드된 비디오 인덱스를 재생 가능한 비디오로 설정
+      setAvailableVideos(loadedIndices);
 
       setFetchingStatus({
         isFetching: false,
@@ -280,12 +323,6 @@ const MainPhase = ({
     }
   };
 
-  // 세션 ID 표시 및 재시도 버튼
-  const handleRetryFetch = () => {
-    console.log("비디오 로딩 수동 재시도");
-    fetchVideosFromServer();
-  };
-
   return (
     <div className="min-h-screen p-8 flex flex-col justify-center">
       {/* 비디오 로딩 상태 표시 */}
@@ -336,13 +373,20 @@ const MainPhase = ({
 
       <div className="grid grid-cols-4 grid-rows-2 gap-6 w-full max-w-6xl mx-auto my-auto">
         {[...Array(8)].map((_, i) => {
-          const isActive = activeLeds.includes(i + 1);
+          const isFullscreen = fullscreenState.isActive && fullscreenState.videoIndex === i;
+          const isAvailable = availableVideos.includes(i + 1) && !playedVideos.has(i + 1);
+          const wasPlayed = playedVideos.has(i + 1);
+          
           return (
             <div
               key={i}
               className={`bg-gray-900 border ${
-                isActive
+                isFullscreen
+                  ? "border-green-500 ring-4 ring-green-500"
+                  : isAvailable
                   ? "border-green-400 ring-2 ring-green-400"
+                  : wasPlayed
+                  ? "border-gray-600"
                   : "border-green-800"
               } aspect-video flex items-center justify-center relative overflow-hidden ${
                 !videoUrls[i] ? "cursor-pointer" : ""
@@ -374,17 +418,24 @@ const MainPhase = ({
                 onClick={() => handleVideoClick(i)} // 비디오 클릭 시 새로고침 핸들러 추가
               />
               {/* LED 상태 표시기 */}
-              {isActive && (
-                <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-green-500 shadow-lg shadow-green-500/50 animate-pulse"></div>
+              {isFullscreen && (
+                <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-green-500 shadow-lg shadow-green-500/50"></div>
+              )}
+              {isAvailable && (
+                <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-green-400 shadow-lg shadow-green-400/50 animate-pulse"></div>
               )}
               <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-2">
                 <p className="text-green-500 font-mono text-center">
                   영상 {i + 1}
                   <span className="ml-2 text-xs">
-                    {isActive
-                      ? "(로드됨)"
+                    {isFullscreen
+                      ? "(전체화면)"
+                      : isAvailable
+                      ? "(재생 가능)"
+                      : wasPlayed
+                      ? "(재생 완료)"
                       : videoUrls[i]
-                      ? "(재생 준비 중)"
+                      ? "(준비 중)"
                       : "(로딩 중...)"}
                   </span>
                 </p>
