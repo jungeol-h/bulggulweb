@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // Setup debug overlay
-  const debugElement = document.getElementById('debug-overlay');
+  const debugElement = document.getElementById("debug-overlay");
 
   function debug(message) {
     console.log(message);
@@ -9,25 +9,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Define sections in sequence
   const SECTIONS = [
-    'typing-text',
-    'entity-grid', // Add new section to the flow
-    'details-text',
-    'scenario-section',
-    'overlay',
-    'final-message',
+    "typing-text",
+    "entity-grid", // Add new section to the flow
+    "details-text",
+    "scenario-section",
+    "overlay",
+    "final-message",
   ];
 
   // IMPORTANT: Ensure all content sections are hidden at startup
   function initializeHiddenSections() {
-    debug('Initializing - hiding all content sections');
+    debug("Initializing - hiding all content sections");
     SECTIONS.forEach((id) => {
       const section = document.getElementById(id);
       // Force hide with multiple properties to ensure it's completely hidden
-      section.classList.remove('active');
-      section.style.display = 'none';
-      section.style.visibility = 'hidden';
-      section.style.opacity = '0';
-      section.style.zIndex = '-10';
+      section.classList.remove("active");
+      section.style.display = "none";
+      section.style.visibility = "hidden";
+      section.style.opacity = "0";
+      section.style.zIndex = "-10";
     });
   }
 
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Find current active section
     const currentActiveSection = document.querySelector(
-      '.content-section.active',
+      ".content-section.active"
     );
     const newSection = document.getElementById(sectionId);
 
@@ -58,16 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Listen for transition end
       const transitionEndHandler = (e) => {
-        if (e.propertyName === 'opacity') {
+        if (e.propertyName === "opacity") {
           debug(`Fade out transition completed for ${currentActiveSection.id}`);
           transitionCompleted = true;
           currentActiveSection.removeEventListener(
-            'transitionend',
-            transitionEndHandler,
+            "transitionend",
+            transitionEndHandler
           );
 
           // Now hide the section and show the new one
-          currentActiveSection.classList.remove('active');
+          currentActiveSection.classList.remove("active");
 
           // Show new section with fade-in
           setTimeout(() => {
@@ -78,27 +78,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Add transition end listener
       currentActiveSection.addEventListener(
-        'transitionend',
-        transitionEndHandler,
+        "transitionend",
+        transitionEndHandler
       );
 
       // Force reflow
       void currentActiveSection.offsetWidth;
 
       // Trigger the fade out
-      currentActiveSection.style.opacity = '0';
+      currentActiveSection.style.opacity = "0";
 
       // Fallback timeout in case transition event doesn't fire
       setTimeout(() => {
         if (!transitionCompleted) {
           debug(`Fallback: Fade out timeout for ${currentActiveSection.id}`);
           currentActiveSection.removeEventListener(
-            'transitionend',
-            transitionEndHandler,
+            "transitionend",
+            transitionEndHandler
           );
 
           // Hide the section
-          currentActiveSection.classList.remove('active');
+          currentActiveSection.classList.remove("active");
 
           // Show new section
           fadeInSection(newSection, sectionId);
@@ -114,116 +114,116 @@ document.addEventListener('DOMContentLoaded', () => {
   function fadeInSection(section, sectionId) {
     debug(`Preparing to fade in: ${sectionId}`);
 
-    section.style.opacity = '0';
-    section.style.display = 'flex';
-    section.style.visibility = 'visible';
-    section.style.zIndex = '30';
-    section.classList.add('active');
+    section.style.opacity = "0";
+    section.style.display = "flex";
+    section.style.visibility = "visible";
+    section.style.zIndex = "30";
+    section.classList.add("active");
 
     // Special handling for details-text alignment
-    if (sectionId === 'details-text') {
-      section.style.alignItems = 'flex-start'; // Left-align text
+    if (sectionId === "details-text") {
+      section.style.alignItems = "flex-start"; // Left-align text
     } else {
-      section.style.alignItems = 'center'; // Center horizontally
+      section.style.alignItems = "center"; // Center horizontally
     }
 
     // Trigger the fade in (in next frame to ensure styles are applied)
     // Use a longer delay to ensure the browser has time to apply styles
     setTimeout(() => {
       debug(`Fading in section: ${sectionId}`);
-      section.style.opacity = '1';
+      section.style.opacity = "1";
 
       // Log when fade-in completes
       const fadeInComplete = (e) => {
-        if (e.propertyName === 'opacity') {
+        if (e.propertyName === "opacity") {
           debug(`Fade in completed for ${sectionId}`);
-          section.removeEventListener('transitionend', fadeInComplete);
+          section.removeEventListener("transitionend", fadeInComplete);
         }
       };
 
-      section.addEventListener('transitionend', fadeInComplete);
+      section.addEventListener("transitionend", fadeInComplete);
     }, 100);
 
     // Initialize section content based on type
     switch (sectionId) {
-      case 'typing-text':
+      case "typing-text":
         initTypingSection();
         break;
-      case 'entity-grid':
+      case "entity-grid":
         initEntityGridSection();
         break;
-      case 'details-text':
+      case "details-text":
         initDetailsSection();
         break;
-      case 'scenario-section':
+      case "scenario-section":
         initScenarioSection();
         break;
-      case 'overlay':
+      case "overlay":
         initOverlaySection();
         break;
-      case 'final-message':
-        debug('Final message shown');
+      case "final-message":
+        debug("Final message shown");
         break;
     }
   }
 
   // Function to fade background
   function fadeBackground() {
-    const background = document.getElementById('background');
-    background.classList.add('fadeout');
+    const background = document.getElementById("background");
+    background.classList.add("fadeout");
   }
 
   // Initialize typing text section
   function initTypingSection() {
-    const section = document.getElementById('typing-text');
-    section.innerHTML = '';
+    const section = document.getElementById("typing-text");
+    section.innerHTML = "";
 
     // Create and add typing animation
     setTimeout(() => {
-      const text = '당신이 올 것을 알고 있었습니다.';
+      const text = "당신이 올 것을 알고 있었습니다.";
 
       typeText(section, text, () => {
         // After typing completes, move to the entity grid section instead of details
         setTimeout(() => {
-          debug('Typing complete, moving to entity grid section');
-          activateSection('entity-grid');
-        }, 2000);
+          debug("Typing complete, moving to entity grid section");
+          activateSection("entity-grid");
+        }, 10000);
       });
     }, 500);
   }
 
   // Initialize entity grid section
   function initEntityGridSection() {
-    const section = document.getElementById('entity-grid');
-    const gridContainer = section.querySelector('.grid-container');
-    const gridScroll = section.querySelector('.grid-scroll');
+    const section = document.getElementById("entity-grid");
+    const gridContainer = section.querySelector(".grid-container");
+    const gridScroll = section.querySelector(".grid-scroll");
 
-    gridScroll.innerHTML = ''; // Clear any existing content
+    gridScroll.innerHTML = ""; // Clear any existing content
 
     // Generate a large number of entity IDs to simulate infinity
     const totalEntities = 300; // Much larger number
     const targetIndex = Math.floor(totalEntities * 0.7); // Position target at 70% through the list
-    const targetId = 'F123-232';
+    const targetId = "F123-232";
 
     // Create grid items
     for (let i = 0; i < totalEntities; i++) {
-      const item = document.createElement('div');
-      item.className = 'grid-item';
+      const item = document.createElement("div");
+      item.className = "grid-item";
 
       // Generate different IDs, but make sure one is the target
       if (i === targetIndex) {
         item.textContent = targetId;
-        item.dataset.isTarget = 'true';
-        item.id = 'target-entity';
+        item.dataset.isTarget = "true";
+        item.id = "target-entity";
       } else {
         // Generate random IDs with similar pattern
-        const prefix = 'F';
+        const prefix = "F";
         const mid = Math.floor(Math.random() * 999)
           .toString()
-          .padStart(3, '0');
+          .padStart(3, "0");
         const suffix = Math.floor(Math.random() * 999)
           .toString()
-          .padStart(3, '0');
+          .padStart(3, "0");
         item.textContent = `${prefix}${mid}-${suffix}`;
       }
 
@@ -236,8 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // After scrolling completes, highlight target and then move to the next section
         highlightTargetEntity(() => {
           setTimeout(() => {
-            debug('Entity grid complete, moving to details section');
-            activateSection('details-text');
+            debug("Entity grid complete, moving to details section");
+            activateSection("details-text");
           }, 2000);
         });
       });
@@ -246,11 +246,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to scroll the grid to the target
   function scrollToTarget(callback) {
-    const gridScroll = document.querySelector('.grid-scroll');
-    const targetItem = document.getElementById('target-entity');
+    const gridScroll = document.querySelector(".grid-scroll");
+    const targetItem = document.getElementById("target-entity");
 
     if (!targetItem || !gridScroll) {
-      debug('Error: Target item or grid scroll container not found');
+      debug("Error: Target item or grid scroll container not found");
       if (callback) callback();
       return;
     }
@@ -258,12 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial position - far left (negative offset)
     let initialPosition = window.innerWidth;
     gridScroll.style.transform = `translateX(${initialPosition}px)`;
-    gridScroll.style.opacity = '0'; // Ensure starting with opacity 0
+    gridScroll.style.opacity = "0"; // Ensure starting with opacity 0
 
     // Calculate the target position to center the target item
     const targetRect = targetItem.getBoundingClientRect();
     const containerRect = document
-      .querySelector('.grid-container')
+      .querySelector(".grid-container")
       .getBoundingClientRect();
     const targetOffset = targetRect.left + targetRect.width / 2;
     const containerCenter = containerRect.left + containerRect.width / 2;
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start fade in right away, but slower than the scroll
     setTimeout(() => {
-      gridScroll.style.opacity = '1';
+      gridScroll.style.opacity = "1";
     }, 100);
 
     // Animation function
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animateScroll);
       } else {
         // Add a little bounce effect at the end
-        gridScroll.style.transition = 'transform 0.3s ease-out';
+        gridScroll.style.transition = "transform 0.3s ease-out";
         gridScroll.style.transform = `translateX(${finalPosition}px)`;
 
         setTimeout(() => {
@@ -315,22 +315,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to highlight the target item with enhanced effect
   function highlightTargetEntity(callback) {
-    const targetItem = document.getElementById('target-entity');
+    const targetItem = document.getElementById("target-entity");
     const otherItems = document.querySelectorAll(
-      '.grid-item:not([data-is-target="true"])',
+      '.grid-item:not([data-is-target="true"])'
     );
 
     // Add target class for additional styling
-    targetItem.classList.add('target');
+    targetItem.classList.add("target");
 
     // Fade other items
     otherItems.forEach((item) => {
-      item.classList.add('fade');
+      item.classList.add("fade");
     });
 
     // Highlight target after a short delay - simplified animation
     setTimeout(() => {
-      targetItem.classList.add('highlight');
+      targetItem.classList.add("highlight");
 
       // Simple pulse effect using opacity and border
       let pulseCount = 0;
@@ -338,20 +338,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const pulseInterval = setInterval(() => {
         // Toggle border brightness
-        if (targetItem.style.borderColor === 'rgba(0, 255, 0, 1)') {
-          targetItem.style.borderColor = 'rgba(0, 255, 0, 0.5)';
-          targetItem.style.boxShadow = '0 0 5px rgba(0, 255, 0, 0.3)';
+        if (targetItem.style.borderColor === "rgba(0, 255, 0, 1)") {
+          targetItem.style.borderColor = "rgba(0, 255, 0, 0.5)";
+          targetItem.style.boxShadow = "0 0 5px rgba(0, 255, 0, 0.3)";
         } else {
-          targetItem.style.borderColor = 'rgba(0, 255, 0, 1)';
-          targetItem.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.5)';
+          targetItem.style.borderColor = "rgba(0, 255, 0, 1)";
+          targetItem.style.boxShadow = "0 0 10px rgba(0, 255, 0, 0.5)";
         }
 
         pulseCount++;
 
         if (pulseCount >= maxPulses) {
           clearInterval(pulseInterval);
-          targetItem.style.borderColor = '#00ff00';
-          targetItem.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.5)';
+          targetItem.style.borderColor = "#00ff00";
+          targetItem.style.boxShadow = "0 0 10px rgba(0, 255, 0, 0.5)";
 
           // Complete highlighting
           if (callback) callback();
@@ -362,9 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize details section
   function initDetailsSection() {
-    const section = document.getElementById('details-text');
-    const lines = Array.from(section.querySelectorAll('p'));
-    section.innerHTML = ''; // Clear existing content
+    const section = document.getElementById("details-text");
+    const lines = Array.from(section.querySelectorAll("p"));
+    section.innerHTML = ""; // Clear existing content
 
     // Recursive function to type each line sequentially
     function typeLine(index) {
@@ -373,25 +373,25 @@ document.addEventListener('DOMContentLoaded', () => {
         simulateDNASequence(() => {
           // After DNA sequence simulation, move to the next section
           setTimeout(() => {
-            debug('Details complete, moving to scenario section');
-            activateSection('scenario-section');
+            debug("Details complete, moving to scenario section");
+            activateSection("scenario-section");
           }, 3000);
         });
         return;
       }
 
       const text = lines[index].textContent;
-      const lineElement = document.createElement('p');
+      const lineElement = document.createElement("p");
       section.appendChild(lineElement);
 
       // Handle survival-line separately due to the presence of a <span>
-      if (lines[index].id === 'survival-line') {
-        const span = lines[index].querySelector('span');
+      if (lines[index].id === "survival-line") {
+        const span = lines[index].querySelector("span");
         const spanText = span.textContent;
-        span.textContent = ''; // Clear existing span content
+        span.textContent = ""; // Clear existing span content
 
         // Append the static part of the line
-        lineElement.textContent = '생존 기간: ';
+        lineElement.textContent = "생존 기간: ";
         lineElement.appendChild(span);
 
         // Type the span content separately
@@ -413,21 +413,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize scenario section
   function initScenarioSection() {
     // Start playing videos
-    document.querySelectorAll('#scenario-section video').forEach((video) => {
-      video.play().catch((e) => console.error('Video play error:', e));
+    document.querySelectorAll("#scenario-section video").forEach((video) => {
+      video.play().catch((e) => console.error("Video play error:", e));
     });
 
     // After longer delay, move to next section
     // Increased from 5000ms to 8000ms to ensure transition is visible
     setTimeout(() => {
-      debug('Scenario complete, moving to overlay section');
-      activateSection('overlay');
+      debug("Scenario complete, moving to overlay section");
+      activateSection("overlay");
     }, 8000);
   }
 
   // Initialize overlay section
   function initOverlaySection() {
-    const button = document.getElementById('play-button');
+    const button = document.getElementById("play-button");
     button.disabled = true;
 
     // Enable button after delay
@@ -439,15 +439,15 @@ document.addEventListener('DOMContentLoaded', () => {
       button.parentNode.replaceChild(newButton, button);
 
       // Add click handler for final section
-      document.getElementById('play-button').addEventListener('click', () => {
-        activateSection('final-message');
+      document.getElementById("play-button").addEventListener("click", () => {
+        activateSection("final-message");
       });
     }, 2000);
   }
 
   // Start survival counter
   function startSurvivalCounter() {
-    const element = document.getElementById('survival-time');
+    const element = document.getElementById("survival-time");
     let hours = 13241;
     let minutes = 2134;
 
@@ -463,50 +463,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to start main flow after face recognition
   window.startFlowAfterRecognition = function () {
-    debug('Starting main flow after face recognition');
+    debug("Starting main flow after face recognition");
 
     // Make sure all sections are hidden before starting flow
     initializeHiddenSections();
 
     // Hide camera interface but ensure matrix stays visible
-    const cameraContainer = document.getElementById('camera-container');
-    cameraContainer.style.opacity = '0';
-    cameraContainer.style.transition = 'opacity 1s ease-out';
+    const cameraContainer = document.getElementById("camera-container");
+    cameraContainer.style.opacity = "0";
+    cameraContainer.style.transition = "opacity 1s ease-out";
 
     setTimeout(() => {
       // Remove camera from DOM flow
-      cameraContainer.style.display = 'none';
-      cameraContainer.style.position = 'absolute';
-      cameraContainer.style.zIndex = '-1';
+      cameraContainer.style.display = "none";
+      cameraContainer.style.position = "absolute";
+      cameraContainer.style.zIndex = "-1";
 
       // Ensure content container and wrapper are visible and centered
-      const contentContainer = document.querySelector('.content-container');
-      contentContainer.style.zIndex = '10';
-      contentContainer.style.position = 'fixed';
-      contentContainer.style.display = 'flex';
-      contentContainer.style.justifyContent = 'center';
-      contentContainer.style.alignItems = 'center';
-      contentContainer.style.height = '100%'; // Ensure full height
-      contentContainer.style.width = '100%'; // Ensure full width
+      const contentContainer = document.querySelector(".content-container");
+      contentContainer.style.zIndex = "10";
+      contentContainer.style.position = "fixed";
+      contentContainer.style.display = "flex";
+      contentContainer.style.justifyContent = "center";
+      contentContainer.style.alignItems = "center";
+      contentContainer.style.height = "100%"; // Ensure full height
+      contentContainer.style.width = "100%"; // Ensure full width
 
       // Explicitly set content wrapper position and size
-      const contentWrapper = document.getElementById('content-wrapper');
+      const contentWrapper = document.getElementById("content-wrapper");
       if (contentWrapper) {
-        contentWrapper.style.position = 'absolute';
-        contentWrapper.style.display = 'flex';
-        contentWrapper.style.flexDirection = 'column';
-        contentWrapper.style.justifyContent = 'center'; // Critical for vertical centering
-        contentWrapper.style.alignItems = 'center';
-        contentWrapper.style.height = '100%'; // Ensure full height
-        contentWrapper.style.width = '100%'; // Ensure full width
-        contentWrapper.style.top = '0';
-        contentWrapper.style.bottom = '0';
-        contentWrapper.style.margin = 'auto 0'; // Center vertically
-        debug('Content wrapper positioned for vertical centering');
+        contentWrapper.style.position = "absolute";
+        contentWrapper.style.display = "flex";
+        contentWrapper.style.flexDirection = "column";
+        contentWrapper.style.justifyContent = "center"; // Critical for vertical centering
+        contentWrapper.style.alignItems = "center";
+        contentWrapper.style.height = "100%"; // Ensure full height
+        contentWrapper.style.width = "100%"; // Ensure full width
+        contentWrapper.style.top = "0";
+        contentWrapper.style.bottom = "0";
+        contentWrapper.style.margin = "auto 0"; // Center vertically
+        debug("Content wrapper positioned for vertical centering");
       }
 
       debug(
-        `Content container z-index: ${getComputedStyle(contentContainer).zIndex}`,
+        `Content container z-index: ${
+          getComputedStyle(contentContainer).zIndex
+        }`
       );
 
       // Make sure matrix continues running but with lower z-index
@@ -514,35 +516,37 @@ document.addEventListener('DOMContentLoaded', () => {
         window.stopMatrixCode = false;
       }
 
-      const matrixContainer = document.getElementById('matrix-container');
+      const matrixContainer = document.getElementById("matrix-container");
       if (matrixContainer) {
-        matrixContainer.style.zIndex = '1';
+        matrixContainer.style.zIndex = "1";
         debug(
-          `Matrix container z-index: ${getComputedStyle(matrixContainer).zIndex}`,
+          `Matrix container z-index: ${
+            getComputedStyle(matrixContainer).zIndex
+          }`
         );
       }
 
       // Fade background and start first section
       fadeBackground();
       setTimeout(() => {
-        debug('Activating first section');
-        activateSection('typing-text');
+        debug("Activating first section");
+        activateSection("typing-text");
       }, 1500);
     }, 1000);
   };
 
   // Keyboard shortcuts for testing
-  document.addEventListener('keydown', (event) => {
+  document.addEventListener("keydown", (event) => {
     // Numbers 1-5 to jump to sections
-    if (event.key >= '1' && event.key <= '5') {
+    if (event.key >= "1" && event.key <= "5") {
       const index = parseInt(event.key) - 1;
       if (index >= 0 && index < SECTIONS.length) {
         activateSection(SECTIONS[index]);
       }
     }
     // Add refresh functionality when 'r' key is pressed
-    else if (event.key === 'r' || event.key === 'R' || event.key === 'ㄱ') {
-      debug('Refreshing page...');
+    else if (event.key === "r" || event.key === "R" || event.key === "ㄱ") {
+      debug("Refreshing page...");
       window.location.reload();
     }
   });
@@ -551,11 +555,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Function to type text one character at a time
 function typeText(element, text, callback) {
   let index = 0;
-  element.innerHTML = ''; // Clear existing content
+  element.innerHTML = ""; // Clear existing content
 
   // Add cursor for typing effect
-  const cursor = document.createElement('span');
-  cursor.className = 'typing-cursor';
+  const cursor = document.createElement("span");
+  cursor.className = "typing-cursor";
   element.appendChild(cursor);
 
   const interval = setInterval(() => {
@@ -576,27 +580,27 @@ function typeText(element, text, callback) {
 
 // Function to simulate DNA sequence discovery
 function simulateDNASequence(callback) {
-  const section = document.getElementById('details-text');
-  section.classList.add('scrolling'); // Add scrolling class for styling
+  const section = document.getElementById("details-text");
+  section.classList.add("scrolling"); // Add scrolling class for styling
 
-  const contentWrapper = document.createElement('div');
-  contentWrapper.style.position = 'absolute';
-  contentWrapper.style.whiteSpace = 'pre-wrap';
-  contentWrapper.style.textAlign = 'left';
-  contentWrapper.style.width = '100%'; // Match parent width
-  contentWrapper.style.margin = '0 auto';
+  const contentWrapper = document.createElement("div");
+  contentWrapper.style.position = "absolute";
+  contentWrapper.style.whiteSpace = "pre-wrap";
+  contentWrapper.style.textAlign = "left";
+  contentWrapper.style.width = "100%"; // Match parent width
+  contentWrapper.style.margin = "0 auto";
   section.appendChild(contentWrapper);
 
   // Add existing lines to the wrapper
-  const existingLines = Array.from(section.querySelectorAll('p'));
+  const existingLines = Array.from(section.querySelectorAll("p"));
   existingLines.forEach((line) => {
-    line.style.textAlign = 'left'; // Ensure consistent alignment
-    line.style.margin = '0'; // Remove default margins
+    line.style.textAlign = "left"; // Ensure consistent alignment
+    line.style.margin = "0"; // Remove default margins
     contentWrapper.appendChild(line);
   });
 
   // Generate DNA sequence lines
-  const dnaCharacters = 'ATCG';
+  const dnaCharacters = "ATCG";
   let lineCount = 0;
   let delay = 200; // Start with a slower delay
   const lineHeight = 12; // Fixed line height in pixels
@@ -604,16 +608,18 @@ function simulateDNASequence(callback) {
   function addDNALine() {
     if (lineCount < 100) {
       const newLine = Array.from({ length: 60 }, () =>
-        dnaCharacters.charAt(Math.floor(Math.random() * dnaCharacters.length)),
-      ).join('');
-      const dnaLine = document.createElement('p');
+        dnaCharacters.charAt(Math.floor(Math.random() * dnaCharacters.length))
+      ).join("");
+      const dnaLine = document.createElement("p");
       dnaLine.textContent = newLine;
-      dnaLine.style.textAlign = 'left'; // Ensure consistent alignment
-      dnaLine.style.margin = '0'; // Remove default margins
+      dnaLine.style.textAlign = "left"; // Ensure consistent alignment
+      dnaLine.style.margin = "0"; // Remove default margins
       contentWrapper.appendChild(dnaLine);
 
       // Scroll the entire content upwards
-      contentWrapper.style.transform = `translateY(-${lineCount * lineHeight}px)`;
+      contentWrapper.style.transform = `translateY(-${
+        lineCount * lineHeight
+      }px)`;
       lineCount++;
 
       // Gradually speed up after the first 10 lines
@@ -625,14 +631,14 @@ function simulateDNASequence(callback) {
     } else {
       // After all lines are loaded, display "로드 완료"
       setTimeout(() => {
-        const loadLine = document.createElement('p');
-        loadLine.id = 'load-line';
-        loadLine.textContent = '로드 완료.';
-        loadLine.style.textAlign = 'left'; // Ensure consistent alignment
-        loadLine.style.margin = '0'; // Remove default margins
+        const loadLine = document.createElement("p");
+        loadLine.id = "load-line";
+        loadLine.textContent = "로드 완료.";
+        loadLine.style.textAlign = "left"; // Ensure consistent alignment
+        loadLine.style.margin = "0"; // Remove default margins
         contentWrapper.appendChild(loadLine);
 
-        section.classList.remove('scrolling'); // Remove scrolling class
+        section.classList.remove("scrolling"); // Remove scrolling class
         if (callback) callback();
       }, 500); // Delay before showing "로드 완료"
     }
