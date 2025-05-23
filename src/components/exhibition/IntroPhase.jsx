@@ -81,7 +81,7 @@ const IntroPhase = ({
       // 첫 번째 메시지 타이핑 효과 후, 자동으로 다음 단계로 진행
       const typingDelay = introTexts[0].length * 70 + 5000; // 타이핑 시간(70ms) + 장문 읽기 시간
       console.log(`장면 1: ${typingDelay}ms 후 다음 장면으로 진행`);
-      
+
       const timer = setTimeout(() => {
         // 다음 단계로 자동 진행
         if (window.advanceIntroSequence) {
@@ -168,8 +168,10 @@ const IntroPhase = ({
       // 각 텍스트마다 적절한 지연 시간 후 다음 시퀀스로 진행
       const currentText = introTexts[introSequence - 1] || "";
       const typingDelay = currentText.length * 70 + 5000; // 타이핑 시간(70ms) + 텍스트 읽기 시간
-      console.log(`장면 ${introSequence}: ${typingDelay}ms 후 다음 장면으로 진행`);
-      
+      console.log(
+        `장면 ${introSequence}: ${typingDelay}ms 후 다음 장면으로 진행`
+      );
+
       const timer = setTimeout(() => {
         if (window.advanceIntroSequence) {
           window.advanceIntroSequence();

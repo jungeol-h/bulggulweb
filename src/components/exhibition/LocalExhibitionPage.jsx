@@ -97,7 +97,7 @@ const LocalExhibitionPage = () => {
         // 성공적으로 이미지 캡처 후 인트로 시퀀스를 시작합니다
         // 전시 통로를 걸어 입장하는 시간을 고려해 5초 딜레이 후 시작
         console.log("이미지 캡처 완료: 5초 후 인트로 시퀀스 시작");
-        
+
         // 페이드 효과와 함께 인트로 시퀀스 시작
         setIsTransitioning(true);
         setTimeout(() => {

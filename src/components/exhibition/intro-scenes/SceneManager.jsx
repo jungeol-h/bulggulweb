@@ -107,7 +107,9 @@ const SceneManager = ({
     if (prevSequence !== introSequence) {
       // 페이드아웃 시작
       setIsTransitioning(true);
-      console.log(`씬 전환: ${prevSequence} -> ${introSequence} (페이드아웃 시작)`);
+      console.log(
+        `씬 전환: ${prevSequence} -> ${introSequence} (페이드아웃 시작)`
+      );
 
       // 페이드아웃 후 컴포넌트 변경 (페이드아웃에 1500ms 소요)
       const timer = setTimeout(() => {

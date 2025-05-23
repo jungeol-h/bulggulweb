@@ -13,9 +13,9 @@ const FollowupTextScene = ({ text, isLastScene }) => {
   useEffect(() => {
     if (isLastScene) {
       // 타이핑 시간 (글자수 × 타이핑 속도) + 충분한 읽기 시간
-      const typingDelay = text.length * 70 + 4000; 
+      const typingDelay = text.length * 70 + 4000;
       console.log(`마지막 장면: ${typingDelay}ms 후 스페이스바 안내 표시`);
-      
+
       const timer = setTimeout(() => {
         setShowSpacebarHint(true);
       }, typingDelay);
