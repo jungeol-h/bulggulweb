@@ -13,7 +13,7 @@ export const VideoService = {
    * @param {string} sessionId - 세션 ID
    * @returns {Promise<{urls: Array<string|null>, loadedIndices: Array<number>}>} - 비디오 URL 목록과 로드된 인덱스
    */
-  fetchInitialVi deoUrls: async (sessionId) => {
+  fetchInitialVideoUrls: async (sessionId) => {
     try {
       console.log(`세션 ID ${sessionId}의 비디오 URL 확인 중...`);
 
