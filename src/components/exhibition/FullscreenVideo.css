@@ -75,3 +75,21 @@
     opacity: 1;
   }
 }
+
+/* fadeIn 애니메이션 클래스 */
+.animate-fadeIn {
+  animation: fade-in 0.8s ease-out;
+}
+
+/* QR 코드 영역에 사용할 부드러운 펄스 애니메이션 */
+@keyframes gentle-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+  }
+}

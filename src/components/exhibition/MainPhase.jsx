@@ -4,6 +4,10 @@ import "./FullscreenVideo.css"; // 전체화면 비디오 스타일을 위한 CS
 // import Esp32DebugPanel from "./Esp32DebugPanel"; // ESP32 디버그 패널 컴포넌트 제거
 import VideoService from "../../services/VideoService"; // 비디오 서비스 가져오기
 import { WS_URL, POLLING_INTERVAL } from "../../constants/apiConstants"; // API 상수 가져오기
+import QRCode from "react-qr-code"; // QR 코드 생성 라이브러리 추가
+
+// 영상 다운로드 베이스 URL 설정
+const DOWNLOAD_BASE_URL = "https://bulggul.com/download";
 
 /**
  * 전시회의 메인 단계를 렌더링하는 컴포넌트
@@ -339,7 +343,7 @@ const MainPhase = ({
   };
 
   return (
-    <div className="min-h-screen p-8 flex flex-col justify-center">
+    <div className="min-h-screen p-8 flex flex-col justify-center gap-8">
       {/* 비디오 로딩 상태 표시 */}
       <div className="absolute top-2 left-2 z-50 flex items-center space-x-2">
         <div
@@ -471,6 +475,45 @@ const MainPhase = ({
       <div className="text-center mt-6 text-green-400 text-lg font-medium">
         버튼을 누르면 영상이 확대됩니다.
       </div>
+
+      {/* QR 코드 및 영상 다운로드 섹션 - 모든 영상이 로드된 경우에만 표시 */}
+      {videoUrls.every((url) => url !== null) && (
+        <div className="mt-8 flex flex-col items-center justify-center p-6 bg-gray-900 border border-green-800 rounded-lg shadow-lg shadow-green-900/30 animate-fadeIn max-w-md mx-auto w-full">
+          <h2 className="text-green-400 text-xl mb-4 font-mono font-bold flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
+            </svg>
+            내 영상 다운로드 받기
+          </h2>
+
+          <div className="p-4 bg-white rounded-lg mb-4 hover:shadow-xl hover:shadow-green-600/20 transition-all duration-300 hover:scale-105">
+            <QRCode
+              value={`${DOWNLOAD_BASE_URL}?session=${sessionId}`}
+              size={180}
+              level="H"
+              style={{ maxWidth: "100%" }}
+            />
+          </div>
+
+          <p className="text-green-300 text-center max-w-md mb-2">
+            QR 코드를 스캔하여 이 전시에서 생성된 당신의 영상을 다운로드하세요.
+          </p>
+          <p className="text-green-500 mt-2 font-bold bg-gray-800 px-3 py-1 rounded-full">
+            세션 ID: {sessionId}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
